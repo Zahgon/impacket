@@ -129,12 +129,7 @@ def _nfold(ba, nbytes):
 
     # Add equal-length strings together with end-around carry.
     def add_ones_complement(str1, str2):
-        n = len(str1)
-        v = [a + b for a, b in zip(str1, str2)]
-        # Propagate carry bits to the left until there aren't any left.
-        while any(x & ~0xff for x in v):
-            v = [(v[i-n+1]>>8) + (v[i]&0xff) for i in range(n)]
-        return bytearray(x for x in v)
+        pass
 
     # Concatenate copies of str to produce the least common multiple
     # of len(str) and nbytes, rotating each copy of str to the right
@@ -692,8 +687,7 @@ def prf(key, string):
 
 
 def make_checksum(cksumtype, key, keyusage, text):
-    c = _get_checksum_profile(cksumtype)
-    return c.checksum(key, keyusage, text)
+    pass
 
 
 def verify_checksum(cksumtype, key, keyusage, text, cksum):

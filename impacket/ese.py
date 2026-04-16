@@ -597,23 +597,7 @@ class ESENT_DB:
         self.parseCatalog(CATALOG_PAGE_NUMBER)
 
     def printCatalog(self):
-        indent = '    '
-
-        print("Database version: 0x%x, 0x%x" % (self.__DBHeader['Version'], self.__DBHeader['FileFormatRevision'] ))
-        print("Page size: %d " % self.__pageSize)
-        print("Number of pages: %d" % self.__totalPages)
-        print() 
-        print("Catalog for %s" % self.__fileName)
-        for table in list(self.__tables.keys()):
-            print("[%s]" % table.decode('utf8'))
-            print("%sColumns " % indent)
-            for column in list(self.__tables[table]['Columns'].keys()):
-                record = self.__tables[table]['Columns'][column]['Record']
-                print("%s%-5d%-30s%s" % (indent*2, record['Identifier'], column.decode('utf-8'),ColumnTypeToName[record['ColumnType']]))
-            print("%sIndexes"% indent)
-            for index in list(self.__tables[table]['Indexes'].keys()):
-                print("%s%s" % (indent*2, index.decode('utf-8')))
-            print("")
+        pass
 
     def __addItem(self, entry):
         dataDefinitionHeader = ESENT_DATA_DEFINITION_HEADER(entry['EntryData'])
@@ -687,7 +671,7 @@ class ESENT_DB:
 
 
     def readHeader(self):
-        LOG.debug("Reading Boot Sector for %s" % self.__volumeName)
+        pass
 
     def getPage(self, pageNum):
         LOG.debug("Trying to fetch page %d (0x%x)" % (pageNum, (pageNum+1)*self.__pageSize))

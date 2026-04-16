@@ -174,18 +174,7 @@ class Principal:
         return principal
 
     def fromPrincipal(self, principal):
-        self.header['name_type'] = principal.type
-        self.header['num_components'] = len(principal.components)
-        octetString = CountedOctetString()
-        octetString['length'] = len(principal.realm)
-        octetString['data'] = principal.realm
-        self.realm = octetString
-        self.components = []
-        for c in principal.components:
-            octetString = CountedOctetString()
-            octetString['length'] = len(c)
-            octetString['data'] = c
-            self.components.append(octetString)
+        pass
 
     def toPrincipal(self):
         return types.Principal(self.prettyPrint(), type=self.header['name_type'])
@@ -252,7 +241,7 @@ class Credential:
         self.header[item] = value
 
     def getServerPrincipal(self):
-        return self.header['server'].prettyPrint()
+        pass
 
     def __len__(self):
         totalLen = len(self.header)
@@ -446,142 +435,16 @@ class CCache:
         return None
 
     def toTimeStamp(self, dt, epoch=datetime(1970,1,1)):
-        td = dt - epoch
-        # return td.total_seconds()
-        return int((td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) // 1e6)
+        pass
 
     def reverseFlags(self, flags):
-        result = 0
-        if isinstance(flags, str):
-            flags = flags[1:-2]
-        for i,j in enumerate(reversed(flags)):
-            if j != 0:
-                result += j << i
-        return result
+        pass
 
     def fromTGT(self, tgt, oldSessionKey, sessionKey):
-        self.headers = []
-        header = Header()
-        header['tag'] = 1
-        header['taglen'] = 8
-        header['tagdata'] = b'\xff\xff\xff\xff\x00\x00\x00\x00'
-        self.headers.append(header)
-
-        decodedTGT = decoder.decode(tgt, asn1Spec = AS_REP())[0]
-
-        tmpPrincipal = types.Principal()
-        tmpPrincipal.from_asn1(decodedTGT, 'crealm', 'cname')
-        self.principal = Principal()
-        self.principal.fromPrincipal(tmpPrincipal)
-
-        # Now let's add the credential
-        cipherText = decodedTGT['enc-part']['cipher']
-
-        cipher = crypto._enctype_table[decodedTGT['enc-part']['etype']]
-
-        # Key Usage 3
-        # AS-REP encrypted part (includes TGS session key or
-        # application session key), encrypted with the client key
-        # (Section 5.4.2)
-        plainText = cipher.decrypt(oldSessionKey, 3, cipherText)
-
-        encASRepPart = decoder.decode(plainText, asn1Spec = EncASRepPart())[0]
-        credential = Credential()
-        server = types.Principal()
-        server.from_asn1(encASRepPart, 'srealm', 'sname')
-        tmpServer = Principal()
-        tmpServer.fromPrincipal(server)
-
-        credential['client'] = self.principal
-        credential['server'] = tmpServer
-        credential['is_skey'] = 0
-
-        credential['key'] = KeyBlockV4()
-        credential['key']['keytype'] = int(encASRepPart['key']['keytype'])
-        credential['key']['keyvalue'] = encASRepPart['key']['keyvalue'].asOctets()
-        credential['key']['keylen'] = len(credential['key']['keyvalue'])
-
-        credential['time'] = Times()
-        credential['time']['authtime'] = self.toTimeStamp(types.KerberosTime.from_asn1(encASRepPart['authtime']))
-        credential['time']['starttime'] = self.toTimeStamp(types.KerberosTime.from_asn1(encASRepPart['starttime']))
-        credential['time']['endtime'] = self.toTimeStamp(types.KerberosTime.from_asn1(encASRepPart['endtime']))
-        # After KB4586793 for CVE-2020-17049 this timestamp may be omitted
-        if encASRepPart['renew-till'].hasValue():
-            credential['time']['renew_till'] = self.toTimeStamp(types.KerberosTime.from_asn1(encASRepPart['renew-till']))
-        flags = self.reverseFlags(encASRepPart['flags'])
-        credential['tktflags'] = flags
-
-        credential['num_address'] = 0
-        credential.ticket = CountedOctetString()
-        credential.ticket['data'] = encoder.encode(decodedTGT['ticket'].clone(tagSet=Ticket.tagSet, cloneValueFlag=True))
-        credential.ticket['length'] = len(credential.ticket['data'])
-        credential.secondTicket = CountedOctetString()
-        credential.secondTicket['data'] = b''
-        credential.secondTicket['length'] = 0
-        self.credentials.append(credential)
+        pass
 
     def fromTGS(self, tgs, oldSessionKey, sessionKey):
-        self.headers = []
-        header = Header()
-        header['tag'] = 1
-        header['taglen'] = 8
-        header['tagdata'] = b'\xff\xff\xff\xff\x00\x00\x00\x00'
-        self.headers.append(header)
-
-        decodedTGS = decoder.decode(tgs, asn1Spec = TGS_REP())[0]
-
-        tmpPrincipal = types.Principal()
-        tmpPrincipal.from_asn1(decodedTGS, 'crealm', 'cname')
-        self.principal = Principal()
-        self.principal.fromPrincipal(tmpPrincipal)
-
-        # Now let's add the credential
-        cipherText = decodedTGS['enc-part']['cipher']
-
-        cipher = crypto._enctype_table[decodedTGS['enc-part']['etype']]
-
-        # Key Usage 8
-        # TGS-REP encrypted part (includes application session
-        # key), encrypted with the TGS session key (Section 5.4.2)
-        plainText = cipher.decrypt(oldSessionKey, 8, cipherText)
-
-        encTGSRepPart = decoder.decode(plainText, asn1Spec = EncTGSRepPart())[0]
-
-        credential = Credential()
-        server = types.Principal()
-        server.from_asn1(encTGSRepPart, 'srealm', 'sname')
-        tmpServer = Principal()
-        tmpServer.fromPrincipal(server)
-
-        credential['client'] = self.principal
-        credential['server'] = tmpServer
-        credential['is_skey'] = 0
-
-        credential['key'] = KeyBlockV4()
-        credential['key']['keytype'] = int(encTGSRepPart['key']['keytype'])
-        credential['key']['keyvalue'] = encTGSRepPart['key']['keyvalue'].asOctets()
-        credential['key']['keylen'] = len(credential['key']['keyvalue'])
-
-        credential['time'] = Times()
-        credential['time']['authtime'] = self.toTimeStamp(types.KerberosTime.from_asn1(encTGSRepPart['authtime']))
-        credential['time']['starttime'] = self.toTimeStamp(types.KerberosTime.from_asn1(encTGSRepPart['starttime']))
-        credential['time']['endtime'] = self.toTimeStamp(types.KerberosTime.from_asn1(encTGSRepPart['endtime']))
-        # After KB4586793 for CVE-2020-17049 this timestamp may be omitted
-        if encTGSRepPart['renew-till'].hasValue():
-            credential['time']['renew_till'] = self.toTimeStamp(types.KerberosTime.from_asn1(encTGSRepPart['renew-till']))
-
-        flags = self.reverseFlags(encTGSRepPart['flags'])
-        credential['tktflags'] = flags
-
-        credential['num_address'] = 0
-
-        credential.ticket = CountedOctetString()
-        credential.ticket['data'] = encoder.encode(decodedTGS['ticket'].clone(tagSet=Ticket.tagSet, cloneValueFlag=True))
-        credential.ticket['length'] = len(credential.ticket['data'])
-        credential.secondTicket = CountedOctetString()
-        credential.secondTicket['data'] = b''
-        credential.secondTicket['length'] = 0
-        self.credentials.append(credential)
+        pass
 
     @classmethod
     def loadFile(cls, fileName):
@@ -599,9 +462,7 @@ class CCache:
             raise e
 
     def saveFile(self, fileName):
-        f = open(fileName, 'wb+')
-        f.write(self.getData())
-        f.close()
+        pass
 
     @classmethod
     def parseFile(cls, domain='', username='', target=''):
@@ -662,125 +523,20 @@ class CCache:
 
     @classmethod
     def loadKirbiFile(cls, fileName):
-        f = open(fileName, 'rb')
-        data = f.read()
-        f.close()
-        ccache = cls()
-        ccache.fromKRBCRED(data)
-        return ccache
+        pass
 
     def saveKirbiFile(self, fileName):
-        f = open(fileName, 'wb+')
-        f.write(self.toKRBCRED())
-        f.close()
+        pass
 
     def fromKRBCRED(self, encodedKrbCred):
 
-        krbCred = decoder.decode(encodedKrbCred, asn1Spec=KRB_CRED())[0]
-        encKrbCredPart = decoder.decode(krbCred['enc-part']['cipher'], asn1Spec=EncKrbCredPart())[0]
-        krbCredInfo = encKrbCredPart['ticket-info'][0]
-
-        self.setDefaultHeader()
-
-        tmpPrincipal = types.Principal()
-        tmpPrincipal.from_asn1(krbCredInfo, 'prealm', 'pname')
-        self.principal = Principal()
-        self.principal.fromPrincipal(tmpPrincipal)
-
-        credential = Credential()
-        server = types.Principal()
-        server.from_asn1(krbCredInfo, 'srealm', 'sname')
-        tmpServer = Principal()
-        tmpServer.fromPrincipal(server)
-
-        credential['client'] = self.principal
-        credential['server'] = tmpServer
-        credential['is_skey'] = 0
-
-        credential['key'] = KeyBlockV4()
-        credential['key']['keytype'] = int(krbCredInfo['key']['keytype'])
-        credential['key']['keyvalue'] = krbCredInfo['key']['keyvalue'].asOctets()
-        credential['key']['keylen'] = len(credential['key']['keyvalue'])
-
-        credential['time'] = Times()
-
-        credential['time']['authtime'] = self.toTimeStamp(types.KerberosTime.from_asn1(krbCredInfo['starttime']))
-        credential['time']['starttime'] = self.toTimeStamp(types.KerberosTime.from_asn1(krbCredInfo['starttime']))
-        credential['time']['endtime'] = self.toTimeStamp(types.KerberosTime.from_asn1(krbCredInfo['endtime']))
-        # After KB4586793 for CVE-2020-17049 this timestamp may be omitted
-        if krbCredInfo['renew-till'].hasValue():
-            credential['time']['renew_till'] = self.toTimeStamp(types.KerberosTime.from_asn1(krbCredInfo['renew-till']))
-
-        flags = self.reverseFlags(krbCredInfo['flags'])
-        credential['tktflags'] = flags
-
-        credential['num_address'] = 0
-        credential.ticket = CountedOctetString()
-        credential.ticket['data'] = encoder.encode(
-            krbCred['tickets'][0].clone(tagSet=Ticket.tagSet, cloneValueFlag=True)
-        )
-        credential.ticket['length'] = len(credential.ticket['data'])
-        credential.secondTicket = CountedOctetString()
-        credential.secondTicket['data'] = b''
-        credential.secondTicket['length'] = 0
-
-        self.credentials.append(credential)
+        pass
 
     def toKRBCRED(self):
-        principal = self.principal
-        credential = self.credentials[0]
-
-        krbCredInfo = KrbCredInfo()
-
-        krbCredInfo['key'] = noValue
-        krbCredInfo['key']['keytype'] = credential['key']['keytype']
-        krbCredInfo['key']['keyvalue'] = credential['key']['keyvalue']
-
-        krbCredInfo['prealm'] = principal.realm.fields['data']
-
-        krbCredInfo['pname'] = noValue
-        krbCredInfo['pname']['name-type'] = principal.header['name_type']
-        seq_set_iter(krbCredInfo['pname'], 'name-string', (principal.components[0].fields['data'],))
-
-        krbCredInfo['flags'] = credential['tktflags']
-
-        krbCredInfo['starttime'] = KerberosTime.to_asn1(datetime.fromtimestamp(credential['time']['starttime'], tz=timezone.utc))
-        krbCredInfo['endtime'] = KerberosTime.to_asn1(datetime.fromtimestamp(credential['time']['endtime'], tz=timezone.utc))
-        krbCredInfo['renew-till'] = KerberosTime.to_asn1(datetime.fromtimestamp(credential['time']['renew_till'], tz=timezone.utc))
-
-        krbCredInfo['srealm'] = credential['server'].realm.fields['data']
-
-        krbCredInfo['sname'] = noValue
-        krbCredInfo['sname']['name-type'] = credential['server'].header['name_type']
-        tmp_service_class = credential['server'].components[0].fields['data']
-        tmp_service_hostname = credential['server'].components[1].fields['data']
-        seq_set_iter(krbCredInfo['sname'], 'name-string', (tmp_service_class, tmp_service_hostname))
-
-        encKrbCredPart = EncKrbCredPart()
-        seq_set_iter(encKrbCredPart, 'ticket-info', (krbCredInfo,))
-
-        krbCred = KRB_CRED()
-        krbCred['pvno'] = 5
-        krbCred['msg-type'] = 22
-
-        krbCred['enc-part'] = noValue
-        krbCred['enc-part']['etype'] = 0
-        krbCred['enc-part']['cipher'] = encoder.encode(encKrbCredPart)
-
-        ticket = decoder.decode(credential.ticket['data'], asn1Spec=Ticket())[0]
-        seq_set_iter(krbCred, 'tickets', (ticket,))
-
-        encodedKrbCred = encoder.encode(krbCred)
-
-        return encodedKrbCred
+        pass
 
     def setDefaultHeader(self):
-        self.headers = []
-        header = Header()
-        header['tag'] = 1
-        header['taglen'] = 8
-        header['tagdata'] = b'\xff\xff\xff\xff\x00\x00\x00\x00'
-        self.headers.append(header)
+        pass
 
 
 

@@ -41,14 +41,7 @@ class PackageIDsRetriever(HTMLParser):
         self.package_ids = set()
 
     def handle_starttag(self, tag, attrs):
-        if tag == 'a':
-            for attr in attrs:
-                if attr[0] == 'href':
-                    href = attr[1]
-                    parts = href.split('/')
-                    last_part = parts[-1].strip()
-                    if not last_part.endswith('.INI'):
-                        self.package_ids.add(last_part)
+        pass
 
 class FilesAndDirsRetriever(HTMLParser):
     def __init__(self):
@@ -57,14 +50,10 @@ class FilesAndDirsRetriever(HTMLParser):
         self.previous_data = ""
 
     def handle_starttag(self, tag, attrs):
-        self.current_tag = tag
-        if tag == 'a':
-            href = dict(attrs).get('href')
-            if href:
-                self.links.append((href, self.previous_data))
+        pass
 
     def handle_data(self, data):
-        self.previous_data = data.strip()
+        pass
 
 
 

@@ -637,20 +637,7 @@ class LDAPConnection:
         :param controls: LDAP controls to include in the request
         :return: True if the DN was modified successfully, else raises LDAPSessionError
         """
-        modifyDNRequest = ModifyDNRequest()
-        modifyDNRequest['entry'] = dn
-        modifyDNRequest['newrdn'] = newrdn
-        modifyDNRequest['deleteoldrdn'] = deleteoldrdn
-        if newSuperior is not None:
-            modifyDNRequest['newSuperior'] = newSuperior
-
-        response = self.sendReceive(modifyDNRequest, controls)[0]['protocolOp']
-        if response['modDNResponse']['resultCode'] != ResultCode('success'):
-            raise LDAPSessionError(
-                error=int(response['modDNResponse']['resultCode']),
-                errorString=f"Error in modifyDNRequest -> {response['modDNResponse']['resultCode'].prettyPrint()}: {response['modDNResponse']['diagnosticMessage']}"
-            )
-        return True
+        pass
 
     def delete(self, dn, controls=None):
         """
@@ -661,15 +648,7 @@ class LDAPConnection:
         :param controls: LDAP controls to include in the request
         :return: True if the entry was deleted successfully, else raises LDAPSessionError
         """
-        deleteRequest = DelRequest(dn)
-
-        response = self.sendReceive(deleteRequest, controls)[0]['protocolOp']
-        if response['delResponse']['resultCode'] != ResultCode('success'):
-            raise LDAPSessionError(
-                error=int(response['delResponse']['resultCode']),
-                errorString=f"Error in deleteRequest -> {response['delResponse']['resultCode'].prettyPrint()}: {response['delResponse']['diagnosticMessage']}"
-            )
-        return True
+        pass
 
     def close(self):
         if self._socket is not None:
@@ -887,7 +866,7 @@ class LDAPConnection:
     @classmethod
     def _processLdapString(cls, ldapstr):
         def replace_escaped_chars(match):
-            return chr(int(match.group(1), 16))  # group(1) == "XX" (valid hex)
+            pass
 
         escaped_chars = re.compile(r'\\([0-9a-fA-F]{2})')  # Capture any sequence of "\XX" (where XX is a valid hex)
         return re.sub(escaped_chars, replace_escaped_chars, ldapstr)
@@ -916,10 +895,10 @@ class LDAPSessionError(Exception):
         return self.error
 
     def getErrorPacket(self):
-        return self.packet
+        pass
 
     def getErrorString(self):
-        return self.errorString
+        pass
 
     def __str__(self):
         return self.errorString
@@ -933,4 +912,4 @@ class LDAPSearchError(LDAPSessionError):
         self.answers = answers
 
     def getAnswers(self):
-        return self.answers
+        pass

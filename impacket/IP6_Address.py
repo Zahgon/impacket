@@ -106,40 +106,28 @@ class IP6_Address:
         return self.__scope_id
     
     def get_unscoped_address(self):
-        return self.as_string(True, False) #Compressed address = True, Scoped address = False
+        pass
         
 #############################################################################################################
 # Semantic helpers
     def is_multicast(self):
-        return self.__bytes[0] == 0xFF
+        pass
     
     def is_unicast(self):
-        return self.__bytes[0] == 0xFE
+        pass
     
     def is_link_local_unicast(self):
-        return self.is_unicast() and (self.__bytes[1] & 0xC0 == 0x80)
+        pass
     
     def is_site_local_unicast(self):
-        return self.is_unicast() and (self.__bytes[1] & 0xC0 == 0xC0)
+        pass
     
     def is_unique_local_unicast(self):
-        return self.__bytes[0] == 0xFD
+        pass
                 
     
     def get_human_readable_address_type(self):
-        if self.is_multicast():
-            return "multicast"
-        elif self.is_unicast():
-            if self.is_link_local_unicast():
-                return "link-local unicast"
-            elif self.is_site_local_unicast():
-                return "site-local unicast"
-            else:
-                return "unicast"
-        elif self.is_unique_local_unicast():
-            return "unique-local unicast"
-        else:
-            return "unknown type"
+        pass
 
 #############################################################################################################
 #Expansion helpers
@@ -242,12 +230,7 @@ class IP6_Address:
 #############################################################################################################
     @classmethod
     def is_a_valid_text_representation(cls, text_representation):
-        try:
-            #Capitalize on the constructor's ability to detect invalid text representations of an IP6 address            
-            IP6_Address(text_representation)
-            return True
-        except Exception:
-            return False
+        pass
                 
     def __is_a_scoped_address(self, text_representation):
         return text_representation.count(self.SCOPE_SEPARATOR) == 1

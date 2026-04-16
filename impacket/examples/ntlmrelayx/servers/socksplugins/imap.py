@@ -38,7 +38,7 @@ class IMAPSocksRelay(SocksRelay):
 
     @staticmethod
     def getProtocolPort():
-        return 143
+        pass
 
     def getServerCapabilities(self):
         for key in list(self.activeRelays.keys()):

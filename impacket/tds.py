@@ -989,10 +989,10 @@ class MSSQL:
             return self.socket.close()
 
     def setPacketSize(self, packetSize):
-        self.packetSize = packetSize
+        pass
 
     def getPacketSize(self):
-        return self.packetSize
+        pass
 
     #################### SEND DATA #####################################################################
 
@@ -2259,59 +2259,31 @@ class MSSQL:
 
     def batch(self, cmd, tuplemode=False, wait=True):
         # First of all we clear the rows, colMeta and lastError
-        self.rows = []
-        self.colMeta = []
-        self.lastError = False
-        self.sendTDS(TDS_SQL_BATCH, (cmd + "\r\n").encode("utf-16le"))
-        if wait:
-            tds = self.recvTDS()
-            self.replies = self.parseReply(tds["Data"], tuplemode)
-            return self.rows
-        else:
-            return True
+        pass
 
     def batchStatement(self, cmd, tuplemode=False):
         # First of all we clear the rows, colMeta and lastError
-        self.rows = []
-        self.colMeta = []
-        self.lastError = False
-        self.sendTDS(TDS_SQL_BATCH, (cmd + "\r\n").encode("utf-16le"))
+        pass
         # self.recvTDS()
 
     # Handy alias
     sql_query = batch
 
     def changeDB(self, db):
-        if db != self.currentDB:
-            chdb = "use %s" % db
-            self.batch(chdb)
-            self.printReplies()
+        pass
 
     def RunSQLQuery(self, db, sql_query, tuplemode=False, wait=True, **kwArgs):
-        db = db or "master"
-        self.changeDB(db)
-        self.printReplies()
-        ret = self.batch(sql_query, tuplemode, wait)
-        if wait:
-            self.printReplies()
-        if self.lastError:
-            raise self.lastError
-        if self.lastError:
-            raise self.lastError
-        return ret
+        pass
 
     def RunSQLStatement(self, db, sql_query, wait=True, **kwArgs):
-        self.RunSQLQuery(db, sql_query, wait=wait)
-        if self.lastError:
-            raise self.lastError
-        return True
+        pass
 
     # Properties
     @property
     def workstation_id(self):
-        return self._workstation_id
+        pass
 
     @property
     def application_name(self):
-        return self._application_name
+        pass
 

@@ -208,9 +208,4 @@ class RPCRelayClient(ProtocolClient):
             self.session = None
 
     def keepAlive(self):
-        try:
-            req = DummyOp()
-            self.session.request(req)
-        except DCERPCException as e:
-            if 'nca_s_op_rng_error' not in str(e) or 'RPC_E_INVALID_HEADER' not in str(e):
-                raise
+        pass

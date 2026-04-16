@@ -270,8 +270,7 @@ class saveRegistryParser(Registry):
         return self.fd.read(count)[4:]
     
     def __setData(self, offset, value):
-        self.fd.seek(4096+offset+4, 0)
-        return self.fd.write(value)
+        pass
 
     def __processDataBlocks(self,data):
         res = []
@@ -305,21 +304,7 @@ class saveRegistryParser(Registry):
             return self.__getData(rec['OffsetData'], rec['DataLen']+4)
     
     def __setValueData(self, rec, value):
-        if len(value) != rec['DataLen']:
-            # The case of data stored in the Offset field itself still needs more
-            # work as it's necessary to identify the offset in the file to overwrite it.
-            # Leaving unimplemented for now as there's no clear use case yet.
-            # if rec['DataLen'] < 0:
-            #    if len(value) <= 4:
-            #        rec['OffsetData'] = int.from_bytes(value)
-            LOG.debug("Invalid value length received by __setValueData. Expected: %d - Got: %d" % (rec['DataLen'], len(value)))
-            # This is a much more relevant scenario that should be revisited and properly implemented.
-            raise NotImplementedError("Setting key values with differing lengths is not implemented.")
-        if rec['DataLen'] == 0:
-            LOG.debug("Received 0 length input for __setValueData.")
-            return 0
-        else:
-            return self.__setData(rec['OffsetData'], value)
+        pass
 
     def __getLhHash(self, key):
         res = 0
@@ -378,49 +363,10 @@ class saveRegistryParser(Registry):
         return None
 
     def __walkSubNodes(self, rec):
-        nk = self.__getBlock(rec['OffsetNk'])
-        if isinstance(nk, REG_NK):
-            print("%s%s" % (self.indent, nk['KeyName'].decode('utf-8')))
-            self.indent += '  '
-            if nk['OffsetSubKeyLf'] < 0:
-                self.indent = self.indent[:-2]
-                return
-            lf = self.__getBlock(nk['OffsetSubKeyLf'])
-        else:
-            lf = nk
-
-        data = lf['HashRecords']
-
-        if lf['Magic'] == 'ri':
-            # ri points to lf/lh records, so we must parse them before
-            records = ''
-            for i in range(lf['NumKeys']):
-                offset = unpack('<L', data[:4])[0]
-                l = self.__getBlock(offset)
-                records = records + l['HashRecords'][:l['NumKeys']*8]
-                data = data[4:]
-            data = records
-
-        for key in range(lf['NumKeys']):
-            hashRec = REG_HASH(data[:8])
-            self.__walkSubNodes(hashRec)
-            data = data[8:]
-
-        if isinstance(nk, REG_NK):
-            self.indent = self.indent[:-2]
+        pass
 
     def walk(self, parentKey):
-        key = self.findKey(parentKey)
-
-        if key is None or key['OffsetSubKeyLf'] < 0:
-            return
-
-        lf = self.__getBlock(key['OffsetSubKeyLf'])
-        data = lf['HashRecords']
-        for record in range(lf['NumKeys']):
-            hashRec = REG_HASH(data[:8])
-            self.__walkSubNodes(hashRec)
-            data = data[8:]
+        pass
 
     def findKey(self, key):
         # Let's strip '\' from the beginning, except for the case of
@@ -441,30 +387,7 @@ class saveRegistryParser(Registry):
         return parentKey
 
     def printValue(self, valueType, valueData):
-        if valueType in [REG_SZ, REG_EXPAND_SZ, REG_MULTISZ]:
-            if isinstance(valueData, int):
-                print('NULL')
-            else:
-                print("%s" % (valueData.decode('utf-16le')))
-        elif valueType == REG_BINARY:
-            print('')
-            hexdump(valueData, self.indent)
-        elif valueType == REG_DWORD:
-            print("%d" % valueData)
-        elif valueType == REG_QWORD:
-            print("%d" % (unpack('<Q',valueData)[0]))
-        elif valueType == REG_NONE:
-            try:
-                if len(valueData) > 1:
-                    print('')
-                    hexdump(valueData, self.indent)
-                else:
-                    print(" NULL")
-            except:
-                print(" NULL")
-        else:
-            print("Unknown Type 0x%x!" % valueType)
-            hexdump(valueData)
+        pass
 
     def enumKey(self, parentKey):
         res = []
@@ -537,24 +460,7 @@ class saveRegistryParser(Registry):
     
     def setValue(self, keyValue, valueData):
         # Returns a tuple with (ValueType, BytesWritten) for the request keyValue
-        regKey = ntpath.dirname(keyValue)
-        regValue = ntpath.basename(keyValue)
-
-        key = self.findKey(regKey)
-
-        if key is None:
-            return None
-        
-        if key['NumValues'] > 0:
-            valueList = self.__getValueBlocks(key['OffsetValueList'], key['NumValues']+1)
-
-            for value in valueList:
-                if value['Name'] == b(regValue):
-                    return value['ValueType'], self.__setValueData(value, valueData)
-                elif regValue == 'default' and value['Flag'] <=0:
-                    return value['ValueType'], self.__setValueData(value, valueData)
-        
-        return None
+        pass
 
     def getClass(self, className):
 
@@ -674,55 +580,13 @@ class exportRegistryParser(Registry):
                 parentNode.addChildNode(node)
 
     def __walkSubNodes(self, node):
-        print("%s%s" % (self.indent, node.nodeName ))
-        self.indent += '  '
-        if node.childKeys == {}:
-            self.indent = self.indent[:-2]
-            return
-
-        for subNode in list(node.childKeys.values()):
-            self.__walkSubNodes(subNode)
-
-        self.indent = self.indent[:-2]
+        pass
 
     def walk(self, parentKey):
-        path = self.__keyToNodePath(parentKey)
-        node = self.__findNode(path)
-
-        if node is None:
-            return
-
-        for subNode in list(node.childKeys.values()):
-            self.__walkSubNodes(subNode)
+        pass
 
     def printValue(self, valueType, valueData):
-        if valueType in [REG_SZ, REG_EXPAND_SZ, REG_MULTISZ] :
-            if valueData == b'' or valueData == b'\x00\x00':
-                print('NULL')
-            else:
-                print("%s" % (valueData.decode('utf-16le')))
-        elif valueType == REG_BINARY:
-            print('')
-            hexdump(valueData, self.indent)
-        elif valueType == REG_DWORD:
-            if valueData == b'':
-                print(0)
-            else:
-                print(int.from_bytes(valueData))
-        elif valueType == REG_QWORD:
-            print("%d" % (unpack('<Q',valueData)[0]))
-        elif valueType == REG_NONE:
-            try:
-                if len(valueData) > 1:
-                    print('')
-                    hexdump(valueData, self.indent)
-                else:
-                    print(" NULL")
-            except:
-                print(" NULL")
-        else:
-            print("Unknown Type 0x%x!" % valueType)
-            hexdump(valueData)
+        pass
 
     def findKey(self, key):
         if key == '\\':

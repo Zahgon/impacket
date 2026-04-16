@@ -108,28 +108,7 @@ def checkNullString(string):
         return string
 
 def hRfrGetNewDSA(dce, pUserDN=''):
-    request = RfrGetNewDSA()
-    request['ulFlags'] = 0
-    request['pUserDN'] = checkNullString(pUserDN)
-    request['ppszUnused'] = NULL
-    request['ppszServer'] = '\x00'
-
-    resp = dce.request(request)
-    resp['ppszServer'] = resp['ppszServer'][:-1]
-
-    if request['ppszUnused'] != NULL:
-        resp['ppszUnused'] = resp['ppszUnused'][:-1]
-
-    return resp
+    pass
 
 def hRfrGetFQDNFromServerDN(dce, szMailboxServerDN):
-    szMailboxServerDN = checkNullString(szMailboxServerDN)
-    request = RfrGetFQDNFromServerDN()
-    request['ulFlags'] = 0
-    request['szMailboxServerDN'] = szMailboxServerDN
-    request['cbMailboxServerDN'] = len(szMailboxServerDN)
-
-    resp = dce.request(request)
-    resp['ppszServerFQDN'] = resp['ppszServerFQDN'][:-1]
-
-    return resp
+    pass

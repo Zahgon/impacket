@@ -165,21 +165,11 @@ class MSSQL_VERSION:
 
     @property
     def version_number(self):
-        return f"{self.major}.{self.minor}.{self.build}"
+        pass
 
     @property
     def version_name(self):
-        try:
-            string = MSSQL_VERSION.VERSION_NAME[0]
-            string += " "
-            string += MSSQL_VERSION.VERSION_NAME[1][self.major][0]
-            string += MSSQL_VERSION.VERSION_NAME[1][self.major][1][self.minor][0]
-            string += " "
-            string += MSSQL_VERSION.VERSION_NAME[1][self.major][1][self.minor][1][self.build]
-        except KeyError:
-            pass
-        finally:
-            return string
+        pass
 
     def __repr__(self):
         return f"{self.version_name} ({self.version_number})"

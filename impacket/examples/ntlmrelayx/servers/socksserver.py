@@ -181,103 +181,15 @@ class SocksRelay:
 
 
 def keepAliveTimer(server):
-    LOG.debug('KeepAlive Timer reached. Updating connections')
-
-    for target in list(server.activeRelays.keys()):
-        for port in list(server.activeRelays[target].keys()):
-            # Now cycle through the users
-            for user in list(server.activeRelays[target][port].keys()):
-                if user != 'data' and user != 'scheme':
-                    # Let's call the keepAlive method for the handler to keep the connection alive
-                    if server.activeRelays[target][port][user]['inUse'] is False:
-                        LOG.debug('Calling keepAlive() for %s@%s:%s' % (user, target, port))
-                        try:
-                            server.activeRelays[target][port][user]['protocolClient'].keepAlive()
-                        except Exception as e:
-                            LOG.debug("Exception:",exc_info=True)
-                            LOG.debug('SOCKS: %s' % str(e))
-                            if str(e).find('Broken pipe') >= 0 or str(e).find('reset by peer') >=0 or \
-                                            str(e).find('Invalid argument') >= 0 or str(e).find('Server not connected') >=0:
-                                # Connection died, taking out of the active list
-                                del (server.activeRelays[target][port][user])
-                                if len(list(server.activeRelays[target][port].keys())) == 1:
-                                    del (server.activeRelays[target][port])
-                                LOG.debug('Removing active relay for %s@%s:%s' % (user, target, port))
-                    else:
-                        LOG.debug('Skipping %s@%s:%s since it\'s being used at the moment' % (user, target, port))
+    pass
 
 def activeConnectionsWatcher(server):
-    while True:
-        # This call blocks until there is data, so it doesn't loop endlessly
-        target, port, scheme, userName, client, data = activeConnections.get()
-        # ToDo: Careful. Dicts are not thread safe right?
-        if (target in server.activeRelays) is not True:
-            server.activeRelays[target] = {}
-        if (port in server.activeRelays[target]) is not True:
-            server.activeRelays[target][port] = {}
-
-        if (userName in server.activeRelays[target][port]) is not True:
-            LOG.info('SOCKS: Adding %s://%s@%s(%s) [%s] to active SOCKS connection. Enjoy' % (scheme, userName, target, port, client.client_id))
-            server.activeRelays[target][port][userName] = {}
-            # This is the protocolClient. Needed because we need to access the killConnection from time to time.
-            # Inside this instance, you have the session attribute pointing to the relayed session.
-            server.activeRelays[target][port][userName]['protocolClient'] = client
-            server.activeRelays[target][port][userName]['inUse'] = False
-            server.activeRelays[target][port][userName]['data'] = data
-            # Just for the CHALLENGE data, we're storing this general
-            server.activeRelays[target][port]['data'] = data
-            # Let's store the protocol scheme, needed be used later when trying to find the right socks relay server to use
-            server.activeRelays[target][port]['scheme'] = scheme
-
-            # Default values in case somebody asks while we're getting the data
-            server.activeRelays[target][port][userName]['isAdmin'] = 'N/A'
-            # Do we have admin access in this connection?
-            try:
-                LOG.debug("Checking admin status for user %s" % str(userName))
-                isAdmin = client.isAdmin()
-                server.activeRelays[target][port][userName]['isAdmin'] = isAdmin
-            except Exception as e:
-                # Method not implemented
-                server.activeRelays[target][port][userName]['isAdmin'] = 'N/A'
-                pass
-            LOG.debug("isAdmin returned: %s" % server.activeRelays[target][port][userName]['isAdmin'])
-        else:
-            LOG.info('Relay connection for %s at %s(%d) already exists. Discarding' % (userName, target, port))
-            client.killConnection()
+    pass
 
 
 def webService(addr, port):
     def _webService(server):
-        from flask import Flask, jsonify
-
-        app = Flask(__name__)
-
-        log = logging.getLogger('werkzeug')
-        log.setLevel(logging.ERROR)
-
-        @app.route('/')
-        def index():
-            print(server.activeRelays)
-            return "Relays available: %s!" % (len(server.activeRelays))
-
-        @app.route('/ntlmrelayx/api/v1.0/relays', methods=['GET'])
-        def get_relays():
-            relays = []
-            for target in server.activeRelays:
-                for port in server.activeRelays[target]:
-                    for user in server.activeRelays[target][port]:
-                        if user != 'data' and user != 'scheme':
-                            client_id = server.activeRelays[target][port][user]['protocolClient'].client_id
-                            protocol = server.activeRelays[target][port]['scheme']
-                            isAdmin = server.activeRelays[target][port][user]['isAdmin']
-                            relays.append([protocol, target, user, isAdmin, str(port), str(client_id)])
-            return jsonify(relays)
-
-        @app.route('/ntlmrelayx/api/v1.0/relays', methods=['GET'])
-        def get_info(relay):
-            pass
-
-        app.run(host=addr, port=port)
+        pass
 
     return _webService
 

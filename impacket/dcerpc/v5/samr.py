@@ -2441,26 +2441,13 @@ OPNUMS = {
 ################################################################################
 
 def hSamrConnect5(dce, serverName='\x00', desiredAccess=MAXIMUM_ALLOWED, inVersion=1, revision=3):
-    request = SamrConnect5()
-    request['ServerName'] = serverName
-    request['DesiredAccess'] = desiredAccess
-    request['InVersion'] = inVersion
-    request['InRevisionInfo']['tag'] = inVersion
-    request['InRevisionInfo']['V1']['Revision'] = revision
-    return dce.request(request)
+    pass
 
 def hSamrConnect4(dce, serverName='\x00', desiredAccess=MAXIMUM_ALLOWED, clientRevision=2):
-    request = SamrConnect4()
-    request['ServerName'] = serverName
-    request['DesiredAccess'] = desiredAccess
-    request['ClientRevision'] = clientRevision
-    return dce.request(request)
+    pass
 
 def hSamrConnect2(dce, serverName='\x00', desiredAccess=MAXIMUM_ALLOWED):
-    request = SamrConnect2()
-    request['ServerName'] = serverName
-    request['DesiredAccess'] = desiredAccess
-    return dce.request(request)
+    pass
 
 def hSamrConnect(dce, serverName='\x00', desiredAccess=MAXIMUM_ALLOWED):
     request = SamrConnect()
@@ -2497,11 +2484,7 @@ def hSamrOpenUser(dce, domainHandle, desiredAccess=MAXIMUM_ALLOWED, userId=0):
     return dce.request(request)
 
 def hSamrEnumerateDomainsInSamServer(dce, serverHandle, enumerationContext=0, preferedMaximumLength=0xffffffff):
-    request = SamrEnumerateDomainsInSamServer()
-    request['ServerHandle'] = serverHandle
-    request['EnumerationContext'] = enumerationContext
-    request['PreferedMaximumLength'] = preferedMaximumLength
-    return dce.request(request)
+    pass
 
 def hSamrEnumerateGroupsInDomain(dce, domainHandle, enumerationContext=0, preferedMaximumLength=0xffffffff):
     request = SamrEnumerateGroupsInDomain()
@@ -2526,59 +2509,25 @@ def hSamrEnumerateUsersInDomain(dce, domainHandle, userAccountControl=USER_NORMA
     return dce.request(request)
 
 def hSamrQueryDisplayInformation3(dce, domainHandle, displayInformationClass=DOMAIN_DISPLAY_INFORMATION.DomainDisplayUser, index=0, entryCount=0xffffffff, preferedMaximumLength=0xffffffff):
-    request = SamrQueryDisplayInformation3()
-    request['DomainHandle'] = domainHandle
-    request['DisplayInformationClass'] = displayInformationClass
-    request['Index'] = index
-    request['EntryCount'] = entryCount
-    request['PreferredMaximumLength'] = preferedMaximumLength
-    return dce.request(request)
+    pass
 
 def hSamrQueryDisplayInformation2(dce, domainHandle, displayInformationClass=DOMAIN_DISPLAY_INFORMATION.DomainDisplayUser, index=0, entryCount=0xffffffff, preferedMaximumLength=0xffffffff):
-    request = SamrQueryDisplayInformation2()
-    request['DomainHandle'] = domainHandle
-    request['DisplayInformationClass'] = displayInformationClass
-    request['Index'] = index
-    request['EntryCount'] = entryCount
-    request['PreferredMaximumLength'] = preferedMaximumLength
-    return dce.request(request)
+    pass
 
 def hSamrQueryDisplayInformation(dce, domainHandle, displayInformationClass=DOMAIN_DISPLAY_INFORMATION.DomainDisplayUser, index=0, entryCount=0xffffffff, preferedMaximumLength=0xffffffff):
-    request = SamrQueryDisplayInformation()
-    request['DomainHandle'] = domainHandle
-    request['DisplayInformationClass'] = displayInformationClass
-    request['Index'] = index
-    request['EntryCount'] = entryCount
-    request['PreferredMaximumLength'] = preferedMaximumLength
-    return dce.request(request)
+    pass
 
 def hSamrGetDisplayEnumerationIndex2(dce, domainHandle, displayInformationClass=DOMAIN_DISPLAY_INFORMATION.DomainDisplayUser, prefix=''):
-    request = SamrGetDisplayEnumerationIndex2()
-    request['DomainHandle'] = domainHandle
-    request['DisplayInformationClass'] = displayInformationClass
-    request['Prefix'] = prefix
-    return dce.request(request)
+    pass
 
 def hSamrGetDisplayEnumerationIndex(dce, domainHandle, displayInformationClass=DOMAIN_DISPLAY_INFORMATION.DomainDisplayUser, prefix=''):
-    request = SamrGetDisplayEnumerationIndex()
-    request['DomainHandle'] = domainHandle
-    request['DisplayInformationClass'] = displayInformationClass
-    request['Prefix'] = prefix
-    return dce.request(request)
+    pass
 
 def hSamrCreateGroupInDomain(dce, domainHandle, name, desiredAccess=GROUP_ALL_ACCESS):
-    request = SamrCreateGroupInDomain()
-    request['DomainHandle'] = domainHandle
-    request['Name'] = name
-    request['DesiredAccess'] = desiredAccess
-    return dce.request(request)
+    pass
 
 def hSamrCreateAliasInDomain(dce, domainHandle, accountName, desiredAccess=GROUP_ALL_ACCESS):
-    request = SamrCreateAliasInDomain()
-    request['DomainHandle'] = domainHandle
-    request['AccountName'] = accountName
-    request['DesiredAccess'] = desiredAccess
-    return dce.request(request)
+    pass
 
 def hSamrCreateUser2InDomain(dce, domainHandle, name, accountType=USER_NORMAL_ACCOUNT, desiredAccess=GROUP_ALL_ACCESS):
     request = SamrCreateUser2InDomain()
@@ -2600,68 +2549,34 @@ def hSamrCreateUser2InDomain(dce, domainHandle, name, accountType=USER_NORMAL_AC
 
 
 def hSamrCreateUserInDomain(dce, domainHandle, name, desiredAccess=GROUP_ALL_ACCESS):
-    request = SamrCreateUserInDomain()
-    request['DomainHandle'] = domainHandle
-    request['Name'] = name
-    request['DesiredAccess'] = desiredAccess
-    return dce.request(request)
+    pass
 
 def hSamrQueryInformationDomain(dce, domainHandle, domainInformationClass=DOMAIN_INFORMATION_CLASS.DomainGeneralInformation2):
-    request = SamrQueryInformationDomain()
-    request['DomainHandle'] = domainHandle
-    request['DomainInformationClass'] = domainInformationClass
-    return dce.request(request)
+    pass
 
 def hSamrQueryInformationDomain2(dce, domainHandle, domainInformationClass=DOMAIN_INFORMATION_CLASS.DomainGeneralInformation2):
-    request = SamrQueryInformationDomain2()
-    request['DomainHandle'] = domainHandle
-    request['DomainInformationClass'] = domainInformationClass
-    return dce.request(request)
+    pass
 
 def hSamrQueryInformationGroup(dce, groupHandle, groupInformationClass=GROUP_INFORMATION_CLASS.GroupGeneralInformation):
-    request = SamrQueryInformationGroup()
-    request['GroupHandle'] = groupHandle
-    request['GroupInformationClass'] = groupInformationClass
-    return dce.request(request)
+    pass
 
 def hSamrQueryInformationAlias(dce, aliasHandle, aliasInformationClass=ALIAS_INFORMATION_CLASS.AliasGeneralInformation):
-    request = SamrQueryInformationAlias()
-    request['AliasHandle'] = aliasHandle
-    request['AliasInformationClass'] = aliasInformationClass
-    return dce.request(request)
+    pass
 
 def hSamrQueryInformationUser2(dce, userHandle, userInformationClass=USER_INFORMATION_CLASS.UserGeneralInformation):
-    request = SamrQueryInformationUser2()
-    request['UserHandle'] = userHandle
-    request['UserInformationClass'] = userInformationClass
-    return dce.request(request)
+    pass
 
 def hSamrQueryInformationUser(dce, userHandle, userInformationClass=USER_INFORMATION_CLASS.UserGeneralInformation):
-    request = SamrQueryInformationUser()
-    request['UserHandle'] = userHandle
-    request['UserInformationClass'] = userInformationClass
-    return dce.request(request)
+    pass
 
 def hSamrSetInformationDomain(dce, domainHandle, domainInformation):
-    request = SamrSetInformationDomain()
-    request['DomainHandle'] = domainHandle
-    request['DomainInformationClass'] = domainInformation['tag']
-    request['DomainInformation'] = domainInformation
-    return dce.request(request)
+    pass
 
 def hSamrSetInformationGroup(dce, groupHandle, buffer):
-    request = SamrSetInformationGroup()
-    request['GroupHandle'] = groupHandle
-    request['GroupInformationClass'] = buffer['tag']
-    request['Buffer'] = buffer
-    return dce.request(request)
+    pass
 
 def hSamrSetInformationAlias(dce, aliasHandle, buffer):
-    request = SamrSetInformationAlias()
-    request['AliasHandle'] = aliasHandle
-    request['AliasInformationClass'] = buffer['tag']
-    request['Buffer'] = buffer
-    return dce.request(request)
+    pass
 
 def hSamrSetInformationUser2(dce, userHandle, buffer):
     request = SamrSetInformationUser2()
@@ -2671,39 +2586,22 @@ def hSamrSetInformationUser2(dce, userHandle, buffer):
     return dce.request(request)
 
 def hSamrSetInformationUser(dce, userHandle, buffer):
-    request = SamrSetInformationUser()
-    request['UserHandle'] = userHandle
-    request['UserInformationClass'] = buffer['tag']
-    request['Buffer'] = buffer
-    return dce.request(request)
+    pass
 
 def hSamrDeleteGroup(dce, groupHandle):
-    request = SamrDeleteGroup()
-    request['GroupHandle'] = groupHandle
-    return dce.request(request)
+    pass
 
 def hSamrDeleteAlias(dce, aliasHandle):
-    request = SamrDeleteAlias()
-    request['AliasHandle'] = aliasHandle
-    return dce.request(request)
+    pass
 
 def hSamrDeleteUser(dce, userHandle):
-    request = SamrDeleteUser()
-    request['UserHandle'] = userHandle
-    return dce.request(request)
+    pass
 
 def hSamrAddMemberToGroup(dce, groupHandle, memberId, attributes):
-    request = SamrAddMemberToGroup()
-    request['GroupHandle'] = groupHandle
-    request['MemberId'] = memberId
-    request['Attributes'] = attributes
-    return dce.request(request)
+    pass
 
 def hSamrRemoveMemberFromGroup(dce, groupHandle, memberId):
-    request = SamrRemoveMemberFromGroup()
-    request['GroupHandle'] = groupHandle
-    request['MemberId'] = memberId
-    return dce.request(request)
+    pass
 
 def hSamrGetMembersInGroup(dce, groupHandle):
     request = SamrGetMembersInGroup()
@@ -2711,16 +2609,10 @@ def hSamrGetMembersInGroup(dce, groupHandle):
     return dce.request(request)
 
 def hSamrAddMemberToAlias(dce, aliasHandle, memberId):
-    request = SamrAddMemberToAlias()
-    request['AliasHandle'] = aliasHandle
-    request['MemberId'] = memberId
-    return dce.request(request)
+    pass
 
 def hSamrRemoveMemberFromAlias(dce, aliasHandle, memberId):
-    request = SamrRemoveMemberFromAlias()
-    request['AliasHandle'] = aliasHandle
-    request['MemberId'] = memberId
-    return dce.request(request)
+    pass
 
 def hSamrGetMembersInAlias(dce, aliasHandle):
     request = SamrGetMembersInAlias()
@@ -2728,36 +2620,19 @@ def hSamrGetMembersInAlias(dce, aliasHandle):
     return dce.request(request)
 
 def hSamrRemoveMemberFromForeignDomain(dce, domainHandle, memberSid):
-    request = SamrRemoveMemberFromForeignDomain()
-    request['DomainHandle'] = domainHandle
-    request['MemberSid'] = memberSid
-    return dce.request(request)
+    pass
 
 def hSamrAddMultipleMembersToAlias(dce, aliasHandle, membersBuffer):
-    request = SamrAddMultipleMembersToAlias()
-    request['AliasHandle'] = aliasHandle
-    request['MembersBuffer'] = membersBuffer
-    request['MembersBuffer']['Count'] = len(membersBuffer['Sids'])
-    return dce.request(request)
+    pass
 
 def hSamrRemoveMultipleMembersFromAlias(dce, aliasHandle, membersBuffer):
-    request = SamrRemoveMultipleMembersFromAlias()
-    request['AliasHandle'] = aliasHandle
-    request['MembersBuffer'] = membersBuffer
-    request['MembersBuffer']['Count'] = len(membersBuffer['Sids'])
-    return dce.request(request)
+    pass
 
 def hSamrGetGroupsForUser(dce, userHandle):
-    request = SamrGetGroupsForUser()
-    request['UserHandle'] = userHandle
-    return dce.request(request)
+    pass
 
 def hSamrGetAliasMembership(dce, domainHandle, sidArray):
-    request = SamrGetAliasMembership()
-    request['DomainHandle'] = domainHandle
-    request['SidArray'] = sidArray
-    request['SidArray']['Count'] = len(sidArray['Sids'])
-    return dce.request(request)
+    pass
 
 def hSamrChangePasswordUser(dce, userHandle, oldPassword, newPassword, oldPwdHashNT='', newPwdHashLM='', newPwdHashNT=''):
     request = SamrChangePasswordUser()
@@ -2806,54 +2681,7 @@ def hSamrChangePasswordUser(dce, userHandle, oldPassword, newPassword, oldPwdHas
     return dce.request(request)
 
 def hSamrUnicodeChangePasswordUser2(dce, serverName='\x00', userName='', oldPassword='', newPassword='', oldPwdHashLM = '', oldPwdHashNT = ''):
-    request = SamrUnicodeChangePasswordUser2()
-    request['ServerName'] = serverName
-    request['UserName'] = userName
-
-    try:
-        from Cryptodome.Cipher import ARC4
-    except Exception:
-        LOG.critical("Warning: You don't have any crypto installed. You need pycryptodomex")
-        LOG.critical("See https://pypi.org/project/pycryptodomex/")
-    from impacket import crypto, ntlm
-
-    if oldPwdHashLM == '' and oldPwdHashNT == '':
-        oldPwdHashLM = ntlm.LMOWFv1(oldPassword)
-        oldPwdHashNT = ntlm.NTOWFv1(oldPassword)
-    else:
-        # Let's convert the hashes to binary form, if not yet
-        try:
-            oldPwdHashLM = unhexlify(oldPwdHashLM)
-        except:
-            pass
-        try:
-            oldPwdHashNT = unhexlify(oldPwdHashNT)
-        except:
-            pass
-
-    newPwdHashNT = ntlm.NTOWFv1(newPassword)
-
-    samUser = SAMPR_USER_PASSWORD()
-    try:
-        encoded_password = newPassword.encode('utf-16le')
-    except UnicodeDecodeError:
-        import sys
-        encoded_password = newPassword.decode(sys.getfilesystemencoding()).encode('utf-16le')
-
-    samUser['Buffer'] = b'A' * (512 - len(encoded_password)) + encoded_password
-
-    samUser['Length'] = len(encoded_password)
-    pwdBuff = samUser.getData()
-
-    rc4 = ARC4.new(oldPwdHashNT)
-    encBuf = rc4.encrypt(pwdBuff)
-    request['NewPasswordEncryptedWithOldNt']['Buffer'] = encBuf
-    request['OldNtOwfPasswordEncryptedWithNewNt'] = crypto.SamEncryptNTLMHash(oldPwdHashNT, newPwdHashNT)
-    request['LmPresent'] = 0
-    request['NewPasswordEncryptedWithOldLm'] = NULL
-    request['OldLmOwfPasswordEncryptedWithNewNt'] = NULL
-
-    return dce.request(request)
+    pass
 
 def hSamrLookupDomainInSamServer(dce, serverHandle, name):
     request = SamrLookupDomainInSamServer()
@@ -2862,51 +2690,28 @@ def hSamrLookupDomainInSamServer(dce, serverHandle, name):
     return dce.request(request)
 
 def hSamrSetSecurityObject(dce, objectHandle, securityInformation, securityDescriptor):
-    request = SamrSetSecurityObject()
-    request['ObjectHandle'] =  objectHandle
-    request['SecurityInformation'] =  securityInformation
-    request['SecurityDescriptor'] = securityDescriptor
-    return dce.request(request)
+    pass
 
 def hSamrQuerySecurityObject(dce, objectHandle, securityInformation):
-    request = SamrQuerySecurityObject()
-    request['ObjectHandle'] =  objectHandle
-    request['SecurityInformation'] =  securityInformation
-    return dce.request(request)
+    pass
 
 def hSamrCloseHandle(dce, samHandle):
-    request = SamrCloseHandle()
-    request['SamHandle'] =  samHandle
-    return dce.request(request)
+    pass
 
 def hSamrSetMemberAttributesOfGroup(dce, groupHandle, memberId, attributes):
-    request = SamrSetMemberAttributesOfGroup()
-    request['GroupHandle'] =  groupHandle
-    request['MemberId'] =  memberId
-    request['Attributes'] =  attributes
-    return dce.request(request)
+    pass
 
 def hSamrGetUserDomainPasswordInformation(dce, userHandle):
-    request = SamrGetUserDomainPasswordInformation()
-    request['UserHandle'] =  userHandle
-    return dce.request(request)
+    pass
 
 def hSamrGetDomainPasswordInformation(dce):
-    request = SamrGetDomainPasswordInformation()
-    request['Unused'] =  NULL
-    return dce.request(request)
+    pass
 
 def hSamrRidToSid(dce, objectHandle, rid):
-    request = SamrRidToSid()
-    request['ObjectHandle'] = objectHandle
-    request['Rid'] =  rid
-    return dce.request(request)
+    pass
 
 def hSamrValidatePassword(dce, inputArg):
-    request = SamrValidatePassword()
-    request['ValidationType'] =  inputArg['tag']
-    request['InputArg'] = inputArg
-    return dce.request(request)
+    pass
 
 def hSamrLookupNamesInDomain(dce, domainHandle, names):
     request = SamrLookupNamesInDomain()
@@ -2922,82 +2727,10 @@ def hSamrLookupNamesInDomain(dce, domainHandle, names):
     return dce.request(request)
 
 def hSamrLookupIdsInDomain(dce, domainHandle, ids):
-    request = SamrLookupIdsInDomain()
-    request['DomainHandle'] =  domainHandle
-    request['Count'] = len(ids)
-    for dId in ids:
-        entry = ULONG()
-        entry['Data'] = dId
-        request['RelativeIds'].append(entry)
-
-    request.fields['RelativeIds'].fields['MaximumCount'] = 1000
-
-    return dce.request(request)
+    pass
 
 def hSamrSetPasswordInternal4New(dce, userHandle, password):
-    request = SamrSetInformationUser2()
-    request['UserHandle'] = userHandle
-    request['UserInformationClass'] = USER_INFORMATION_CLASS.UserInternal4InformationNew
-    request['Buffer']['tag'] = USER_INFORMATION_CLASS.UserInternal4InformationNew
-    request['Buffer']['Internal4New']['I1']['WhichFields'] = 0x01000000 | 0x08000000
-
-    request['Buffer']['Internal4New']['I1']['UserName'] = NULL
-    request['Buffer']['Internal4New']['I1']['FullName'] = NULL
-    request['Buffer']['Internal4New']['I1']['HomeDirectory'] = NULL
-    request['Buffer']['Internal4New']['I1']['HomeDirectoryDrive'] = NULL
-    request['Buffer']['Internal4New']['I1']['ScriptPath'] = NULL
-    request['Buffer']['Internal4New']['I1']['ProfilePath'] = NULL
-    request['Buffer']['Internal4New']['I1']['AdminComment'] = NULL
-    request['Buffer']['Internal4New']['I1']['WorkStations'] = NULL
-    request['Buffer']['Internal4New']['I1']['UserComment'] = NULL
-    request['Buffer']['Internal4New']['I1']['Parameters'] = NULL
-    request['Buffer']['Internal4New']['I1']['LmOwfPassword']['Buffer'] = NULL
-    request['Buffer']['Internal4New']['I1']['NtOwfPassword']['Buffer'] = NULL
-    request['Buffer']['Internal4New']['I1']['PrivateData'] = NULL
-    request['Buffer']['Internal4New']['I1']['SecurityDescriptor']['SecurityDescriptor'] = NULL
-    request['Buffer']['Internal4New']['I1']['LogonHours']['LogonHours'] = NULL
-    request['Buffer']['Internal4New']['I1']['PasswordExpired'] = 1
-
-    #crypto
-    pwdbuff = password.encode("utf-16le")
-    bufflen = len(pwdbuff)
-    pwdbuff = pwdbuff.rjust(512, b'\0')
-    pwdbuff += struct.pack('<I', bufflen)
-    salt = os.urandom(16)
-    session_key = dce.get_rpc_transport().get_smb_connection().getSessionKey()
-    keymd = md5()
-    keymd.update(salt)
-    keymd.update(session_key)
-    key = keymd.digest()
-
-    cipher = ARC4.new(key)
-    buffercrypt = cipher.encrypt(pwdbuff) + salt
-
-    request['Buffer']['Internal4New']['UserPassword']['Buffer'] = buffercrypt
-    return dce.request(request)
+    pass
 
 def hSamrSetNTInternal1(dce, userHandle, password, hashNT=''):
-    request = SamrSetInformationUser()
-    request['UserHandle'] = userHandle
-    request['UserInformationClass'] = USER_INFORMATION_CLASS.UserInternal1Information
-    request['Buffer']['tag'] = USER_INFORMATION_CLASS.UserInternal1Information
-
-    from impacket import crypto, ntlm
-
-    if hashNT == '':
-        hashNT = ntlm.NTOWFv1(password)
-    else:
-        # Let's convert the hashes to binary form, if not yet
-        try:
-            hashNT = unhexlify(hashNT)
-        except:
-            pass
-
-    session_key = dce.get_rpc_transport().get_smb_connection().getSessionKey()
-
-    request['Buffer']['Internal1']['EncryptedNtOwfPassword'] = crypto.SamEncryptNTLMHash(hashNT, session_key)
-    request['Buffer']['Internal1']['EncryptedLmOwfPassword'] = NULL
-    request['Buffer']['Internal1']['NtPasswordPresent'] = 1
-    request['Buffer']['Internal1']['LmPasswordPresent'] = 0
-
-    return dce.request(request)
+    pass

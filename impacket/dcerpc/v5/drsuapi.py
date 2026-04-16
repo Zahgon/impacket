@@ -1339,9 +1339,7 @@ def checkNullString(string):
         return string
 
 def hDRSUnbind(dce, hDrs):
-    request = DRSUnbind()
-    request['phDrs'] = hDrs
-    return dce.request(request)
+    pass
 
 def hDRSDomainControllerInfo(dce, hDrs, domain, infoLevel):
     request = DRSDomainControllerInfo()

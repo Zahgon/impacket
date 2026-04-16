@@ -150,13 +150,7 @@ If the value contains no realm, then default_realm will be used."""
         return self
 
     def components_to_asn1(self, name):
-        name.setComponentByName('name-type', int(self.type))
-        strings = name.setComponentByName('name-string'
-                                          ).getComponentByName('name-string')
-        for i, c in enumerate(self.components):
-            strings.setComponentByPosition(i, ensure_binary(c))
-
-        return name
+        pass
 
 class Address(object):
     DIRECTIONAL_AP_REQ_SENDER = struct.pack('!I', 0)
@@ -176,21 +170,11 @@ class Address(object):
 
     @property
     def family(self):
-        if self.type == constants.AddressType.IPv4.value:
-            return socket.AF_INET
-        elif self.type == constants.AddressType.IPv4.value:
-            return socket.AF_INET6
-        else:
-            return None
+        pass
 
     @property
     def address(self):
-        if self.type == constants.AddressType.IPv4.value:
-            return socket.inet_pton(self.family, self.data)
-        elif self.type == constants.AddressType.IPv4.value:
-            return socket.inet_pton(self.family, self.data)
-        else:
-            return None
+        pass
 
     def encode(self):
         # ipv4-mapped ipv6 addresses must be encoded as ipv4.

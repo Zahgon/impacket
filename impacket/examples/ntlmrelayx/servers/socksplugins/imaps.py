@@ -35,7 +35,7 @@ class IMAPSSocksRelay(SSLServerMixin, IMAPSocksRelay):
 
     @staticmethod
     def getProtocolPort():
-        return 993
+        pass
 
     def skipAuthentication(self):
         LOG.debug('Wrapping IMAP client connection in TLS/SSL')

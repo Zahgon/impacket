@@ -85,7 +85,7 @@ class IMAPRelayClient(ProtocolClient):
 
     def keepAlive(self):
         # Send a NOOP
-        self.session.noop()
+        pass
 
 class IMAPSRelayClient(IMAPRelayClient):
     PLUGIN_NAME = "IMAPS"

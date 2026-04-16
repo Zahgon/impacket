@@ -86,9 +86,7 @@ def seq_set(seq, name, builder=None, *args, **kwargs):
     return seq.getComponentByName(name)
 
 def seq_set_dict(seq, name, pairs, *args, **kwargs):
-    component = seq.setComponentByName(name).getComponentByName(name)
-    for k, v in pairs.items():
-        component.setComponentByName(k, v)
+    pass
 
 def seq_set_iter(seq, name, iterable):
     component = seq.setComponentByName(name).getComponentByName(name)
@@ -96,17 +94,10 @@ def seq_set_iter(seq, name, iterable):
         component.setComponentByPosition(pos, v)
 
 def seq_set_flags(seq, name, flags):
-    seq_set(seq, name, flags.to_asn1)
+    pass
 
 def seq_append(seq, name, pairs):
-    component = seq.getComponentByName(name)
-    if component is None:
-        component = seq.setComponentByName(name).getComponentByName(name)
-    index = len(component)
-    element = component.setComponentByPosition(index
-                                               ).getComponentByPosition(index)
-    for k, v in pairs.items():
-        element.setComponentByName(k, v)
+    pass
 
 class Int32(univ.Integer):
     subtypeSpec = univ.Integer.subtypeSpec + constraint.ValueRangeConstraint(

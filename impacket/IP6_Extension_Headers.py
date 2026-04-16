@@ -135,7 +135,7 @@ class IP6_Extension_Header(Header):
         self._option_list.append(option)
     
     def get_options(self):
-        return self._option_list
+        pass
 
     def get_packet(self):
         data = self.get_data_as_string()

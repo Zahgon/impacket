@@ -907,246 +907,41 @@ OPNUMS = {
 # HELPER FUNCTIONS
 ################################################################################
 def hDhcpGetClientInfoV4(dce, searchType, searchValue):
-    request = DhcpGetClientInfoV4()
-
-    request['ServerIpAddress'] = NULL
-    request['SearchInfo']['SearchType'] = searchType
-    request['SearchInfo']['SearchInfo']['tag'] = searchType
-    if searchType == DHCP_SEARCH_INFO_TYPE.DhcpClientIpAddress:
-        request['SearchInfo']['SearchInfo']['ClientIpAddress'] = searchValue
-    elif searchType == DHCP_SEARCH_INFO_TYPE.DhcpClientHardwareAddress:
-        # This should be a DHCP_BINARY_DATA
-        request['SearchInfo']['SearchInfo']['ClientHardwareAddress'] = searchValue
-    else:
-        request['SearchInfo']['SearchInfo']['ClientName'] = searchValue
-
-    return dce.request(request)
+    pass
 
 def hDhcpGetSubnetInfo(dce, subnetaddress):
-    request = DhcpGetSubnetInfo()
-
-    request['ServerIpAddress'] = NULL
-    request['SubnetAddress'] = subnetaddress
-    resp = dce.request(request)
-
-    return resp
+    pass
 
 def hDhcpGetOptionValue(dce, optionID, scopetype=DHCP_OPTION_SCOPE_TYPE.DhcpDefaultOptions, options=NULL):
-    request = DhcpGetOptionValue()
-
-    request['ServerIpAddress'] = NULL
-    request['OptionID'] = optionID
-    request['ScopeInfo']['ScopeType'] = scopetype
-    if scopetype != DHCP_OPTION_SCOPE_TYPE.DhcpDefaultOptions and scopetype != DHCP_OPTION_SCOPE_TYPE.DhcpGlobalOptions:
-        request['ScopeInfo']['ScopeInfo']['tag'] = scopetype
-    if scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpSubnetOptions:
-        request['ScopeInfo']['ScopeInfo']['SubnetScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpReservedOptions:
-        request['ScopeInfo']['ScopeInfo']['ReservedScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpMScopeOptions:
-        request['ScopeInfo']['ScopeInfo']['MScopeInfo'] = options
-
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('ERROR_NO_MORE_ITEMS') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hDhcpEnumOptionValues(dce, scopetype=DHCP_OPTION_SCOPE_TYPE.DhcpDefaultOptions, options=NULL,
                           preferredMaximum=0xffffffff):
-    request = DhcpEnumOptionValues()
-
-    request['ServerIpAddress'] = NULL
-    request['ScopeInfo']['ScopeType'] = scopetype
-    if scopetype != DHCP_OPTION_SCOPE_TYPE.DhcpDefaultOptions and scopetype != DHCP_OPTION_SCOPE_TYPE.DhcpGlobalOptions:
-        request['ScopeInfo']['ScopeInfo']['tag'] = scopetype
-    if scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpSubnetOptions:
-        request['ScopeInfo']['ScopeInfo']['SubnetScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpReservedOptions:
-        request['ScopeInfo']['ScopeInfo']['ReservedScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpMScopeOptions:
-        request['ScopeInfo']['ScopeInfo']['MScopeInfo'] = options
-    request['ResumeHandle'] = NULL
-    request['PreferredMaximum'] = preferredMaximum
-
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('ERROR_NO_MORE_ITEMS') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hDhcpEnumOptionValuesV5(dce, flags=DHCP_FLAGS_OPTION_DEFAULT, classname=NULL, vendorname=NULL,
                             scopetype=DHCP_OPTION_SCOPE_TYPE.DhcpDefaultOptions, options=NULL,
                             preferredMaximum=0xffffffff):
-    request = DhcpEnumOptionValuesV5()
-
-    request['ServerIpAddress'] = NULL
-    request['Flags'] = flags
-    request['ClassName'] = classname
-    request['VendorName'] = vendorname
-    request['ScopeInfo']['ScopeType'] = scopetype
-    request['ScopeInfo']['ScopeInfo']['tag'] = scopetype
-    if scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpSubnetOptions:
-        request['ScopeInfo']['ScopeInfo']['SubnetScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpReservedOptions:
-        request['ScopeInfo']['ScopeInfo']['ReservedScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpMScopeOptions:
-        request['ScopeInfo']['ScopeInfo']['MScopeInfo'] = options
-    request['ResumeHandle'] = NULL
-    request['PreferredMaximum'] = preferredMaximum
-
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('ERROR_NO_MORE_ITEMS') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hDhcpGetOptionValueV5(dce, option_id, flags=DHCP_FLAGS_OPTION_DEFAULT, classname=NULL, vendorname=NULL,
                             scopetype=DHCP_OPTION_SCOPE_TYPE.DhcpDefaultOptions, options=NULL):
-    request = DhcpGetOptionValueV5()
-
-    request['ServerIpAddress'] = NULL
-    request['Flags'] = flags
-    request['OptionID'] = option_id
-    request['ClassName'] = classname
-    request['VendorName'] = vendorname
-    request['ScopeInfo']['ScopeType'] = scopetype
-    request['ScopeInfo']['ScopeInfo']['tag'] = scopetype
-    if scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpSubnetOptions:
-        request['ScopeInfo']['ScopeInfo']['SubnetScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpReservedOptions:
-        request['ScopeInfo']['ScopeInfo']['ReservedScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpMScopeOptions:
-        request['ScopeInfo']['ScopeInfo']['MScopeInfo'] = options
-
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('ERROR_NO_MORE_ITEMS') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hDhcpGetAllOptionValues(dce, scopetype=DHCP_OPTION_SCOPE_TYPE.DhcpDefaultOptions, options=NULL):
-    request = DhcpGetAllOptionValues()
-
-    request['ServerIpAddress'] = NULL
-    request['Flags'] = NULL
-    request['ScopeInfo']['ScopeType'] = scopetype
-    request['ScopeInfo']['ScopeInfo']['tag'] = scopetype
-    if scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpSubnetOptions:
-        request['ScopeInfo']['ScopeInfo']['SubnetScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpReservedOptions:
-        request['ScopeInfo']['ScopeInfo']['ReservedScopeInfo'] = options
-    elif scopetype == DHCP_OPTION_SCOPE_TYPE.DhcpMScopeOptions:
-        request['ScopeInfo']['ScopeInfo']['MScopeInfo'] = options
-
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('ERROR_NO_MORE_ITEMS') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hDhcpEnumSubnets(dce, preferredMaximum=0xffffffff):
-    request = DhcpEnumSubnets()
-
-    request['ServerIpAddress'] = NULL
-    request['ResumeHandle'] = NULL
-    request['PreferredMaximum'] = preferredMaximum
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('STATUS_MORE_ENTRIES') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hDhcpEnumSubnetClientsVQ(dce, preferredMaximum=0xffffffff):
-    request = DhcpEnumSubnetClientsVQ()
-
-    request['ServerIpAddress'] = NULL
-    request['SubnetAddress'] = NULL
-    request['ResumeHandle'] = NULL
-    request['PreferredMaximum'] = preferredMaximum
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('STATUS_MORE_ENTRIES') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hDhcpEnumSubnetClientsV4(dce, preferredMaximum=0xffffffff):
-    request = DhcpEnumSubnetClientsV4()
-
-    request['ServerIpAddress'] = NULL
-    request['SubnetAddress'] = NULL
-    request['ResumeHandle'] = NULL
-    request['PreferredMaximum'] = preferredMaximum
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('STATUS_MORE_ENTRIES') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hDhcpEnumSubnetClientsV5(dce, subnetAddress=0, preferredMaximum=0xffffffff):
-    request = DhcpEnumSubnetClientsV5()
-
-    request['ServerIpAddress'] = NULL
-    request['SubnetAddress'] = subnetAddress
-    request['ResumeHandle'] = NULL
-    request['PreferredMaximum'] = preferredMaximum
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCSessionError as e:
-            if str(e).find('STATUS_MORE_ENTRIES') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hDhcpEnumSubnetElementsV5(dce, subnet_address, element_type=DHCP_SUBNET_ELEMENT_TYPE.DhcpIpRanges, preferredMaximum=0xffffffff):
-    request = DhcpEnumSubnetElementsV5()
-
-    request['ServerIpAddress'] = NULL
-    request['SubnetAddress'] = subnet_address
-    request['EnumElementType'] = element_type
-    request['ResumeHandle'] = NULL
-    request['PreferredMaximum'] = preferredMaximum
-
-    status = system_errors.ERROR_MORE_DATA
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('ERROR_NO_MORE_ITEMS') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass

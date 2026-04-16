@@ -1056,40 +1056,7 @@ class LSASecrets():
                     self.__printSecret(key, secret)
 
     def getSecret(self, key):
-        LOG.info(f'Dumping LSA secret: {key}')
-
-        if self.__LSAKey == b'':
-            self.__getLSASecretKey()
-
-        valueTypeList = ['CurrVal']
-        # Check if old LSA secrets values are also need to be shown
-        if self.__history:
-            valueTypeList.append('OldVal')
-
-        for valueType in valueTypeList:
-            try:
-                value = self.__remoteOps.retrieveSubKey(f'SECURITY\\Policy\\Secrets\\{key}\\{valueType}', '', throttle=self.__throttle)
-            except Exception as e:
-                if logging.getLogger().level == logging.DEBUG:
-                    import traceback
-                    traceback.print_exc()
-                print(str(e))
-                continue
-            if value is not None and value[1] != 0:
-                if self.__vistaStyle is True:
-                    record = LSA_SECRET(value[1])
-                    tmpKey = self.__sha256(self.__LSAKey, record['EncryptedData'][:32])
-                    plainText = self.__cryptoCommon.decryptAES(tmpKey, record['EncryptedData'][32:])
-                    record = LSA_SECRET_BLOB(plainText)
-                    secret = record['Secret']
-                else:
-                    secret = self.__decryptSecret(self.__LSAKey, value[1])
-
-                # If this is an OldVal secret, let's append '_history' to be able to distinguish it and
-                # also be consistent with NTDS history
-                if valueType == 'OldVal':
-                    key += '_history'
-                return secret
+        pass
 
     def exportSecrets(self, baseFileName, openFileFunc = None):
         if len(self.__secretItems) > 0:

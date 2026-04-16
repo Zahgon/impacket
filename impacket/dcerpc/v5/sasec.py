@@ -147,34 +147,13 @@ def checkNullString(string):
         return string
 
 def hSASetAccountInformation(dce, handle, pwszJobName, pwszAccount, pwszPassword, dwJobFlags=0):
-    request = SASetAccountInformation()
-    request['Handle'] = handle
-    request['pwszJobName'] = checkNullString(pwszJobName)
-    request['pwszAccount'] = checkNullString(pwszAccount)
-    request['pwszPassword'] = checkNullString(pwszPassword)
-    request['dwJobFlags'] = dwJobFlags
-    return dce.request(request)
+    pass
 
 def hSASetNSAccountInformation(dce, handle, pwszAccount, pwszPassword):
-    request = SASetNSAccountInformation()
-    request['Handle'] = handle
-    request['pwszAccount'] = checkNullString(pwszAccount)
-    request['pwszPassword'] = checkNullString(pwszPassword)
-    return dce.request(request)
+    pass
 
 def hSAGetNSAccountInformation(dce, handle, ccBufferSize = MAX_BUFFER_SIZE):
-    request = SAGetNSAccountInformation()
-    request['Handle'] = handle
-    request['ccBufferSize'] = ccBufferSize
-    for _ in range(ccBufferSize):
-        request['wszBuffer'].append(0)
-    return dce.request(request)
+    pass
 
 def hSAGetAccountInformation(dce, handle, pwszJobName, ccBufferSize = MAX_BUFFER_SIZE):
-    request = SAGetAccountInformation()
-    request['Handle'] = handle
-    request['pwszJobName'] = checkNullString(pwszJobName)
-    request['ccBufferSize'] = ccBufferSize
-    for _ in range(ccBufferSize):
-        request['wszBuffer'].append(0)
-    return dce.request(request)
+    pass

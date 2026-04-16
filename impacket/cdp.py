@@ -66,7 +66,7 @@ class CDP(Header):
         return self.get_byte(0)
         
     def get_ttl(self):
-        return self.get_byte(1)
+        pass
         
     def get_checksum(self):
         return self.get_word(2)
@@ -75,10 +75,10 @@ class CDP(Header):
         return self.get_word(4)
         
     def get_lenght(self):      
-        return self.get_word(6)
+        pass
 
     def getElements(self):
-        return self._elements
+        pass
 
 
     def __str__(self):
@@ -167,10 +167,10 @@ class Address(CDPElement):
         return Address.Type
     
     def get_number(self):
-        return self.get_long(4)
+        pass
        
     def get_address_details(self):
-        return self.address_details
+        pass
         
     def __str__(self):
         tmp_str = "Addresses:"
@@ -201,7 +201,7 @@ class AddressDetails():
         return self.buffer[0:1]
         
     def get_protocol_length(self):
-        return get_byte( self.buffer, 1)
+        pass
 
     def get_protocol(self):
         return get_byte( self.buffer, 2)
@@ -218,7 +218,7 @@ class AddressDetails():
             return address            
             
     def is_protocol_IP(self):
-        return self.get_protocol()==AddressDetails.PROTOCOL_IP
+        pass
             
     def __str__(self):
         return "Protocol Type:%r Protocol:%r Address Length:%r Address:%s" % (self.get_protocol_type(), self.get_protocol(), self.get_address_length(), self.get_address())            
@@ -272,25 +272,25 @@ class Capabilities(CDPElement):
         self._repeater = (capabilities & 0x40) > 0
 
     def is_router(self):
-        return self._router
+        pass
 
     def is_transparent_bridge(self):
-        return self._transparent_bridge
+        pass
 
     def is_source_route_bridge(self):
-        return self._source_route_bridge
+        pass
         
     def is_switch(self):
-        return self._switch
+        pass
 
     def is_host(self):
-        return self.is_host
+        pass
 
     def is_igmp_capable(self):
-        return self._igmp_capable
+        pass
         
     def is_repeater(self):
-        return self._repeater
+        pass
 
                  
     def __str__(self):
@@ -357,7 +357,7 @@ class ProtocolHello(CDPElement):
         return self.get_byte(19)
 
     def get_cluster_command_mac(self):
-        return array_tobytes(self.get_bytes())[20:20+6]
+        pass
             
     def get_switch_mac(self):
         return array_tobytes(self.get_bytes())[28:28+6]
@@ -376,7 +376,7 @@ class VTPManagementDomain(CDPElement):
         return VTPManagementDomain.Type
     
     def get_domain(self):
-        return CDPElement.get_data(self)                  
+        pass
   
   
 class Duplex(CDPElement):
@@ -386,10 +386,10 @@ class Duplex(CDPElement):
         return Duplex.Type
     
     def get_duplex(self):
-        return CDPElement.get_data(self)                
+        pass
                 
     def is_full_duplex(self):
-        return self.get_duplex()==0x1
+        pass
         
 class VLAN(CDPElement):
     Type = 0xa
@@ -398,7 +398,7 @@ class VLAN(CDPElement):
         return VLAN.Type
         
     def get_vlan_number(self):
-        return CDPElement.get_data(self)
+        pass
 
 
 

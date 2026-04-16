@@ -469,9 +469,7 @@ def hRpcAsyncClosePrinter(dce, phPrinter):
 
     :return: a RpcClosePrinterResponse instance, raises DCERPCSessionError on error.
     """
-    request = RpcAsyncClosePrinter()
-    request['phPrinter'] = phPrinter
-    return dce.request(request, MSRPC_UUID_WINSPOOL)
+    pass
 
 
 def hRpcAsyncOpenPrinter(dce, printerName, pDatatype=NULL, pDevModeContainer=NULL, accessRequired=SERVER_READ,
@@ -494,20 +492,7 @@ def hRpcAsyncOpenPrinter(dce, printerName, pDatatype=NULL, pDevModeContainer=NUL
 
     :return: a RpcOpenPrinterExResponse instance, raises DCERPCSessionError on error.
     """
-    request = RpcAsyncOpenPrinter()
-    request['pPrinterName'] = checkNullString(printerName)
-    request['pDatatype'] = pDatatype
-    if pDevModeContainer is NULL:
-        request['pDevModeContainer']['pDevMode'] = NULL
-    else:
-        request['pDevModeContainer'] = pDevModeContainer
-
-    request['AccessRequired'] = accessRequired
-    if pClientInfo is NULL:
-        raise Exception('pClientInfo cannot be NULL')
-
-    request['pClientInfo'] = pClientInfo
-    return dce.request(request, MSRPC_UUID_WINSPOOL)
+    pass
 
 
 def hRpcAsyncEnumPrinters(dce, flags, name = NULL, level = 1):
@@ -523,27 +508,7 @@ def hRpcAsyncEnumPrinters(dce, flags, name = NULL, level = 1):
 
     :return: a RpcEnumPrintersResponse instance, raises DCERPCSessionError on error.
     """
-    request = RpcAsyncEnumPrinters()
-    request['Flags'] = flags
-    request['Name'] = name
-    request['pPrinterEnum'] = NULL
-    request['Level'] = level
-    bytesNeeded = 0
-    try:
-        dce.request(request, MSRPC_UUID_WINSPOOL)
-    except DCERPCSessionError as e:
-        if str(e).find('ERROR_INSUFFICIENT_BUFFER') < 0:
-            raise
-        bytesNeeded = e.get_packet()['pcbNeeded']
-
-    request = RpcAsyncEnumPrinters()
-    request['Flags'] = flags
-    request['Name'] = name
-    request['Level'] = level
-
-    request['cbBuf'] = bytesNeeded
-    request['pPrinterEnum'] = b'a' * bytesNeeded
-    return dce.request(request, MSRPC_UUID_WINSPOOL)
+    pass
 
 
 def hRpcAsyncAddPrinterDriver(dce, pName, pDriverContainer, dwFileCopyFlags):
@@ -558,13 +523,7 @@ def hRpcAsyncAddPrinterDriver(dce, pName, pDriverContainer, dwFileCopyFlags):
 
     :return: raises DCERPCSessionError on error.
     """
-    request = RpcAsyncAddPrinterDriver()
-    request['pName'] = checkNullString(pName)
-    request['pDriverContainer'] = pDriverContainer
-    request['dwFileCopyFlags'] = dwFileCopyFlags
-
-    #return request
-    return dce.request(request, MSRPC_UUID_WINSPOOL)
+    pass
 
 
 def hRpcAsyncEnumPrinterDrivers(dce, pName, pEnvironment, Level):
@@ -583,30 +542,7 @@ def hRpcAsyncEnumPrinterDrivers(dce, pName, pEnvironment, Level):
 
     :return: raises DCERPCSessionError on error.
     """
-    # get value for cbBuf
-    request = RpcAsyncEnumPrinterDrivers()
-    request['pName']        = checkNullString(pName)
-    request['pEnvironment'] = pEnvironment
-    request['Level']        = Level
-    request['pDrivers']     = NULL
-    request['cbBuf']        = 0
-    try:
-        dce.request(request, MSRPC_UUID_WINSPOOL)
-    except DCERPCSessionError as e:
-        if str(e).find('ERROR_INSUFFICIENT_BUFFER') < 0:
-            raise
-        bytesNeeded = e.get_packet()['pcbNeeded']
-
-    # now do RpcEnumPrinterDrivers again
-    request = RpcAsyncEnumPrinterDrivers()
-    request['pName']        = checkNullString(pName)
-    request['pEnvironment'] = pEnvironment
-    request['Level']        = Level
-    request['pDrivers']     = b'a' * bytesNeeded
-    request['cbBuf']        = bytesNeeded
-
-    #return request
-    return dce.request(request, MSRPC_UUID_WINSPOOL)
+    pass
 
 def hRpcAsyncGetPrinterDriverDirectory(dce, pName, pEnvironment, Level):
     """
@@ -623,26 +559,4 @@ def hRpcAsyncGetPrinterDriverDirectory(dce, pName, pEnvironment, Level):
 
     :return: raises DCERPCSessionError on error.
     """
-    # get value for cbBuf
-    request = RpcAsyncGetPrinterDriverDirectory()
-    request['pName']            = checkNullString(pName)
-    request['pEnvironment']     = pEnvironment
-    request['Level']            = Level
-    request['pDriverDirectory'] = NULL
-    request['cbBuf']            = 0
-    try:
-        dce.request(request, MSRPC_UUID_WINSPOOL)
-    except DCERPCSessionError as e:
-        if str(e).find('ERROR_INSUFFICIENT_BUFFER') < 0:
-            raise
-        bytesNeeded = e.get_packet()['pcbNeeded']
-    
-    # now do RpcGetPrinterDriverDirectory again
-    request = RpcAsyncGetPrinterDriverDirectory()
-    request['pName']            = checkNullString(pName)
-    request['pEnvironment']     = pEnvironment
-    request['Level']            = Level
-    request['pDriverDirectory'] = b'a' * bytesNeeded
-    request['cbBuf']            = bytesNeeded
-    
-    return dce.request(request, MSRPC_UUID_WINSPOOL)
+    pass

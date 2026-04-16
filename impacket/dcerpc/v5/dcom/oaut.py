@@ -975,28 +975,7 @@ OPNUMS = {
 #     END FOR i
 # ENDIF
 def enumerateMethods(iInterface):
-    methods = dict()
-    typeInfoCount = iInterface.GetTypeInfoCount()
-    if typeInfoCount['pctinfo'] == 0:
-        LOG.error('Automation Server does not support type information for this object')
-        return {}
-    iTypeInfo = iInterface.GetTypeInfo()
-    iTypeAttr = iTypeInfo.GetTypeAttr()
-    for x in range(iTypeAttr['ppTypeAttr']['cFuncs']):
-        funcDesc = iTypeInfo.GetFuncDesc(x)
-        names = iTypeInfo.GetNames(funcDesc['ppFuncDesc']['memid'], 255)
-        print(names['rgBstrNames'][0]['asData'])
-        funcDesc.dump()
-        print('='*80)
-        if names['pcNames'] > 0:
-            name = names['rgBstrNames'][0]['asData']
-            methods[name] = {}
-            for param in range(1, names['pcNames']):
-                methods[name][names['rgBstrNames'][param]['asData']] = ''
-        if funcDesc['ppFuncDesc']['elemdescFunc'] != NULL:
-            methods[name]['ret'] = funcDesc['ppFuncDesc']['elemdescFunc']['tdesc']['vt']
-
-    return methods
+    pass
 
 def checkNullString(string):
     if string == NULL:
@@ -1018,34 +997,19 @@ class ITypeInfo(IRemUnknown2):
         self._iid = IID_ITypeInfo
 
     def GetTypeAttr(self):
-        request = ITypeInfo_GetTypeAttr()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def GetTypeComp(self):
-        request = ITypeInfo_GetTypeComp()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return ITypeComp(INTERFACE(self.get_cinstance(), b''.join(resp['ppTComp']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
+        pass
 
     def GetFuncDesc(self, index):
-        request = ITypeInfo_GetFuncDesc()
-        request['index'] = index
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def GetNames(self, memid, cMaxNames=10):
-        request = ITypeInfo_GetNames()
-        request['memid'] = memid
-        request['cMaxNames'] = cMaxNames
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def GetDocumentation(self, memid, refPtrFlags=15):
-        request = ITypeInfo_GetDocumentation()
-        request['memid'] = memid
-        request['refPtrFlags'] = refPtrFlags
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
 
 class IDispatch(IRemUnknown2):
@@ -1054,16 +1018,10 @@ class IDispatch(IRemUnknown2):
         self._iid = IID_IDispatch
 
     def GetTypeInfoCount(self):
-        request = IDispatch_GetTypeInfoCount()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def GetTypeInfo(self):
-        request = IDispatch_GetTypeInfo()
-        request['iTInfo'] = 0
-        request['lcid'] = 0
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return ITypeInfo(INTERFACE(self.get_cinstance(), b''.join(resp['ppTInfo']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
+        pass
 
     def GetIDsOfNames(self, rgszNames, lcid = 0):
         request = IDispatch_GetIDsOfNames()

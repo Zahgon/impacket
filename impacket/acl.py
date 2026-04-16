@@ -281,25 +281,13 @@ class SMBFileACL:
         Disconnect from the tree id, close the file
         and disconnect from the smb server
         """
-
-        # close policy handle and transport
-        if self.policy_handle:
-            lsad.hLsarClose(self.dce_rpc, self.policy_handle)
-        if self.transport:
-            self.transport.disconnect()
-
-        # close the smb connection only if we created it
-        if self._owns_connection:
-            self.connection.close()
+        pass
 
     def close_file(self):
         """
         Close the tree ID and file ID handles
         """
-        if self.fid:
-            self.connection.closeFile(self.tid, self.fid)
-        if self.tid:
-            self.connection.disconnectTree(self.tid)
+        pass
 
     def open_file(self, share_name, file_name, desired_access=READ_CONTROL):
         """
@@ -308,11 +296,7 @@ class SMBFileACL:
         @param file_name: file to open
         @return: tuple of (tid, fid)
         """
-        self.tid = self.connection.connectTree(share_name)
-        self.fid = self.connection.openFile(
-            self.tid, file_name, desiredAccess=desired_access, creationOption=FILE_OPEN_REPARSE_POINT
-        )
-        return self.tid, self.fid
+        pass
 
     def start_dce_rpc(self):
         """
@@ -348,16 +332,7 @@ class SMBFileACL:
         :param resp: the response containing the names
         :return: None
         """
-        names = [name["Name"] for name in resp["TranslatedNames"]["Names"]]
-        for i, name in enumerate(names):
-            # should check here if the name is real sid
-            if name in ("None", b""):
-                name = sids[i]
-            rid = name.split("-")[-1]
-            if rid in self.rid_to_name:
-                self.sid_to_name[ACL_SID.build_from_string(name)] = self.rid_to_name[rid]
-            elif sids[i] not in self.sid_to_name:
-                self.sid_to_name[sids[i]] = name
+        pass
 
     def sids_to_names(self, sids):
         """
@@ -365,22 +340,13 @@ class SMBFileACL:
         :param sids: list of SIDs
         :return: list of usernames
         """
-        try:
-            resp = lsat.hLsarLookupSids2(self.dce_rpc, self.policy_handle, sids)
-        except lsat.DCERPCSessionError as session_error:
-            resp = session_error.packet
-
-        self.set_sid_to_name(sids, resp)
+        pass
 
     def name_to_sid(self, name):
         """
         Translate name to SID using LSA_LookupNames
         """
-        try:
-            resp = lsat.hLsarLookupNames3(self.dce_rpc, self.policy_handle, [name])
-            return resp["TranslatedSids"]["Sids"][0]["Sid"].getData()[4:]  # don't include the 'count' attribute
-        except Exception as e:
-            raise Exception(f"Failed to resolve name '{name}' to SID: {str(e)}")
+        pass
 
     def permissions_to_ace(self, username, permissions, action='grant'):
         """
@@ -389,35 +355,7 @@ class SMBFileACL:
         @param permissions: permissions in the icacls format
         @param action: 'grant', 'revoke', or 'delete'
         """
-        access_required = 0x00000000
-        invalid_perms = []
-        if permissions:
-            for permission in permissions.split(","):
-                try:
-                    access_required |= SUPPORTED_PERMISSIONS[permission.upper()]
-                except KeyError:
-                    invalid_perms.append(permission)
-
-            # Warn about invalid permissions
-            if invalid_perms:
-                import logging
-                logging.warning(f"Ignoring unsupported permissions: {', '.join(invalid_perms)}")
-
-            # check if we couldn't resolve any of the permissions
-            if not access_required:
-                raise Exception("No valid permissions specified")
-
-        sid_bytes = self.name_to_sid(username)
-        total_size = 8 + len(sid_bytes)  # nt ace attributes length + sid length
-
-        permissions_as_bytes = (
-                struct.pack("<BBHI", 0x00, 0x00, total_size, access_required) + sid_bytes
-        )
-
-        ace = FileNTACE(permissions_as_bytes)
-        # Store the action type in the ACE for later use
-        ace.action = action
-        return ace
+        pass
 
     def get_security_attributes(self, sec):
         """
@@ -425,47 +363,7 @@ class SMBFileACL:
         :param sec: FileSecInformation instance
         :return: SecurityAttributes
         """
-        # get owner SID and Group SID
-        owner = ACL_SID(sec.rawData[sec["OffsetToOwner"]: sec["OffsetToGroup"]])
-        group = ACL_SID(sec.rawData[sec["OffsetToGroup"]: sec["OffsetToDACL"]])
-
-        self.sids_to_names([owner, group])
-
-        try:
-            owner_name = self.sid_to_name[owner]
-        except KeyError:
-            owner_name = owner
-
-        try:
-            group_name = self.sid_to_name[group]
-        except KeyError:
-            group_name = group
-        security_attributes = SecurityAttributes(owner_name, group_name)
-
-        # get all dacl's
-        nt = sec.rawData[sec["OffsetToDACL"]:]
-        ntuser = FileNTUser(nt)
-        ntace = ntuser["Buffer"]
-
-        while len(ntace):
-            face = FileNTACE(ntace)  # set new FileNTACE
-            ntace = ntace[face["Size"]:]  # slice the buffer
-            if face["SID"] == b'': continue
-            sid = ACL_SID(face["SID"])  # get the DACL SID
-            security_attributes.dacls[sid] = face
-
-        # Resolve all DACL SIDs to names
-        self.sids_to_names(list(security_attributes.dacls.keys()))
-
-        for sid, permissions in security_attributes.dacls.items():
-            try:
-                name = self.sid_to_name[sid]
-            except KeyError:
-                name = sid
-
-            security_attributes.readable_dacls[sid] = "{}:{}".format(name, permissions)
-
-        return security_attributes
+        pass
 
     def get_permissions(self, share_name, file_name):
         """
@@ -474,26 +372,7 @@ class SMBFileACL:
         @param file_name: file to get permissions from
         @return: SecurityAttributes
         """
-        # set the file and tree handles for the given file
-        self.open_file(share_name=share_name, file_name=file_name)
-
-        try:
-            # query the file security information
-            result = self.connection._SMBConnection.queryInfo(
-                self.tid,
-                self.fid,
-                fileInfoClass=0,
-                infoType=3,
-                additionalInformation=0x00000017,
-            )
-            sec = FileSecInformation(result)
-
-            # get security attributes
-            security_attributes = self.get_security_attributes(sec)
-            return security_attributes
-        finally:
-            # ensure file handles are always closed, even on error
-            self.close_file()
+        pass
 
     @staticmethod
     def insert_permission(sec, permission):
@@ -506,71 +385,7 @@ class SMBFileACL:
         @param sec: current security descriptor
         @param permission: new permission ACE with action attribute
         """
-        ntuser = FileNTUser(sec.rawData[sec["OffsetToDACL"]:])
-        ntace = ntuser["Buffer"]
-
-        new_buffer = b""
-        sid_found = False
-        ace_deleted = False
-        action = permission.action
-
-        # enumerate the current permissions and search for the given permission sid
-        while len(ntace):
-            delete_ace = False
-            face = FileNTACE(ntace)  # set new FileNTACE
-            sid = ACL_SID(face["SID"])  # get the DACL SID
-
-            if sid.rawData == permission["SID"]:
-                sid_found = True
-
-                if action == 'grant':
-                    # Add the new permissions to the current permission (OR operation)
-                    face["SpecificRights"] |= permission["SpecificRights"]
-                    face["StandardRights"] |= permission["StandardRights"]
-                    face["GenericRights"] |= permission["GenericRights"]
-                elif action == 'revoke':
-                    # Remove specific permissions (AND NOT operation)
-                    face["SpecificRights"] &= ~permission["SpecificRights"]
-                    face["StandardRights"] &= ~permission["StandardRights"]
-                    face["GenericRights"] &= ~permission["GenericRights"]
-                    
-                    # If all permissions are revoked, remove the ACE entirely (Windows behavior)
-                    if (face["SpecificRights"] == 0 and 
-                        face["StandardRights"] == 0 and 
-                        face["GenericRights"] == 0):
-                        delete_ace = True
-                        ace_deleted = True
-                elif action == 'delete':
-                    delete_ace = True
-                    ace_deleted = True
-
-            # Only keep ACE if not marked for deletion
-            if not delete_ace:
-                new_buffer += face.getData()
-
-            ntace = ntace[face["Size"]:]  # slice the buffer
-
-        if sid_found:
-            # replace the current buffer with the modified one
-            ntuser["Buffer"] = new_buffer
-            ntuser["Size"] = len(new_buffer) + 8  # add the nt user attribute size
-            # Decrement ACE count if an ACE was deleted
-            if ace_deleted:
-                ntuser["NumACEs"] -= 1
-        elif action != 'delete' and action != 'revoke':
-            # insert the permissions on the top of the other permissions
-            # (only for grant when ACE doesn't exist yet)
-            ntuser["Size"] += len(
-                permission.getData()
-            )  # add the nt user attribute size
-            ntuser["NumACEs"] += 1
-            ntuser["Buffer"] = permission.getData() + ntuser["Buffer"]
-
-        owner = sec.rawData[sec["OffsetToOwner"]: sec["OffsetToGroup"]]
-        group = sec.rawData[sec["OffsetToGroup"]: sec["OffsetToDACL"]]
-
-        sec_info_blob = sec.getData() + owner + group + ntuser.getData()
-        return sec_info_blob
+        pass
 
     def set_permissions(self, share_name, file_name, user, permissions, action='grant'):
         """
@@ -588,34 +403,4 @@ class SMBFileACL:
         @param action: action to perform - 'grant' (add), 'revoke' (remove), 'delete' (remove ACE)
         @return: bool. whether the operation succeeded or not
         """
-        # open file descriptor
-        self.tid, self.fid = self.open_file(share_name, file_name, GENERIC_ALL)
-
-        try:
-            # permissions_to_ace function returns the new ACE to add
-            permission = self.permissions_to_ace(user, permissions, action)
-
-            result = self.connection._SMBConnection.queryInfo(
-                self.tid,
-                self.fid,
-                fileInfoClass=0,
-                infoType=3,
-                additionalInformation=0x00000017,
-            )
-
-            sec = FileSecInformation(result)
-            security_descriptor = self.insert_permission(sec=sec, permission=permission)
-
-            result = self.connection._SMBConnection.setInfo(
-                self.tid,
-                self.fid,
-                fileInfoClass=0,
-                infoType=3,
-                additionalInformation=0x04,
-                inputBlob=security_descriptor,
-            )
-
-            return result
-        finally:
-            # ensure file handles are always closed, even if permission resolution fails
-            self.close_file()
+        pass

@@ -1113,7 +1113,7 @@ class ept_lookup_handle_t(NDRSTRUCT):
         self['context_handle_uuid'] = b'\x00'*16
 
     def isNull(self):
-        return self['context_handle_uuid'] == b'\x00'*16
+        pass
 
 class twr_t(NDRSTRUCT):
     structure = (
@@ -1205,52 +1205,7 @@ class ept_mapResponse(NDRCALL):
 ################################################################################
 
 def hept_lookup(destHost, inquiry_type = RPC_C_EP_ALL_ELTS, objectUUID = NULL, ifId = NULL, vers_option = RPC_C_VERS_ALL, dce = None):
-    if dce is None:
-        stringBinding = r'ncacn_ip_tcp:%s[135]' % destHost
-        rpctransport = transport.DCERPCTransportFactory(stringBinding)
-        dce = rpctransport.get_dce_rpc()
-        dce.connect()
-        disconnect = True
-    else:
-        disconnect = False
-
-    dce.bind(MSRPC_UUID_PORTMAP)
-
-    entries = []
-    entry_handle = ept_lookup_handle_t()
-
-    while True:
-        request = ept_lookup()
-        request['inquiry_type'] = inquiry_type
-        request['object'] = objectUUID
-        if ifId != NULL:
-            request['Ifid']['Uuid'] = ifId[:16]
-            request['Ifid']['VersMajor'] = ifId[16:][:2]
-            request['Ifid']['VersMinor'] = ifId[18:]
-        else:
-            request['Ifid'] = ifId
-        request['vers_option'] = vers_option
-        request['entry_handle'] = entry_handle
-        request['max_ents'] = 500
-
-        resp = dce.request(request)
-
-        for i in range(resp['num_ents']):
-            tmpEntry = {}
-            entry = resp['entries'][i]
-            tmpEntry['object'] = entry['object']
-            tmpEntry['annotation'] = b''.join(entry['annotation'])
-            tmpEntry['tower'] = EPMTower(b''.join(entry['tower']['tower_octet_string']))
-            entries.append(tmpEntry)
-
-        entry_handle = resp['entry_handle']
-        if entry_handle.isNull():
-            break
-
-    if disconnect is True:
-        dce.disconnect()
-
-    return entries
+    pass
 
 def hept_map(destHost, remoteIf, dataRepresentation = uuidtup_to_bin(('8a885d04-1ceb-11c9-9fe8-08002b104860', '2.0')), protocol = 'ncacn_np', dce=None):
 
@@ -1349,40 +1304,4 @@ def hept_map(destHost, remoteIf, dataRepresentation = uuidtup_to_bin(('8a885d04-
     return result
 
 def PrintStringBinding(floors):
-    tmp_address = ''
-    for floor in floors[3:]:
-        if floor['ProtocolData'] == b'\x07':
-            tmp_address = 'ncacn_ip_tcp:%%s[%d]' % unpack('!H',floor['RelatedData'])
-        elif floor['ProtocolData'] == b'\x08':
-            tmp_address = 'ncadg_ip_udp:%%s[%d]' % unpack('!H',floor['RelatedData'])
-        elif floor['ProtocolData'] == b'\x09':
-            tmp_address2 = socket.inet_ntoa(floor['RelatedData'])
-            if tmp_address != '':
-                return tmp_address % tmp_address2
-            else:
-                return 'IP: %s' % tmp_address2
-        elif floor['ProtocolData'] == b'\x0c':
-            tmp_address = 'ncacn_spx:~%%s[%d]' % unpack('!H',floor['RelatedData'])
-        elif floor['ProtocolData'] == b'\x0d':
-            n = len(floor['RelatedData'])
-            tmp_address2 = ('%02X' * n) % unpack("%dB" % n, floor['RelatedData'])
-
-            if tmp_address != '':
-                return tmp_address % tmp_address2
-            else:
-                return 'SPX: %s' % tmp_address2
-        elif floor['ProtocolData'] == b'\x0e':
-            tmp_address = 'ncadg_ipx:~%%s[%d]' % unpack('!H',floor['RelatedData'])
-        elif floor['ProtocolData'] == b'\x0f':
-            tmp_address = 'ncacn_np:%%s[%s]' % floor['RelatedData'][:len(floor['RelatedData'])-1].decode('utf-8')
-        elif floor['ProtocolData'] == b'\x10':
-            return 'ncalrpc:[%s]' % floor['RelatedData'][:len(floor['RelatedData'])-1].decode('utf-8')
-        elif floor['ProtocolData'] == b'\x01' or floor['ProtocolData'] == b'\x11':
-            if tmp_address != '':
-                return tmp_address % floor['RelatedData'][:len(floor['RelatedData'])-1].decode('utf-8')
-            else:
-                return 'NetBIOS: %s' % floor['RelatedData'].decode('utf-8')
-        elif floor['ProtocolData'] == b'\x1f':
-            tmp_address = 'ncacn_http:%%s[%d]' % unpack('!H',floor['RelatedData'])
-        else:
-            return 'unknown_proto_0x%x:[0]' % ord(floor['ProtocolData'] )
+    pass

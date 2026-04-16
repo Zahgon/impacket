@@ -180,6 +180,4 @@ OPNUMS = {
 # HELPER FUNCTIONS
 ################################################################################
 def hDsRolerGetPrimaryDomainInformation(dce, infoLevel):
-    request = DsRolerGetPrimaryDomainInformation()
-    request['InfoLevel'] = infoLevel
-    return dce.request(request)
+    pass

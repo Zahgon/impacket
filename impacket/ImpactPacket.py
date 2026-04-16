@@ -137,22 +137,11 @@ class PacketBuffer(object):
 
     def set_long_long(self, index, value, order = '!'):
         "Set 8-byte 'value' at 'index'. See struct module's documentation to understand the meaning of 'order'."
-        index = self.__validate_index(index, 8)
-        ary = array.array("B", struct.pack(order + 'Q', value))
-        if -8 == index:
-            self.__bytes[index:] = ary
-        else:
-            self.__bytes[index:index+8] = ary
+        pass
 
     def get_long_long(self, index, order = '!'):
         "Return 8-byte value at 'index'. See struct module's documentation to understand the meaning of 'order'."
-        index = self.__validate_index(index, 8)
-        if -8 == index:
-            bytes = self.__bytes[index:]
-        else:
-            bytes = self.__bytes[index:index+8]
-        (value,) = struct.unpack(order + 'Q', array_tobytes(bytes))
-        return value
+        pass
 
 
     def get_ip_address(self, index):
@@ -176,7 +165,7 @@ class PacketBuffer(object):
 
     def set_checksum_from_data(self, index, data):
         "Set 16-bit checksum at 'index' by calculating checksum of 'data'"
-        self.set_word(index, self.compute_checksum(data))
+        pass
 
     def compute_checksum(self, anArray):
         "Return the one's complement of the one's complement sum of all the 16-bit words in 'anArray'"
@@ -271,18 +260,17 @@ class ProtocolPacket(ProtocolLayer):
             self.__body.set_bytes_from_string(body)
             
     def __get_header(self):
-        return self.__header
+        pass
     
     header = property(__get_header)
 
     def __get_body(self):
-        self.__update_body_from_child()
-        return self.__body
+        pass
     
     body = property(__get_body)
     
     def __get_tail(self):
-        return self.__tail
+        pass
     
     tail = property(__get_tail)
 
@@ -310,13 +298,10 @@ class ProtocolPacket(ProtocolLayer):
     def load_body(self, aBuffer):
         "Load the packet body from string. "\
         "WARNING: Using this function will break the hierarchy of preceding protocol layer"
-        self.unlink_child()
-        self.__BODY_SIZE=len(aBuffer)
-        self.__body.set_bytes_from_string(aBuffer)
+        pass
     
     def load_tail(self, aBuffer):
-        self.__TAIL_SIZE=len(aBuffer)
-        self.__tail.set_bytes_from_string(aBuffer)
+        pass
     
     def __extract_header(self, aBuffer):
         self.load_header(aBuffer[:self.__HEADER_SIZE])
@@ -517,11 +502,11 @@ class EthernetTag(PacketBuffer):
 
     def get_tpid(self):
         """Returns Tag Protocol Identifier"""
-        return self.get_word(0)
+        pass
 
     def set_tpid(self, value):
         """Sets Tag Protocol Identifier"""
-        return self.set_word(0, value)
+        pass
 
     def get_pcp(self):
         """Returns Priority Code Point"""
@@ -529,8 +514,7 @@ class EthernetTag(PacketBuffer):
 
     def set_pcp(self, value):
         """Sets Priority Code Point"""
-        orig_value = self.get_byte(2)
-        self.set_byte(2, (orig_value & 0x1F) | ((value & 0x07) << 5))
+        pass
 
     def get_dei(self):
         """Returns Drop Eligible Indicator"""
@@ -538,8 +522,7 @@ class EthernetTag(PacketBuffer):
 
     def set_dei(self, value):
         """Sets Drop Eligible Indicator"""
-        orig_value = self.get_byte(2)
-        self.set_byte(2, orig_value | 0x10 if value else orig_value & 0xEF)
+        pass
 
     def get_vid(self):
         """Returns VLAN Identifier"""
@@ -547,8 +530,7 @@ class EthernetTag(PacketBuffer):
 
     def set_vid(self, value):
         """Sets VLAN Identifier"""
-        orig_value = self.get_word(2)
-        self.set_word(2, (orig_value & 0xF000) | (value & 0x0FFF))
+        pass
 
     def __str__(self):
         priorities = (
@@ -588,40 +570,23 @@ class Ethernet(Header):
         """Returns an EthernetTag initialized from index-th VLAN tag.
            The tags are numbered from 0 to self.tag_cnt-1 as they appear in the frame.
            It is possible to use negative indexes as well."""
-        index = self.__validate_tag_index(index)
-        return EthernetTag(self.get_long(12+4*index))
+        pass
 
     def set_tag(self, index, tag):
         """Sets the index-th VLAN tag to contents of an EthernetTag object.
            The tags are numbered from 0 to self.tag_cnt-1 as they appear in the frame.
            It is possible to use negative indexes as well."""
-        index = self.__validate_tag_index(index)
-        pos = 12 + 4*index
-        for i,val in enumerate(tag.get_bytes()):
-            self.set_byte(pos+i, val)
+        pass
 
     def push_tag(self, tag, index=0):
         """Inserts contents of an EthernetTag object before the index-th VLAN tag.
            Index defaults to 0 (the top of the stack)."""
-        if index < 0:
-            index += self.tag_cnt
-        pos = 12 + 4*max(0, min(index, self.tag_cnt))
-        data = self.get_bytes()
-        data[pos:pos] = tag.get_bytes()
-        self.set_bytes(data)
-        self.tag_cnt += 1
+        pass
 
     def pop_tag(self, index=0):
         """Removes the index-th VLAN tag and returns it as an EthernetTag object.
            Index defaults to 0 (the top of the stack)."""
-        index = self.__validate_tag_index(index)
-        pos = 12 + 4*index
-        tag = self.get_long(pos)
-        data = self.get_bytes()
-        del data[pos:pos+4]
-        self.set_bytes(data)
-        self.tag_cnt -= 1
-        return EthernetTag(tag)
+        pass
 
     def load_header(self, aBuffer):
         self.tag_cnt = 0
@@ -654,8 +619,7 @@ class Ethernet(Header):
 
     def set_ether_dhost(self, aValue):
         "Set destination ethernet address from 6 byte array 'aValue'"
-        for i in range(0, 6):
-            self.set_byte(i, aValue[i])
+        pass
 
     def get_ether_shost(self):
         "Return 48 bit source ethernet address as a 6 byte array"
@@ -663,8 +627,7 @@ class Ethernet(Header):
 
     def set_ether_shost(self, aValue):
         "Set source ethernet address from 6 byte array 'aValue'"
-        for i in range(0, 6):
-            self.set_byte(i + 6, aValue[i])
+        pass
 
     @staticmethod
     def as_eth_addr(anArray):
@@ -681,11 +644,7 @@ class Ethernet(Header):
     def __validate_tag_index(self, index):
         """Adjusts negative indices to their absolute equivalents.
            Raises IndexError when out of range <0, self.tag_cnt-1>."""
-        if index < 0:
-            index += self.tag_cnt
-        if index < 0 or index >= self.tag_cnt:
-            raise IndexError("Tag index out of range")
-        return index
+        pass
 
 # Linux "cooked" capture encapsulation.
 # Used, for instance, for packets returned by the "any" interface.
@@ -713,15 +672,15 @@ class LinuxSLL(Header):
 
     def set_arphdr(self, value):
         "Sets the ARPHDR value for the link layer device type"
-        self.set_word(2, value)
+        pass
 
     def get_arphdr(self):
         "Returns the ARPHDR value for the link layer device type"
-        return self.get_word(2)
+        pass
 
     def set_addr_len(self, len):
         "Sets the length of the sender's address field to len"
-        self.set_word(4, len)
+        pass
 
     def get_addr_len(self):
         "Returns the length of the sender's address field"
@@ -729,10 +688,7 @@ class LinuxSLL(Header):
 
     def set_addr(self, addr):
         "Sets the sender's address field to addr. Addr must be at most 8-byte long."
-        addr = array.array('B', addr[:8])
-        if len(addr) < 8:
-            addr.extend(b'\0' * (8 - len(addr)))
-        self.get_bytes()[6:14] = addr
+        pass
 
     def get_addr(self):
         "Returns the sender's address field"
@@ -887,7 +843,7 @@ class IP(Header):
         self.set_byte(0, n)
 
     def get_ip_tos(self):
-        return self.get_byte(1)
+        pass
 
     def set_ip_tos(self,value):
         self.set_byte(1, value)
@@ -905,7 +861,7 @@ class IP(Header):
             self.set_word(2, value)
 
     def get_ip_id(self):
-        return self.get_word(4)
+        pass
     def set_ip_id(self, value):
         return self.set_word(4, value)
 
@@ -922,24 +878,16 @@ class IP(Header):
             self.set_word(6, aValue)
 
     def get_ip_offmask(self):
-        return self.get_ip_off() & 0x1FFF
+        pass
 
     def set_ip_offmask(self, aValue):
-        tmp_value = self.get_ip_off() & 0xD000
-        tmp_value |= aValue
-        self.set_ip_off(tmp_value)
+        pass
 
     def get_ip_rf(self):
         return self.get_ip_off() & 0x8000
 
     def set_ip_rf(self, aValue):
-        tmp_value = self.get_ip_off()
-        if aValue:
-            tmp_value |= 0x8000
-        else:
-            my_not = 0xFFFF ^ 0x8000
-            tmp_value &= my_not
-        self.set_ip_off(tmp_value)
+        pass
 
     def get_ip_df(self):
         return self.get_ip_off() & 0x4000
@@ -957,92 +905,19 @@ class IP(Header):
         return self.get_ip_off() & 0x2000
 
     def set_ip_mf(self, aValue):
-        tmp_value = self.get_ip_off()
-        if aValue:
-            tmp_value |= 0x2000
-        else:
-            my_not = 0xFFFF ^ 0x2000
-            tmp_value &= my_not
-        self.set_ip_off(tmp_value)
+        pass
 
 
     def fragment_by_list(self, aList):
-        if self.child() and self.child().protocol is not None:
-            proto = self.child().protocol
-        else:
-            proto = self.get_ip_p()
-
-        child_data = self.get_data_as_string()
-        if not child_data:
-            return [self]
-
-        ip_header_bytes = self.get_bytes()
-        current_offset = 0
-        fragment_list = []
-
-        for frag_size in aList:
-            ip = IP()
-            ip.set_bytes(ip_header_bytes) # copy of original header
-            ip.set_ip_p(proto)
-
-
-            if frag_size % 8:   # round this fragment size up to next multiple of 8
-                frag_size += 8 - (frag_size % 8)
-
-
-            ip.set_ip_offmask(current_offset // 8)
-            current_offset += frag_size
-
-            data = Data(child_data[:frag_size])
-            child_data = child_data[frag_size:]
-
-            ip.set_ip_len(20 + data.get_size())
-            ip.contains(data)
-
-
-            if child_data:
-
-                ip.set_ip_mf(1)
-
-                fragment_list.append(ip)
-            else: # no more data bytes left to add to fragments
-
-                ip.set_ip_mf(0)
-
-                fragment_list.append(ip)
-                return fragment_list
-
-        if child_data: # any remaining data?
-            # create a fragment containing all of the remaining child_data
-            ip = IP()
-            ip.set_bytes(ip_header_bytes)
-            ip.set_ip_offmask(current_offset)
-            ip.set_ip_len(20 + len(child_data))
-            data = Data(child_data)
-            ip.contains(data)
-            fragment_list.append(ip)
-
-        return fragment_list
+        pass
 
 
     def fragment_by_size(self, aSize):
-        data = self.get_data_as_string()
-        if not data:
-            return [self]
-        data_len = len(data)
-        num_frags = data_len // aSize
-
-        if data_len % aSize:
-            num_frags += 1
-
-        size_list = []
-        for i in range(0, num_frags):
-            size_list.append(aSize)
-        return self.fragment_by_list(size_list)
+        pass
 
 
     def get_ip_ttl(self):
-        return self.get_byte(8)
+        pass
     def set_ip_ttl(self, value):
         self.set_byte(8, value)
 
@@ -1053,7 +928,7 @@ class IP(Header):
         self.set_byte(9, value)
 
     def get_ip_sum(self):
-        return self.get_word(10)
+        pass
     def set_ip_sum(self, value):
         self.auto_checksum = 0
         self.set_word(10, value)
@@ -1185,20 +1060,7 @@ class IPOption(PacketBuffer):
 
 
     def append_ip(self, ip):
-        op = self.get_code()
-        if not (op == IPOption.IPOPT_RR or op == IPOption.IPOPT_LSRR or op == IPOption.IPOPT_SSRR or op == IPOption.IPOPT_TS):
-            raise ImpactPacketException("append_ip() not support for option type %d" % self.opt_type)
-
-        p = self.get_ptr()
-        if not p:
-            raise ImpactPacketException("append_ip() failed, option ptr uninitialized")
-
-        if (p + 4) > self.get_len():
-            raise ImpactPacketException("append_ip() would overflow option")
-
-        self.set_ip_address(p - 1, ip)
-        p += 4
-        self.set_ptr(p)
+        pass
 
 
     def set_code(self, value):
@@ -1355,12 +1217,10 @@ class TCP(Header):
             raise ImpactPacketException("Cannot add TCP option, would overflow option space")
 
     def get_options(self):
-        return self.__option_list
+        pass
 
     def swapSourceAndDestination(self):
-        oldSource = self.get_th_sport()
-        self.set_th_sport(self.get_th_dport())
-        self.set_th_dport(oldSource)
+        pass
 
     #
     # Header field accessors
@@ -1379,13 +1239,13 @@ class TCP(Header):
         self.set_word(2, aValue)
 
     def get_th_seq(self):
-        return self.get_long(4)
+        pass
 
     def set_th_seq(self, aValue):
         self.set_long(4, aValue)
 
     def get_th_ack(self):
-        return self.get_long(8)
+        pass
 
     def set_th_ack(self, aValue):
         self.set_long(8, aValue)
@@ -1399,7 +1259,7 @@ class TCP(Header):
         return self.set_word(12, nb, ">")
      
     def get_th_win(self):
-        return self.get_word(14)
+        pass
 
     def set_th_win(self, aValue):
         self.set_word(14, aValue)
@@ -1409,10 +1269,10 @@ class TCP(Header):
         self.auto_checksum = 0
 
     def get_th_sum(self):
-        return self.get_word(16)
+        pass
 
     def get_th_urp(self):
-        return self.get_word(18)
+        pass
 
     def set_th_urp(self, aValue):
         return self.set_word(18, aValue)
@@ -1420,8 +1280,7 @@ class TCP(Header):
     # Flag accessors
 
     def get_th_reserved(self):
-        tmp_value = self.get_byte(12) & 0x0f
-        return tmp_value
+        pass
 
 
     def get_th_off(self):
@@ -1439,56 +1298,56 @@ class TCP(Header):
     def set_CWR(self):
         return self.set_flags(128)
     def reset_CWR(self):
-        return self.reset_flags(128)
+        pass
 
     def get_ECE(self):
         return self.get_flag(64)
     def set_ECE(self):
         return self.set_flags(64)
     def reset_ECE(self):
-        return self.reset_flags(64)
+        pass
 
     def get_URG(self):
         return self.get_flag(32)
     def set_URG(self):
         return self.set_flags(32)
     def reset_URG(self):
-        return self.reset_flags(32)
+        pass
 
     def get_ACK(self):
         return self.get_flag(16)
     def set_ACK(self):
         return self.set_flags(16)
     def reset_ACK(self):
-        return self.reset_flags(16)
+        pass
 
     def get_PSH(self):
         return self.get_flag(8)
     def set_PSH(self):
         return self.set_flags(8)
     def reset_PSH(self):
-        return self.reset_flags(8)
+        pass
 
     def get_RST(self):
         return self.get_flag(4)
     def set_RST(self):
-        return self.set_flags(4)
+        pass
     def reset_RST(self):
-        return self.reset_flags(4)
+        pass
 
     def get_SYN(self):
         return self.get_flag(2)
     def set_SYN(self):
         return self.set_flags(2)
     def reset_SYN(self):
-        return self.reset_flags(2)
+        pass
 
     def get_FIN(self):
         return self.get_flag(1)
     def set_FIN(self):
         return self.set_flags(1)
     def reset_FIN(self):
-        return self.reset_flags(1)
+        pass
 
     # Overridden Methods
 
@@ -1568,8 +1427,7 @@ class TCP(Header):
             return 0
 
     def reset_flags(self, aValue):
-        tmp_value = self.get_th_flags() & (~aValue)
-        return self.set_th_flags(tmp_value)
+        pass
 
     def set_flags(self, aValue):
         tmp_value =  self.get_th_flags() | aValue
@@ -1665,10 +1523,10 @@ class TCPOption(PacketBuffer):
             self.set_kind(TCPOption.TCPOPT_SACK)
 
     def set_left_edge(self, aValue):
-        self.set_long (2, aValue)
+        pass
 
     def set_right_edge(self, aValue):
-        self.set_long (6, aValue)
+        pass
 
     def set_kind(self, kind):
         self.set_byte(0, kind)
@@ -1713,9 +1571,7 @@ class TCPOption(PacketBuffer):
         return self.get_byte(2)
 
     def get_ts(self):
-        if self.get_kind() != TCPOption.TCPOPT_TIMESTAMP:
-            raise ImpactPacketException("Can only retrieve timestamp from TCPOPT_TIMESTAMP option")
-        return self.get_long(2)
+        pass
 
     def set_ts(self, ts):
         if self.get_kind() != TCPOption.TCPOPT_TIMESTAMP:
@@ -1723,14 +1579,10 @@ class TCPOption(PacketBuffer):
         self.set_long(2, ts)
 
     def get_ts_echo(self):
-        if self.get_kind() != TCPOption.TCPOPT_TIMESTAMP:
-            raise ImpactPacketException("Can only retrieve timestamp from TCPOPT_TIMESTAMP option")
-        return self.get_long(6)
+        pass
 
     def set_ts_echo(self, ts):
-        if self.get_kind() != TCPOption.TCPOPT_TIMESTAMP:
-            raise ImpactPacketException("Can only set timestamp on TCPOPT_TIMESTAMP option")
-        self.set_long(6, ts)
+        pass
 
     def __str__(self):
         map = { TCPOption.TCPOPT_EOL : "End of List ",
@@ -1829,77 +1681,77 @@ class ICMP(Header):
         self.auto_checksum = 0
 
     def get_icmp_gwaddr(self):
-        return self.get_ip_address(4)
+        pass
 
     def set_icmp_gwaddr(self, ip):
-        self.set_ip_address(4, ip)
+        pass
 
     def get_icmp_id(self):
-        return self.get_word(4)
+        pass
 
     def set_icmp_id(self, aValue):
         self.set_word(4, aValue)
 
     def get_icmp_seq(self):
-        return self.get_word(6)
+        pass
 
     def set_icmp_seq(self, aValue):
         self.set_word(6, aValue)
 
     def get_icmp_void(self):
-        return self.get_long(4)
+        pass
 
     def set_icmp_void(self, aValue):
-        self.set_long(4, aValue)
+        pass
 
 
     def get_icmp_nextmtu(self):
-        return self.get_word(6)
+        pass
 
     def set_icmp_nextmtu(self, aValue):
-        self.set_word(6, aValue)
+        pass
 
     def get_icmp_num_addrs(self):
-        return self.get_byte(4)
+        pass
 
     def set_icmp_num_addrs(self, aValue):
-        self.set_byte(4, aValue)
+        pass
 
     def get_icmp_wpa(self):
-        return self.get_byte(5)
+        pass
 
     def set_icmp_wpa(self, aValue):
-        self.set_byte(5, aValue)
+        pass
 
     def get_icmp_lifetime(self):
-        return self.get_word(6)
+        pass
 
     def set_icmp_lifetime(self, aValue):
-        self.set_word(6, aValue)
+        pass
 
     def get_icmp_otime(self):
-        return self.get_long(8)
+        pass
 
     def set_icmp_otime(self, aValue):
-        self.set_long(8, aValue)
+        pass
 
     def get_icmp_rtime(self):
-        return self.get_long(12)
+        pass
 
     def set_icmp_rtime(self, aValue):
-        self.set_long(12, aValue)
+        pass
 
     def get_icmp_ttime(self):
-        return self.get_long(16)
+        pass
 
     def set_icmp_ttime(self, aValue):
-        self.set_long(16, aValue)
+        pass
 
     def get_icmp_mask(self):
-        return self.get_ip_address(8)
+        pass
 
     def set_icmp_mask(self, mask):
-        self.set_ip_address(8, mask)
+        pass
 
 
     def calculate_checksum(self):
@@ -1943,26 +1795,25 @@ class ICMP(Header):
         return tmp_str
 
     def isDestinationUnreachable(self):
-        return self.get_icmp_type() == 3
+        pass
 
     def isError(self):
-        return not self.isQuery()
+        pass
 
     def isHostUnreachable(self):
-        return self.isDestinationUnreachable() and (self.get_icmp_code() == 1)
+        pass
 
     def isNetUnreachable(self):
-        return self.isDestinationUnreachable() and (self.get_icmp_code() == 0)
+        pass
 
     def isPortUnreachable(self):
-        return self.isDestinationUnreachable() and (self.get_icmp_code() == 3)
+        pass
 
     def isProtocolUnreachable(self):
-        return self.isDestinationUnreachable() and (self.get_icmp_code() == 2)
+        pass
 
     def isQuery(self):
-        tmp_dict = {8:'',  9:'',  10:'', 13:'', 14:'', 15:'', 16:'', 17:'', 18:''}
-        return self.get_icmp_type() in tmp_dict
+        pass
 
 class IGMP(Header):
     protocol = 2
@@ -1975,13 +1826,13 @@ class IGMP(Header):
         return self.get_byte(0)
 
     def set_igmp_type(self, aValue):
-        self.set_byte(0, aValue)
+        pass
 
     def get_igmp_code(self):
-        return self.get_byte(1)
+        pass
 
     def set_igmp_code(self, aValue):
-        self.set_byte(1, aValue)
+        pass
 
     def get_igmp_cksum(self):
         return self.get_word(2)
@@ -1993,7 +1844,7 @@ class IGMP(Header):
         return self.get_long(4)
 
     def set_igmp_group(self, aValue):
-        self.set_long(4, aValue)
+        pass
 
     def get_header_size(self):
         return 8
@@ -2027,47 +1878,45 @@ class ARP(Header):
         return self.get_word(0)
 
     def set_ar_hrd(self, aValue):
-        self.set_word(0, aValue)
+        pass
 
     def get_ar_pro(self):
-        return self.get_word(2)
+        pass
 
     def set_ar_pro(self, aValue):
-        self.set_word(2, aValue)
+        pass
 
     def get_ar_hln(self):
         return self.get_byte(4)
 
     def set_ar_hln(self, aValue):
-        self.set_byte(4, aValue)
+        pass
 
     def get_ar_pln(self):
         return self.get_byte(5)
 
     def set_ar_pln(self, aValue):
-        self.set_byte(5, aValue)
+        pass
 
     def get_ar_op(self):
         return self.get_word(6)
 
     def set_ar_op(self, aValue):
-        self.set_word(6, aValue)
+        pass
 
     def get_ar_sha(self):
         tmp_size = self.get_ar_hln()
         return self.get_bytes().tolist()[8: 8 + tmp_size]
 
     def set_ar_sha(self, aValue):
-        for i in range(0, self.get_ar_hln()):
-            self.set_byte(i + 8, aValue[i])
+        pass
 
     def get_ar_spa(self):
         tmp_size = self.get_ar_pln()
         return self.get_bytes().tolist()[8 + self.get_ar_hln(): 8 + self.get_ar_hln() + tmp_size]
 
     def set_ar_spa(self, aValue):
-        for i in range(0, self.get_ar_pln()):
-            self.set_byte(i + 8 + self.get_ar_hln(), aValue[i])
+        pass
 
     def get_ar_tha(self):
         tmp_size = self.get_ar_hln()
@@ -2075,9 +1924,7 @@ class ARP(Header):
         return self.get_bytes().tolist()[tmp_from: tmp_from + tmp_size]
 
     def set_ar_tha(self, aValue):
-        tmp_from = 8 + self.get_ar_hln() + self.get_ar_pln()
-        for i in range(0, self.get_ar_hln()):
-            self.set_byte(i + tmp_from, aValue[i])
+        pass
 
     def get_ar_tpa(self):
         tmp_size = self.get_ar_pln()
@@ -2085,9 +1932,7 @@ class ARP(Header):
         return self.get_bytes().tolist()[tmp_from: tmp_from + tmp_size]
 
     def set_ar_tpa(self, aValue):
-        tmp_from = 8 + (2 * self.get_ar_hln()) + self.get_ar_pln()
-        for i in range(0, self.get_ar_pln()):
-            self.set_byte(i + tmp_from, aValue[i])
+        pass
 
     def get_header_size(self):
         return 8 + (2 * self.get_ar_hln()) + (2 * self.get_ar_pln())
@@ -2132,19 +1977,4 @@ class ARP(Header):
         return tmp_str
 
 def example(): #To execute an example, remove this line
-    a = Ethernet()
-    b = ARP()
-    c = Data('Hola loco!!!')
-    b.set_ar_hln(6)
-    b.set_ar_pln(4)
-    #a.set_ip_dst('192.168.22.6')
-    #a.set_ip_src('1.1.1.2')
-    a.contains(b)
-    b.contains(c)
-    b.set_ar_op(2)
-    b.set_ar_hrd(1)
-    b.set_ar_spa((192, 168, 22, 6))
-    b.set_ar_tpa((192, 168, 66, 171))
-    a.set_ether_shost((0x0, 0xe0, 0x7d, 0x8a, 0xef, 0x3d))
-    a.set_ether_dhost((0x0, 0xc0, 0xdf, 0x6, 0x5, 0xe))
-    print("beto %s" % a)
+    pass

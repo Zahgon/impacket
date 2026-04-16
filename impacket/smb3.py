@@ -328,13 +328,7 @@ class SMB3:
             self.negotiateSession(preferredDialect, negSessionResponse)
 
     def printStatus(self):
-        print("CONNECTION")
-        for i in list(self._Connection.items()):
-            print("%-40s : %s" % i)
-        print()
-        print("SESSION")
-        for i in list(self._Session.items()):
-            print("%-40s : %s" % i)
+        pass
 
     def __UpdateConnectionPreAuthHash(self, data):
         from Cryptodome.Hash import SHA512
@@ -357,7 +351,7 @@ class SMB3:
         return self._Session['ServerName']
 
     def getClientName(self):
-        return self._Session['ClientName']
+        pass
 
     def getRemoteName(self):
         if self._Session['ServerName'] == '':
@@ -369,7 +363,7 @@ class SMB3:
         return True
 
     def getServerIP(self):
-        return self._Connection['ServerIP']
+        pass
 
     def getServerDomain(self):
         return self._Session['ServerDomain']
@@ -378,19 +372,19 @@ class SMB3:
         return self._Session['ServerDNSDomainName']
 
     def getServerDNSHostName(self):
-        return self._Session['ServerDNSHostName']
+        pass
 
     def getServerOS(self):
-        return self._Session['ServerOS']
+        pass
 
     def getServerOSMajor(self):
-        return self._Session['ServerOSMajor']
+        pass
 
     def getServerOSMinor(self):
-        return self._Session['ServerOSMinor']
+        pass
 
     def getServerOSBuild(self):
-        return self._Session['ServerOSBuild']
+        pass
 
     def isGuestSession(self):
         return self._Session['SessionFlags'] & SMB2_SESSION_FLAG_IS_GUEST
@@ -400,11 +394,7 @@ class SMB3:
 
     @contextmanager
     def useTimeout(self, timeout):
-        prev_timeout = self.getTimeout(timeout)
-        try:
-            yield
-        finally:
-            self.setTimeout(prev_timeout)
+        pass
 
     def getDialect(self):
         return self._Connection['Dialect']
@@ -1460,48 +1450,10 @@ class SMB3:
             return bytesWritten
 
     def queryDirectory(self, treeId, fileId, searchString = '*', resumeIndex = 0, informationClass = FILENAMES_INFORMATION, maxBufferSize = None, enumRestart = False, singleEntry = False):
-        if (treeId in self._Session['TreeConnectTable']) is False:
-            raise SessionError(STATUS_INVALID_PARAMETER)
-        if (fileId in self._Session['OpenTable']) is False:
-            raise SessionError(STATUS_INVALID_PARAMETER)
-
-        packet = self.SMB_PACKET()
-        packet['Command'] = SMB2_QUERY_DIRECTORY
-        packet['TreeID']  = treeId
-
-        queryDirectory = SMB2QueryDirectory()
-        queryDirectory['FileInformationClass'] = informationClass
-        if resumeIndex != 0 :
-            queryDirectory['Flags'] = SMB2_INDEX_SPECIFIED
-        queryDirectory['FileIndex'] = resumeIndex
-        queryDirectory['FileID']    = fileId
-        if maxBufferSize is None:
-            maxBufferSize = self._Connection['MaxReadSize']
-        queryDirectory['OutputBufferLength'] = maxBufferSize
-        queryDirectory['Buffer']             = searchString.encode('utf-16le')
-        queryDirectory['FileNameLength']     = len(queryDirectory['Buffer'])
-        
-
-        packet['Data'] = queryDirectory
-
-        if self._Connection['Dialect'] != SMB2_DIALECT_002 and self._Connection['SupportsMultiCredit'] is True:
-            packet['CreditCharge'] = ( 1 + (maxBufferSize - 1) // 65536)
-
-        packetID = self.sendSMB(packet)
-        ans = self.recvSMB(packetID)
-        if ans.isValidAnswer(STATUS_SUCCESS):
-            queryDirectoryResponse = SMB2QueryDirectory_Response(ans['Data'])
-            return queryDirectoryResponse['Buffer']
+        pass
 
     def echo(self):
-        packet = self.SMB_PACKET()
-        packet['Command'] = SMB2_ECHO
-        smbEcho = SMB2Echo()
-        packet['Data'] = smbEcho
-        packetID = self.sendSMB(packet)
-        ans = self.recvSMB(packetID)
-        if ans.isValidAnswer(STATUS_SUCCESS):
-            return True
+        pass
 
     def cancel(self, packetID):
         packet = self.SMB_PACKET()
@@ -1514,45 +1466,7 @@ class SMB3:
         self.sendSMB(packet)
 
     def ioctl(self, treeId, fileId = None, ctlCode = -1, flags = 0, inputBlob = '',  maxInputResponse = None, maxOutputResponse = None, waitAnswer = 1):
-        if (treeId in self._Session['TreeConnectTable']) is False:
-            raise SessionError(STATUS_INVALID_PARAMETER)
-        if fileId is None:
-            fileId = '\xff'*16
-        else:
-            if (fileId in self._Session['OpenTable']) is False:
-                raise SessionError(STATUS_INVALID_PARAMETER)
-
-        packet = self.SMB_PACKET()
-        packet['Command']            = SMB2_IOCTL
-        packet['TreeID']             = treeId
-
-        smbIoctl = SMB2Ioctl()
-        smbIoctl['FileID']             = fileId
-        smbIoctl['CtlCode']            = ctlCode
-        smbIoctl['MaxInputResponse']   = maxInputResponse
-        smbIoctl['MaxOutputResponse']  = maxOutputResponse
-        smbIoctl['InputCount']         = len(inputBlob)
-        if len(inputBlob) == 0:
-            smbIoctl['InputOffset'] = 0
-            smbIoctl['Buffer']      = '\x00'
-        else:
-            smbIoctl['Buffer']             = inputBlob
-        smbIoctl['OutputOffset']       = 0
-        smbIoctl['MaxOutputResponse']  = maxOutputResponse
-        smbIoctl['Flags']              = flags
-
-        packet['Data'] = smbIoctl
-
-        packetID = self.sendSMB(packet)
-
-        if waitAnswer == 0:
-            return True
-
-        ans = self.recvSMB(packetID)
-
-        if ans.isValidAnswer(STATUS_SUCCESS):
-            smbIoctlResponse = SMB2Ioctl_Response(ans['Data'])
-            return smbIoctlResponse['Buffer']
+        pass
 
     def flush(self,treeId, fileId):
         if (treeId in self._Session['TreeConnectTable']) is False:
@@ -1576,29 +1490,7 @@ class SMB3:
             return True
 
     def lock(self, treeId, fileId, locks, lockSequence = 0):
-        if (treeId in self._Session['TreeConnectTable']) is False:
-            raise SessionError(STATUS_INVALID_PARAMETER)
-        if (fileId in self._Session['OpenTable']) is False:
-            raise SessionError(STATUS_INVALID_PARAMETER)
-
-        packet = self.SMB_PACKET()
-        packet['Command'] = SMB2_LOCK
-        packet['TreeID']  = treeId
-
-        smbLock = SMB2Lock()
-        smbLock['FileID']       = fileId
-        smbLock['LockCount']    = len(locks)
-        smbLock['LockSequence'] = lockSequence
-        smbLock['Locks']        = ''.join(str(x) for x in locks)
-
-        packet['Data'] = smbLock
-
-        packetID = self.sendSMB(packet)
-        ans = self.recvSMB(packetID)
-
-        if ans.isValidAnswer(STATUS_SUCCESS):
-            smbFlushResponse = SMB2Lock_Response(ans['Data'])
-            return True
+        pass
 
         # ToDo:
         # If Open.ResilientHandle is TRUE or Connection.SupportsMultiChannel is TRUE, the client MUST
@@ -1638,36 +1530,7 @@ class SMB3:
             return True
 
     def queryInfo(self, treeId, fileId, inputBlob = '', infoType = SMB2_0_INFO_FILE, fileInfoClass = SMB2_FILE_STANDARD_INFO, additionalInformation = 0, flags = 0 ):
-        if (treeId in self._Session['TreeConnectTable']) is False:
-            raise SessionError(STATUS_INVALID_PARAMETER)
-        if (fileId in self._Session['OpenTable']) is False:
-            raise SessionError(STATUS_INVALID_PARAMETER)
-
-        packet = self.SMB_PACKET()
-        packet['Command'] = SMB2_QUERY_INFO
-        packet['TreeID']  = treeId
-
-        queryInfo = SMB2QueryInfo()
-        queryInfo['FileID']                = fileId
-        queryInfo['InfoType']              = infoType
-        queryInfo['FileInfoClass']         = fileInfoClass
-        queryInfo['OutputBufferLength']    = 65535
-        queryInfo['AdditionalInformation'] = additionalInformation
-        if len(inputBlob) == 0:
-            queryInfo['InputBufferOffset'] = 0
-            queryInfo['Buffer']            = '\x00'
-        else:
-            queryInfo['InputBufferLength'] = len(inputBlob)
-            queryInfo['Buffer']            = inputBlob
-        queryInfo['Flags']                 = flags
-
-        packet['Data'] = queryInfo
-        packetID = self.sendSMB(packet)
-        ans = self.recvSMB(packetID)
-
-        if ans.isValidAnswer(STATUS_SUCCESS):
-            queryResponse = SMB2QueryInfo_Response(ans['Data'])
-            return queryResponse['Buffer']
+        pass
 
     def setInfo(self, treeId, fileId, inputBlob = '', infoType = SMB2_0_INFO_FILE, fileInfoClass = SMB2_FILE_STANDARD_INFO, additionalInformation = 0 ):
         if (treeId in self._Session['TreeConnectTable']) is False:
@@ -1695,48 +1558,16 @@ class SMB3:
             return True
 
     def getSessionKey(self):
-        if self.getDialect() >= SMB2_DIALECT_30:
-           return self._Session['ApplicationKey']
-        else:
-           return self._Session['SessionKey']
+        pass
 
     def setSessionKey(self, key):
-        if self.getDialect() >= SMB2_DIALECT_30:
-           self._Session['ApplicationKey'] = key
-        else:
-           self._Session['SessionKey'] = key
+        pass
 
     ######################################################################
     # Higher level functions
 
     def rename(self, shareName, oldPath, newPath):
-        oldPath = oldPath.replace('/', '\\')
-        oldPath = ntpath.normpath(oldPath)
-        if len(oldPath) > 0 and oldPath[0] == '\\':
-            oldPath = oldPath[1:]
-
-        newPath = newPath.replace('/', '\\')
-        newPath = ntpath.normpath(newPath)
-        if len(newPath) > 0 and newPath[0] == '\\':
-            newPath = newPath[1:]
-
-        treeId = self.connectTree(shareName)
-        fileId = None
-        try:
-            fileId = self.create(treeId, oldPath, MAXIMUM_ALLOWED ,FILE_SHARE_READ | FILE_SHARE_WRITE |FILE_SHARE_DELETE, 0x200020, FILE_OPEN, 0)
-            renameReq = FILE_RENAME_INFORMATION_TYPE_2()
-            renameReq['ReplaceIfExists'] = 1
-            renameReq['RootDirectory']   = '\x00'*8
-            renameReq['FileName']        = newPath.encode('utf-16le')
-            renameReq['FileNameLength']  = len(renameReq['FileName'])
-
-            self.setInfo(treeId, fileId, renameReq, infoType = SMB2_0_INFO_FILE, fileInfoClass = SMB2_FILE_RENAME_INFO)
-        finally:
-            if fileId is not None:
-                self.close(treeId, fileId)
-            self.disconnectTree(treeId)
-
-        return True
+        pass
 
     def writeFile(self, treeId, fileId, data, offset = 0):
         finished = False
@@ -1752,86 +1583,13 @@ class SMB3:
 
     def isSnapshotRequest(self, path):
         #TODO: use a regex here?
-        return '@GMT-' in path
+        pass
 
     def timestampForSnapshot(self, path):
-        timestamp = path[path.index("@GMT-"):path.index("@GMT-")+24]
-        path = path.replace(timestamp, '')
-        from datetime import datetime
-        fTime = int((datetime.strptime(timestamp, '@GMT-%Y.%m.%d-%H.%M.%S') - datetime(1970,1,1)).total_seconds())
-        fTime *= 10000000
-        fTime += 116444736000000000
-
-        token = SMB2_CREATE_TIMEWARP_TOKEN()
-        token['Timestamp'] = fTime
-
-        ctx = SMB2CreateContext()
-        ctx['Next'] = 0
-        ctx['NameOffset'] = 16
-        ctx['NameLength'] = len('TWrp')
-        ctx['DataOffset'] = 24
-        ctx['DataLength'] = 8
-        ctx['Buffer'] = b'TWrp'
-        ctx['Buffer'] += b'\x00'*4 # 4 bytes to 8-byte align
-        ctx['Buffer'] += token.getData()
-
-        # fix-up the path
-        path = path.replace(timestamp, '').replace('\\\\', '\\')
-        if path == '\\':
-            path += '*'
-        return path, ctx
+        pass
 
     def listPath(self, shareName, path, password = None):
-        createContexts = None
-
-        if self.isSnapshotRequest(path):
-            createContexts = []
-            path, ctx = self.timestampForSnapshot(path)
-            createContexts.append(ctx)
-
-        # ToDo: Handle situations where share is password protected
-        path = path.replace('/', '\\')
-        path = ntpath.normpath(path)
-        if len(path) > 0 and path[0] == '\\':
-            path = path[1:]
-
-        treeId = self.connectTree(shareName)
-
-        fileId = None
-        try:
-            # ToDo, we're assuming it's a directory, we should check what the file type is
-            fileId = self.create(treeId, ntpath.dirname(path), FILE_READ_ATTRIBUTES | FILE_READ_DATA, FILE_SHARE_READ |
-                                 FILE_SHARE_WRITE | FILE_SHARE_DELETE,
-                                 FILE_DIRECTORY_FILE | FILE_SYNCHRONOUS_IO_NONALERT, FILE_OPEN, 0,
-                                 createContexts=createContexts)
-            res = ''
-            files = []
-            from impacket import smb
-            while True:
-                try:
-                    res = self.queryDirectory(treeId, fileId, ntpath.basename(path), maxBufferSize=65535,
-                                              informationClass=FILE_FULL_DIRECTORY_INFORMATION)
-                    nextOffset = 1
-                    while nextOffset != 0:
-                        fileInfo = smb.SMBFindFileFullDirectoryInfo(smb.SMB.FLAGS2_UNICODE)
-                        fileInfo.fromString(res)
-                        files.append(smb.SharedFile(fileInfo['CreationTime'], fileInfo['LastAccessTime'],
-                                                    fileInfo['LastWriteTime'], fileInfo['LastChangeTime'], fileInfo['EndOfFile'],
-                                                    fileInfo['AllocationSize'], fileInfo['ExtFileAttributes'],
-                                                    fileInfo['FileName'].decode('utf-16le'),
-                                                    fileInfo['FileName'].decode('utf-16le')))
-                        nextOffset = fileInfo['NextEntryOffset']
-                        res = res[nextOffset:]
-                except SessionError as e:
-                    if (e.get_error_code()) != STATUS_NO_MORE_FILES:
-                        raise
-                    break
-        finally:
-            if fileId is not None:
-                self.close(treeId, fileId)
-            self.disconnectTree(treeId)
-
-        return files
+        pass
 
     def mkdir(self, shareName, pathName, password = None):
         # ToDo: Handle situations where share is password protected
@@ -1899,84 +1657,14 @@ class SMB3:
         return True
 
     def retrieveFile(self, shareName, path, callback, mode = FILE_OPEN, offset = 0, password = None, shareAccessMode = FILE_SHARE_READ):
-        createContexts = None
-
-        if self.isSnapshotRequest(path):
-            createContexts = []
-            path, ctx = self.timestampForSnapshot(path)
-            createContexts.append(ctx)
-
-        # ToDo: Handle situations where share is password protected
-        path = path.replace('/', '\\')
-        path = ntpath.normpath(path)
-        if len(path) > 0 and path[0] == '\\':
-            path = path[1:]
-
-        treeId = self.connectTree(shareName)
-        fileId = None
-        from impacket import smb
-        try:
-            fileId = self.create(treeId, path, FILE_READ_DATA, shareAccessMode, FILE_NON_DIRECTORY_FILE, mode, 0, createContexts=createContexts)
-            res = self.queryInfo(treeId, fileId)
-            fileInfo = smb.SMBQueryFileStandardInfo(res)
-            fileSize = fileInfo['EndOfFile']
-            if (fileSize-offset) < self._Connection['MaxReadSize']:
-                # Skip reading 0 bytes files.
-                if (fileSize-offset) > 0:
-                    data = self.read(treeId, fileId, offset, fileSize-offset)
-                    callback(data)
-            else:
-                written = 0
-                toBeRead = fileSize-offset
-                while written < toBeRead:
-                    data = self.read(treeId, fileId, offset, self._Connection['MaxReadSize'])
-                    written += len(data)
-                    offset  += len(data)
-                    callback(data)
-        finally:
-            if fileId is not None:
-                self.close(treeId, fileId)
-            self.disconnectTree(treeId)
+        pass
 
     def storeFile(self, shareName, path, callback, mode = FILE_OVERWRITE_IF, offset = 0, password = None, shareAccessMode = FILE_SHARE_READ):
         # ToDo: Handle situations where share is password protected
-        path = path.replace('/', '\\')
-        path = ntpath.normpath(path)
-        if len(path) > 0 and path[0] == '\\':
-            path = path[1:]
-
-        treeId = self.connectTree(shareName)
-        fileId = None
-        try:
-            fileId = self.create(treeId, path, FILE_WRITE_DATA, shareAccessMode, FILE_NON_DIRECTORY_FILE, mode, 0)
-            finished = False
-            writeOffset = offset
-            while not finished:
-                data = callback(self._Connection['MaxWriteSize'])
-                if len(data) == 0:
-                    break
-                written = self.write(treeId, fileId, data, writeOffset, len(data))
-                writeOffset += written
-        finally:
-            if fileId is not None:
-                self.close(treeId, fileId)
-            self.disconnectTree(treeId)
+        pass
 
     def waitNamedPipe(self, treeId, pipename, timeout = 5):
-        pipename = ntpath.basename(pipename)
-        if (treeId in self._Session['TreeConnectTable']) is False:
-            raise SessionError(STATUS_INVALID_PARAMETER)
-        if len(pipename) > 0xffff:
-            raise SessionError(STATUS_INVALID_PARAMETER)
-
-        pipeWait = FSCTL_PIPE_WAIT_STRUCTURE()
-        pipeWait['Timeout']          = timeout*100000
-        pipeWait['Name']             = pipename.encode('utf-16le')
-        pipeWait['NameLength']       = len(pipeWait['Name'] )
-        pipeWait['TimeoutSpecified'] = 1
-
-
-        return self.ioctl(treeId, None, FSCTL_PIPE_WAIT,flags=SMB2_0_IOCTL_IS_FSCTL, inputBlob=pipeWait, maxInputResponse = 0, maxOutputResponse=0)
+        pass
 
     def getIOCapabilities(self):
         res = dict()
@@ -2023,7 +1711,7 @@ class SMB3:
 
     def is_login_required(self):
         # Always true :P
-        return True
+        pass
 
     def is_signing_required(self):
         return self._Connection['RequireSigning']
@@ -2055,14 +1743,10 @@ class SMB3:
         return self.write(tid, fid, data, offset, len(data))
 
     def TransactNamedPipe(self, tid, fid, data, noAnswer = 0, waitAnswer = 1, offset = 0):
-        return self.ioctl(tid, fid, FSCTL_PIPE_TRANSCEIVE, SMB2_0_IOCTL_IS_FSCTL, data, maxOutputResponse = 65535, waitAnswer = noAnswer | waitAnswer)
+        pass
 
     def TransactNamedPipeRecv(self):
-        ans = self.recvSMB()
-
-        if ans.isValidAnswer(STATUS_SUCCESS):
-            smbIoctlResponse = SMB2Ioctl_Response(ans['Data'])
-            return smbIoctlResponse['Buffer']
+        pass
 
 
     def read_andx(self, tid, fid, offset=0, max_size = None, wait_answer=1, smb_packet=None):
@@ -2077,11 +1761,7 @@ class SMB3:
 
     def open_andx(self, tid, fileName, open_mode, desired_access):
         # ToDo Return all the attributes of the file
-        if len(fileName) > 0 and fileName[0] == '\\':
-            fileName = fileName[1:]
-
-        fileId = self.create(tid,fileName,desired_access, open_mode, FILE_NON_DIRECTORY_FILE, open_mode, 0)
-        return fileId, 0, 0, 0, 0, 0, 0, 0, 0
+        pass
 
     def set_session_key(self, signingKey):
         self._Session['SessionKey'] = signingKey

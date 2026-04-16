@@ -161,29 +161,7 @@ class NDR(object):
         return False
 
     def dumpRaw(self, msg = None, indent = 0):
-        if msg is None:
-            msg = self.__class__.__name__
-        ind = ' '*indent
-        print("\n%s" % msg)
-        for field in self.commonHdr+self.structure+self.referent:
-            i = field[0] 
-            if i in self.fields:
-                if isinstance(self.fields[i], NDR):
-                    self.fields[i].dumpRaw('%s%s:{' % (ind,i), indent = indent + 4)
-                    print("%s}" % ind)
-
-                elif isinstance(self.fields[i], list):
-                    print("%s[" % ind)
-                    for num,j in enumerate(self.fields[i]):
-                       if isinstance(j, NDR):
-                           j.dumpRaw('%s%s:' % (ind,i), indent = indent + 4)
-                           print("%s," % ind)
-                       else:
-                           print("%s%s: {%r}," % (ind, i, j))
-                    print("%s]" % ind)
-
-                else:
-                    print("%s%s: {%r}" % (ind,i,self[i]))
+        pass
 
     def dump(self, msg = None, indent = 0):
         if msg is None:
@@ -339,25 +317,7 @@ class NDR(object):
         return calcsize(fieldTypeOrClass)
 
     def calcUnPackSize(self, fieldTypeOrClass, data, offset=0):
-        if isinstance(fieldTypeOrClass, str) is False:
-            return len(data) - offset
-
-        # code specifier
-        two = fieldTypeOrClass.split('=')
-        if len(two) >= 2:
-            return self.calcUnPackSize(two[0], data, offset)
-
-        # array specifier
-        two = fieldTypeOrClass.split('*')
-        if len(two) == 2:
-            return len(data) - offset
-
-        # literal specifier
-        if fieldTypeOrClass[:1] == ':':
-            return len(data) - offset
-
-        # struct like specifier
-        return calcsize(fieldTypeOrClass)
+        pass
 
 # NDR Primitives
 class NDRSMALL(NDR):
@@ -658,14 +618,7 @@ class NDRCONSTRUCTEDTYPE(NDR):
         return offset-offset0
 
     def calcUnPackSize(self, fieldTypeOrClass, data, offset=0):
-        if isinstance(fieldTypeOrClass, str) is False:
-            return len(data) - offset
-
-        two = fieldTypeOrClass.split('*')
-        if len(two) == 2:
-            return len(data) - offset
-        else:
-            return NDR.calcUnPackSize(self, fieldTypeOrClass, data, offset)
+        pass
 
 # Uni-dimensional Fixed Arrays
 class NDRArray(NDRCONSTRUCTEDTYPE):

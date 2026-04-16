@@ -446,8 +446,7 @@ class RPCProxyClient(HTTPClientSecurityProvider):
         self.rts_ping_received = False
 
     def set_proxy_credentials(self, username, password, domain='', lmhash='', nthash=''):
-        LOG.error("DeprecationWarning: Call to deprecated method set_proxy_credentials (use set_credentials).")
-        self.set_credentials(username, password, domain, lmhash, nthash)
+        pass
 
     def set_credentials(self, username, password, domain='', lmhash='', nthash='', aesKey='', TGT=None, TGS=None):
         HTTPClientSecurityProvider.set_credentials(self, username, password,

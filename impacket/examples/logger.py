@@ -34,18 +34,7 @@ class ImpacketFormatter(logging.Formatter):
       logging.Formatter.__init__(self,'%(bullet)s %(identity)s%(message)s', None)
 
   def format(self, record):
-    if record.levelno == logging.INFO:
-      record.bullet = '[*]'
-    elif record.levelno == logging.DEBUG:
-      record.bullet = '[+]'
-    elif record.levelno == logging.WARNING:
-      record.bullet = '[!]'
-    else:
-      record.bullet = '[-]'
-
-    if not hasattr(record, 'identity'): record.identity = ''
-
-    return logging.Formatter.format(self, record)
+    pass
 
 class ImpacketFormatterTimeStamp(ImpacketFormatter):
   '''
@@ -55,7 +44,7 @@ class ImpacketFormatterTimeStamp(ImpacketFormatter):
       logging.Formatter.__init__(self,'[%(asctime)-15s] %(bullet)s %(identity)s%(message)s', None)
 
   def formatTime(self, record, datefmt=None):
-      return ImpacketFormatter.formatTime(self, record, datefmt="%Y-%m-%d %H:%M:%S")
+      pass
 
 def init(ts=False, debug=False):
     # We add a StreamHandler and formatter to the root logger

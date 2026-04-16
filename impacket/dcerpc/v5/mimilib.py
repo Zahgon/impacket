@@ -208,16 +208,10 @@ class MimiDiffeH:
 
 
 def hMimiBind(dce, clientPublicKey):
-    request = MimiBind()
-    request['clientPublicKey'] = clientPublicKey
-    return dce.request(request)
+    pass
 
 def hMimiCommand(dce, phMimi, encCommand):
-    request = MimiCommand()
-    request['phMimi'] = phMimi
-    request['szEncCommand'] = len(encCommand)
-    request['encCommand'] = list(encCommand)
-    return dce.request(request)
+    pass
 
 if __name__ == '__main__':
     from impacket.winregistry import hexdump

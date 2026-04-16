@@ -65,23 +65,19 @@ class PcapFile:
         return self.file.fileno()
 
     def setFile(self, file):
-        self.file = file
+        pass
 
     def setSnapLen(self, snapLen):
-        self.createHeaderOnce()
-        self.hdr['maxLength'] = snapLen
+        pass
 
     def getSnapLen(self):
-        self.readHeaderOnce()
-        return self.hdr['maxLength']
+        pass
 
     def setLinkType(self, linkType):
-        self.createHeaderOnce()
-        self.hdr['linkType'] = linkType
+        pass
 
     def getLinkType(self):
-        self.readHeaderOnce()
-        return self.hdr['linkType']
+        pass
 
     def readHeaderOnce(self):
         if self.hdr is None:
@@ -112,9 +108,4 @@ class PcapFile:
         self.file.write(str(pkt))
 
     def packets(self):
-        self.reset()
-        while 1:
-           answer = self.read()
-           if answer is None:
-               break
-           yield answer
+        pass

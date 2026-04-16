@@ -22,7 +22,7 @@ class LDAPSocksRelay(SocksRelay):
 
     @staticmethod
     def getProtocolPort():
-        return 389
+        pass
 
     def initConnection(self):
         # No particular action required to initiate the connection

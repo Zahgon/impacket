@@ -63,7 +63,7 @@ class HTTPClientSecurityProvider:
         return self.__auth_type
 
     def get_auth_types(self):
-        return self.__auth_types
+        pass
 
     def get_ntlmssp_info(self):
         return self.__ntlmssp_info

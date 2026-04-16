@@ -26,18 +26,10 @@ class KeyManager:
         return tuple(bssid) 
 
     def add_key(self, bssid, key):
-        bssid=self.__get_bssid_hasheable_type(bssid)
-        if bssid not in self.keys:
-            self.keys[bssid] = key
-            return True
-        else:
-            return False
+        pass
         
     def replace_key(self, bssid, key):
-        bssid=self.__get_bssid_hasheable_type(bssid)
-        self.keys[bssid] = key
-        
-        return True
+        pass
         
     def get_key(self, bssid):
         bssid=self.__get_bssid_hasheable_type(bssid)
@@ -47,12 +39,4 @@ class KeyManager:
             return False
         
     def delete_key(self, bssid):
-        bssid=self.__get_bssid_hasheable_type(bssid)
-        if not isinstance(bssid, list):
-            raise Exception('BSSID datatype must be a list')
-        
-        if bssid in self.keys:
-            del self.keys[bssid] 
-            return True
-        
-        return False
+        pass

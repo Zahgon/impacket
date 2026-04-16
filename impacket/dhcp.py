@@ -152,51 +152,22 @@ class DhcpPacket(ProtocolPacket, structure.Structure):
     def packOptions(self, options):
         # options is an array of tuples: ('name',value)
 
-        answer = b''
-        for name, value in options:
-            code,format = self.options[name]
-            val = self.pack(format, value)
-            answer += b'%c%c%s' % (code, len(val), val)
-
-        return answer
+        pass
 
     def getOptionNameAndFormat(self, optionCode):
-        for k in self.options:
-            code,format = self.options[k]
-            if code == optionCode: return k, format
-        return optionCode, ':'
+        pass
 
     def unpackOptions(self, options):
         # options is a string
 
         # print '%r' % options
-        answer = []
-        i = 0
-        options = bytearray(options)
-        while i < len(options)-1:
-            name, format = self.getOptionNameAndFormat(options[i])
-            # size = self.calcUnpackSize(format, options[i+1:])
-            size = options[i+1]
-            # print i, name, format, size
-            value = self.unpack(format, bytes(options[i+2:i+2+size]))
-            answer.append((name, value))
-            i += 2+size
-
-        return answer
+        pass
 
     def unpackParameterRequestList(self, options):
-        return [self.getOptionNameAndFormat(ord(opt))[0] for opt in options]
+        pass
 
     def isAskingForProxyAutodiscovery(self):
-        for opt in self.fields['options']:
-            if opt[0] == 'parameter-request-list':
-                for optCode in opt[1]:
-                    if ord(optCode) == 252:
-                        return True
-        return False
+        pass
 
     def getOptionValue(self, name):
-        for opt in self.fields['options']:
-            if opt[0] == name:
-                return opt[1]
-        return None
+        pass

@@ -144,34 +144,16 @@ def checkNullString(string):
 
 # For all notifications except EX
 def hIpTransitionProtocolApplyConfigChanges(dce, notification_num):
-    request = IpTransitionProtocolApplyConfigChanges()
-    request['NotificationNum'] = notification_num
-
-    return dce.request(request)
+    pass
 
 # Only for NOTIFICATION_DA_SITE_MGR_LOCAL_CONFIGURATION_CHANGE_EX
 # No admin required
 def hIpTransitionProtocolApplyConfigChangesEx(dce, notification_num, notification_data):
-    request = IpTransitionProtocolApplyConfigChangesEx()
-    request['NotificationNum'] = notification_num
-    request['DataLength'] = len(notification_data)
-    request['Data'] = notification_data
-
-    return dce.request(request)
+    pass
 
 # Same as netsh interface ipv6 add v6v4tunnel "Test Tunnel" 192.168.0.1 10.0.0.5
 def hIpTransitionCreatev6Inv4Tunnel(dce, local_address, remote_address, interface_name):
-    request = IpTransitionCreatev6Inv4Tunnel()
-    request['LocalAddress'] = inet_aton(local_address)
-    request['RemoteAddress'] = inet_aton(remote_address)
-
-    request['InterfaceName'] = checkNullString(interface_name)
-    request.fields['InterfaceName'].fields['MaximumCount'] = 256
-
-    return dce.request(request)
+    pass
 
 def hIpTransitionDeletev6Inv4Tunnel(dce, tunnel_guid):
-    request = IpTransitionDeletev6Inv4Tunnel()
-    request['TunnelGuid'] = uuid.string_to_bin(tunnel_guid)
-
-    return dce.request(request)
+    pass

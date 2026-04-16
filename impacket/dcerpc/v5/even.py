@@ -340,66 +340,29 @@ OPNUMS = {
 # HELPER FUNCTIONS
 ################################################################################
 def hElfrOpenBELW(dce, backupFileName = NULL):
-    request = ElfrOpenBELW()
-    request['UNCServerName'] = NULL
-    request['BackupFileName'] = backupFileName
-    request['MajorVersion'] = 1
-    request['MinorVersion'] = 1
-    return dce.request(request)
+    pass
 
 def hElfrOpenELW(dce, moduleName = NULL, regModuleName = NULL):
-    request = ElfrOpenELW()
-    request['UNCServerName'] = NULL
-    request['ModuleName'] = moduleName
-    request['RegModuleName'] = regModuleName
-    request['MajorVersion'] = 1
-    request['MinorVersion'] = 1
-    return dce.request(request)
+    pass
 
 def hElfrCloseEL(dce, logHandle):
-    request = ElfrCloseEL()
-    request['LogHandle'] = logHandle
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hElfrRegisterEventSourceW(dce, moduleName = NULL, regModuleName = NULL):
-    request = ElfrRegisterEventSourceW()
-    request['UNCServerName'] = NULL
-    request['ModuleName'] = moduleName
-    request['RegModuleName'] = regModuleName
-    request['MajorVersion'] = 1
-    request['MinorVersion'] = 1
-    return dce.request(request)
+    pass
 
 def hElfrReadELW(dce, logHandle = '', readFlags = EVENTLOG_SEEK_READ|EVENTLOG_FORWARDS_READ,
                  recordOffset = 0, numberOfBytesToRead = MAX_BATCH_BUFF):
-    request = ElfrReadELW()
-    request['LogHandle'] = logHandle
-    request['ReadFlags'] = readFlags
-    request['RecordOffset'] = recordOffset
-    request['NumberOfBytesToRead'] = numberOfBytesToRead
-    return dce.request(request)
+    pass
 
 def hElfrClearELFW(dce, logHandle = '', backupFileName = NULL):
-    request = ElfrClearELFW()
-    request['LogHandle'] = logHandle
-    request['BackupFileName'] = backupFileName
-    return dce.request(request)
+    pass
 
 def hElfrBackupELFW(dce, logHandle = '', backupFileName = NULL):
-    request = ElfrBackupELFW()
-    request['LogHandle'] = logHandle
-    request['BackupFileName'] = backupFileName
-    return dce.request(request)
+    pass
 
 def hElfrNumberOfRecords(dce, logHandle):
-    request = ElfrNumberOfRecords()
-    request['LogHandle'] = logHandle
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hElfrOldestRecordNumber(dce, logHandle):
-    request = ElfrOldestRecord()
-    request['LogHandle'] = logHandle
-    resp = dce.request(request)
-    return resp
+    pass

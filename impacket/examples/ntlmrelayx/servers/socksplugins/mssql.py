@@ -48,7 +48,7 @@ class MSSQLSocksRelay(SocksRelay):
 
     @staticmethod
     def getProtocolPort():
-        return 1433
+        pass
 
     def initConnection(self):
         pass

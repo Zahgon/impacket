@@ -36,7 +36,7 @@ class HTTPSocksRelay(SocksRelay):
 
     @staticmethod
     def getProtocolPort():
-        return 80
+        pass
 
     def initConnection(self):
         pass

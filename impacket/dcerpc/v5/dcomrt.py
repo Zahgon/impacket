@@ -193,7 +193,7 @@ class handle_t(NDRSTRUCT):
         self['context_handle_uuid'] = b'\x00'*16
 
     def isNull(self):
-        return self['context_handle_uuid'] == b'\x00'*16
+        pass
 
 # 2.2.11 COMVERSION
 class COMVERSION(NDRSTRUCT):
@@ -208,10 +208,7 @@ class COMVERSION(NDRSTRUCT):
     @classmethod
     def set_default_version(cls, major_version=None, minor_version=None):
         # Set default dcom version for all new COMVERSION objects.
-        if major_version is not None:
-            cls.default_major_version = major_version
-        if minor_version is not None:
-            cls.default_minor_version = minor_version
+        pass
 
     def __init__(self, data = None,isNDR64 = False):
         NDRSTRUCT.__init__(self, data, isNDR64)
@@ -1038,43 +1035,7 @@ class DCOMConnection:
         # ToDo: locking for avoiding race conditions
         #print DCOMConnection.PORTMAPS
         #print DCOMConnection.OID_SET
-        try:
-            for target in DCOMConnection.OID_SET:
-                addedOids = set()
-                deletedOids = set()
-                if target in DCOMConnection.OID_ADD:
-                    addedOids = DCOMConnection.OID_ADD[target]
-                    del(DCOMConnection.OID_ADD[target])
-
-                if target in DCOMConnection.OID_DEL:
-                    deletedOids = DCOMConnection.OID_DEL[target]
-                    del(DCOMConnection.OID_DEL[target])
-
-                objExporter = IObjectExporter(DCOMConnection.PORTMAPS[target])
-
-                if len(addedOids) > 0 or len(deletedOids) > 0:
-                    if 'setid' in DCOMConnection.OID_SET[target]:
-                        setId = DCOMConnection.OID_SET[target]['setid']
-                    else:
-                        setId = 0
-                    resp = objExporter.ComplexPing(setId, 0, addedOids, deletedOids)
-                    DCOMConnection.OID_SET[target]['oids'] -= deletedOids
-                    DCOMConnection.OID_SET[target]['oids'] |= addedOids
-                    DCOMConnection.OID_SET[target]['setid'] = resp['pSetId']
-                else:
-                    objExporter.SimplePing(DCOMConnection.OID_SET[target]['setid'])
-        except Exception as e:
-            # There might be exceptions when sending packets 
-            # We should try to continue tho.
-            LOG.error(str(e))
-            pass
-
-        DCOMConnection.PINGTIMER = Timer(120,DCOMConnection.pingServer)
-        try:
-            DCOMConnection.PINGTIMER.start()
-        except Exception as e:
-            if str(e).find('threads can only be started once') < 0:
-                raise e
+        pass
 
     def initTimer(self):
         if self.__oxidResolver is True:
@@ -1221,7 +1182,7 @@ class INTERFACE:
         return self.__oid
 
     def set_oid(self, oid):
-        self.__oid = oid
+        pass
 
     def get_target(self):
         return self.__target
@@ -1230,13 +1191,13 @@ class INTERFACE:
         return self.__iPid
 
     def set_iPid(self, iPid):
-        self.__iPid = iPid
+        pass
 
     def get_objRef(self):
         return self.__objRef
 
     def set_objRef(self, objRef):
-        self.__objRef = objRef
+        pass
 
     def get_ipidRemUnknown(self):
         return self.__ipidRemUnknown
@@ -1248,7 +1209,7 @@ class INTERFACE:
         return self.__cinstance
 
     def set_cinstance(self, cinstance):
-        self.__cinstance = cinstance
+        pass
 
     def is_fqdn(self):
         # I will assume the following
@@ -1393,35 +1354,10 @@ class IRemUnknown(INTERFACE):
 
     def RemQueryInterface(self, cRefs, iids):
         # For now, it only supports a single IID
-        request = RemQueryInterface()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        request['ripid'] = self.get_iPid()
-        request['cRefs'] = cRefs
-        request['cIids'] = len(iids)
-        for iid in iids:
-            _iid = IID()
-            _iid['Data'] = iid
-            request['iids'].append(_iid)
-        resp = self.request(request, IID_IRemUnknown, self.get_ipidRemUnknown())
-        #resp.dump()
-
-        return IRemUnknown2(
-            INTERFACE(self.get_cinstance(), None, self.get_ipidRemUnknown(), resp['ppQIResults']['std']['ipid'],
-                      oxid=resp['ppQIResults']['std']['oxid'], oid=resp['ppQIResults']['std']['oxid'],
-                      target=self.get_target()))
+        pass
 
     def RemAddRef(self):
-        request = RemAddRef()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        request['cInterfaceRefs'] = 1
-        element = REMINTERFACEREF()
-        element['ipid'] = self.get_iPid()
-        element['cPublicRefs'] = 1
-        request['InterfaceRefs'].append(element)
-        resp = self.request(request, IID_IRemUnknown, self.get_ipidRemUnknown())
-        return resp
+        pass
 
     def RemRelease(self):
         request = RemRelease()
@@ -1449,37 +1385,11 @@ class IObjectExporter:
 
     # 3.1.2.5.1.1 IObjectExporter::ResolveOxid (Opnum 0)
     def ResolveOxid(self, pOxid, arRequestedProtseqs):
-        self.__portmap.connect()
-        self.__portmap.bind(IID_IObjectExporter)
-        request = ResolveOxid()
-        request['pOxid'] = pOxid
-        request['cRequestedProtseqs'] = len(arRequestedProtseqs)
-        for protSeq in arRequestedProtseqs:
-            request['arRequestedProtseqs'].append(protSeq)
-        resp = self.__portmap.request(request)
-        Oxids = b''.join(pack('<H', x) for x in resp['ppdsaOxidBindings']['aStringArray'])
-        strBindings = Oxids[:resp['ppdsaOxidBindings']['wSecurityOffset']*2]
-
-        done = False
-        stringBindings = list()
-        while not done:
-            if strBindings[0:1] == b'\x00' and strBindings[1:2] == b'\x00':
-                done = True
-            else:
-                binding = STRINGBINDING(strBindings)
-                stringBindings.append(binding)
-                strBindings = strBindings[len(binding):]
-
-        return stringBindings
+        pass
 
     # 3.1.2.5.1.2 IObjectExporter::SimplePing (Opnum 1)
     def SimplePing(self, setId):
-        self.__portmap.connect()
-        self.__portmap.bind(IID_IObjectExporter)
-        request = SimplePing()
-        request['pSetId'] = setId
-        resp = self.__portmap.request(request)
-        return resp
+        pass
 
     # 3.1.2.5.1.3 IObjectExporter::ComplexPing (Opnum 2)
     def ComplexPing(self, setId = 0, sequenceNum = 0, addToSet = [], delFromSet = []):
@@ -1511,58 +1421,15 @@ class IObjectExporter:
 
     # 3.1.2.5.1.4 IObjectExporter::ServerAlive (Opnum 3)
     def ServerAlive(self):
-        self.__portmap.connect()
-        self.__portmap.bind(IID_IObjectExporter)
-        request = ServerAlive()
-        resp = self.__portmap.request(request)
-        return resp
+        pass
 
     # 3.1.2.5.1.5 IObjectExporter::ResolveOxid2 (Opnum 4)
     def ResolveOxid2(self,pOxid, arRequestedProtseqs):
-        self.__portmap.connect()
-        self.__portmap.bind(IID_IObjectExporter)
-        request = ResolveOxid2()
-        request['pOxid'] = pOxid
-        request['cRequestedProtseqs'] = len(arRequestedProtseqs)
-        for protSeq in arRequestedProtseqs:
-            request['arRequestedProtseqs'].append(protSeq)
-        resp = self.__portmap.request(request)
-        Oxids = b''.join(pack('<H', x) for x in resp['ppdsaOxidBindings']['aStringArray'])
-        strBindings = Oxids[:resp['ppdsaOxidBindings']['wSecurityOffset']*2]
-
-        done = False
-        stringBindings = list()
-        while not done:
-            if strBindings[0:1] == b'\x00' and strBindings[1:2] == b'\x00':
-                done = True
-            else:
-                binding = STRINGBINDING(strBindings)
-                stringBindings.append(binding)
-                strBindings = strBindings[len(binding):]
-
-        return stringBindings
+        pass
 
     # 3.1.2.5.1.6 IObjectExporter::ServerAlive2 (Opnum 5)
     def ServerAlive2(self):
-        self.__portmap.connect()
-        self.__portmap.bind(IID_IObjectExporter)
-        request = ServerAlive2()
-        resp = self.__portmap.request(request)
-
-        Oxids = b''.join(pack('<H', x) for x in resp['ppdsaOrBindings']['aStringArray'])
-        strBindings = Oxids[:resp['ppdsaOrBindings']['wSecurityOffset']*2]
-
-        done = False
-        stringBindings = list()
-        while not done:
-            if strBindings[0:1] == b'\x00' and strBindings[1:2] == b'\x00':
-                done = True
-            else:
-                binding = STRINGBINDING(strBindings)
-                stringBindings.append(binding)
-                strBindings = strBindings[len(binding):]
-
-        return stringBindings
+        pass
 
 # 3.1.2.5.2.1 IActivation Methods
 class IActivation:
@@ -1572,60 +1439,7 @@ class IActivation:
     # 3.1.2.5.2.3.1 IActivation:: RemoteActivation (Opnum 0)
     def RemoteActivation(self, clsId, iid):
         # Only supports one interface at a time
-        self.__portmap.bind(IID_IActivation)
-        ORPCthis = ORPCTHIS()
-        ORPCthis['cid'] = generate()
-        ORPCthis['extensions'] = NULL
-        ORPCthis['flags'] = 1
-
-        request = RemoteActivation()
-        request['Clsid'] = clsId
-        request['pwszObjectName'] = NULL
-        request['pObjectStorage'] = NULL
-        request['ClientImpLevel'] = 2
-        request['Mode'] = 0
-        request['Interfaces'] = 1
-
-        _iid = IID()
-        _iid['Data'] = iid
-
-        request['pIIDs'].append(_iid)
-        request['cRequestedProtseqs'] = 1
-        request['aRequestedProtseqs'].append(7)
-
-        resp = self.__portmap.request(request)
-
-        # Now let's parse the answer and build an Interface instance
-
-        ipidRemUnknown = resp['pipidRemUnknown']
-
-        Oxids = b''.join(pack('<H', x) for x in resp['ppdsaOxidBindings']['aStringArray'])
-        strBindings = Oxids[:resp['ppdsaOxidBindings']['wSecurityOffset']*2]
-        securityBindings = Oxids[resp['ppdsaOxidBindings']['wSecurityOffset']*2:]
-
-        done = False
-        stringBindings = list()
-        while not done:
-            if strBindings[0:1] == b'\x00' and strBindings[1:2] == b'\x00':
-                done = True
-            else:
-                binding = STRINGBINDING(strBindings)
-                stringBindings.append(binding)
-                strBindings = strBindings[len(binding):]
-
-        done = False
-        while not done:
-            if len(securityBindings) < 2:
-                done = True
-            elif securityBindings[0:1] == b'\x00' and securityBindings[1:2 ]== b'\x00':
-                done = True
-            else:
-                secBinding = SECURITYBINDING(securityBindings)
-                securityBindings = securityBindings[len(secBinding):]
-
-        classInstance = CLASS_INSTANCE(ORPCthis, stringBindings)
-        return IRemUnknown2(INTERFACE(classInstance, b''.join(resp['ppInterfaceData'][0]['abData']), ipidRemUnknown,
-                                      target=self.__portmap.get_rpc_transport().getRemoteName()))
+        pass
 
 
 # 3.1.2.5.2.2 IRemoteSCMActivator Methods
@@ -1635,163 +1449,7 @@ class IRemoteSCMActivator:
 
     def RemoteGetClassObject(self, clsId, iid):
         #  iid should be IID_IClassFactory
-        self.__portmap.bind(IID_IRemoteSCMActivator)
-        ORPCthis = ORPCTHIS()
-        ORPCthis['cid'] = generate()
-        ORPCthis['extensions'] = NULL
-        ORPCthis['flags'] = 1
-
-        request = RemoteGetClassObject()
-        request['ORPCthis'] = ORPCthis
-        activationBLOB = ACTIVATION_BLOB()
-        activationBLOB['CustomHeader']['destCtx'] = 2
-        activationBLOB['CustomHeader']['pdwReserved'] = NULL
-        clsid = CLSID()
-        clsid['Data'] = CLSID_InstantiationInfo
-        activationBLOB['CustomHeader']['pclsid'].append(clsid)
-        clsid = CLSID()
-        clsid['Data'] = CLSID_ActivationContextInfo
-        activationBLOB['CustomHeader']['pclsid'].append(clsid)
-        clsid = CLSID()
-        clsid['Data'] = CLSID_ServerLocationInfo
-        activationBLOB['CustomHeader']['pclsid'].append(clsid)
-        clsid = CLSID()
-        clsid['Data'] = CLSID_ScmRequestInfo
-        activationBLOB['CustomHeader']['pclsid'].append(clsid)
-
-        properties = b''
-        # InstantiationInfo
-        instantiationInfo = InstantiationInfoData()
-        instantiationInfo['classId'] = clsId
-        instantiationInfo['cIID'] = 1
-
-        _iid = IID()
-        _iid['Data'] = iid
-
-        instantiationInfo['pIID'].append(_iid)
-
-        dword = DWORD()
-        marshaled = instantiationInfo.getData()+instantiationInfo.getDataReferents()
-        pad = (8 - (len(marshaled) % 8)) % 8
-        dword['Data'] = len(marshaled) + pad
-        activationBLOB['CustomHeader']['pSizes'].append(dword)
-        instantiationInfo['thisSize'] = dword['Data']
-
-        properties += marshaled + b'\xFA'*pad
-
-        # ActivationContextInfoData
-        activationInfo = ActivationContextInfoData()
-        activationInfo['pIFDClientCtx'] = NULL
-        activationInfo['pIFDPrototypeCtx'] = NULL
-
-        dword = DWORD()
-        marshaled = activationInfo.getData()+activationInfo.getDataReferents()
-        pad = (8 - (len(marshaled) % 8)) % 8
-        dword['Data'] = len(marshaled) + pad
-        activationBLOB['CustomHeader']['pSizes'].append(dword)
-
-        properties += marshaled + b'\xFA'*pad
-
-        # ServerLocation
-        locationInfo = LocationInfoData()
-        locationInfo['machineName'] = NULL
-
-        dword = DWORD()
-        dword['Data'] = len(locationInfo.getData())
-        activationBLOB['CustomHeader']['pSizes'].append(dword)
-
-        properties += locationInfo.getData()+locationInfo.getDataReferents()
-
-        # ScmRequestInfo
-        scmInfo = ScmRequestInfoData()
-        scmInfo['pdwReserved'] = NULL
-        #scmInfo['remoteRequest']['ClientImpLevel'] = 2
-        scmInfo['remoteRequest']['cRequestedProtseqs'] = 1
-        scmInfo['remoteRequest']['pRequestedProtseqs'].append(7)
-
-        dword = DWORD()
-        marshaled = scmInfo.getData()+scmInfo.getDataReferents()
-        pad = (8 - (len(marshaled) % 8)) % 8
-        dword['Data'] = len(marshaled) + pad
-        activationBLOB['CustomHeader']['pSizes'].append(dword)
-
-        properties += marshaled + b'\xFA'*pad
-
-        activationBLOB['Property'] = properties
-
-
-        objrefcustom = OBJREF_CUSTOM()
-        objrefcustom['iid'] = IID_IActivationPropertiesIn[:-4]
-        objrefcustom['clsid'] = CLSID_ActivationPropertiesIn
-
-        objrefcustom['pObjectData'] = activationBLOB.getData()
-        objrefcustom['ObjectReferenceSize'] = len(objrefcustom['pObjectData'])+8
-
-        request['pActProperties']['ulCntData'] = len(objrefcustom.getData())
-        request['pActProperties']['abData'] = list(objrefcustom.getData())
-        resp = self.__portmap.request(request)
-        # Now let's parse the answer and build an Interface instance
-
-        objRefType = OBJREF(b''.join(resp['ppActProperties']['abData']))['flags']
-        objRef = None
-        if objRefType == FLAGS_OBJREF_CUSTOM:
-            objRef = OBJREF_CUSTOM(b''.join(resp['ppActProperties']['abData']))
-        elif objRefType == FLAGS_OBJREF_HANDLER:
-            objRef = OBJREF_HANDLER(b''.join(resp['ppActProperties']['abData']))
-        elif objRefType == FLAGS_OBJREF_STANDARD:
-            objRef = OBJREF_STANDARD(b''.join(resp['ppActProperties']['abData']))
-        elif objRefType == FLAGS_OBJREF_EXTENDED:
-            objRef = OBJREF_EXTENDED(b''.join(resp['ppActProperties']['abData']))
-        else:
-            LOG.error("Unknown OBJREF Type! 0x%x" % objRefType)
-
-
-        activationBlob = ACTIVATION_BLOB(objRef['pObjectData'])
-
-        propOutput = activationBlob['Property'][:activationBlob['CustomHeader']['pSizes'][0]['Data']]
-        scmReply = activationBlob['Property'][
-                   activationBlob['CustomHeader']['pSizes'][0]['Data']:activationBlob['CustomHeader']['pSizes'][0]['Data'] +
-                                                                       activationBlob['CustomHeader']['pSizes'][1]['Data']]
-
-        scmr = ScmReplyInfoData()
-        size = scmr.fromString(scmReply)
-        # Processing the scmReply
-        scmr.fromStringReferents(scmReply[size:])
-        ipidRemUnknown = scmr['remoteReply']['ipidRemUnknown']
-        Oxids = b''.join(pack('<H', x) for x in scmr['remoteReply']['pdsaOxidBindings']['aStringArray'])
-        strBindings = Oxids[:scmr['remoteReply']['pdsaOxidBindings']['wSecurityOffset']*2]
-        securityBindings = Oxids[scmr['remoteReply']['pdsaOxidBindings']['wSecurityOffset']*2:]
-
-        done = False
-        stringBindings = list()
-        while not done:
-            if strBindings[0:1] == b'\x00' and strBindings[1:2] == b'\x00':
-                done = True
-            else:
-                binding = STRINGBINDING(strBindings)
-                stringBindings.append(binding)
-                strBindings = strBindings[len(binding):]
-
-        done = False
-        while not done:
-            if len(securityBindings) < 2:
-                done = True
-            elif securityBindings[0:1] == b'\x00' and securityBindings[1:2] == b'\x00':
-                done = True
-            else:
-                secBinding = SECURITYBINDING(securityBindings)
-                securityBindings = securityBindings[len(secBinding):]
-
-        # Processing the Properties Output
-        propsOut = PropsOutInfo()
-        size = propsOut.fromString(propOutput)
-        propsOut.fromStringReferents(propOutput[size:])
-
-        classInstance = CLASS_INSTANCE(ORPCthis, stringBindings)
-        classInstance.set_auth_level(scmr['remoteReply']['authnHint'])
-        classInstance.set_auth_type(self.__portmap.get_auth_type())
-        return IRemUnknown2(INTERFACE(classInstance, b''.join(propsOut['ppIntfData'][0]['abData']), ipidRemUnknown,
-                                      target=self.__portmap.get_rpc_transport().getRemoteName()))
+        pass
 
     def RemoteCreateInstance(self, clsId, iid):
         # Only supports one interface at a time

@@ -123,12 +123,4 @@ OPNUMS = {
 # HELPER FUNCTIONS
 ################################################################################
 def hBackuprKey(dce, pguidActionAgent, pDataIn, dwParam=0):
-    request = BackuprKey()
-    request['pguidActionAgent'] = pguidActionAgent
-    request['pDataIn'] = pDataIn
-    if pDataIn == NULL:
-        request['cbDataIn'] = 0
-    else:
-        request['cbDataIn'] = len(pDataIn)
-    request['dwParam'] = dwParam
-    return dce.request(request)
+    pass

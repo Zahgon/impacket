@@ -426,14 +426,7 @@ class CREDHIST_ENTRY(Structure):
         print()
 
     def summarize(self):
-        print("[CREDHIST ENTRY]")
-        print("Guid       : %s" % bin_to_string(self['Guid']))
-        if self.pwdhash is not None and self.nthash is not None:
-            print("pwdHash    : %s" % hexlify(self.pwdhash).decode())
-            print("ntHash     : %s" % hexlify(self.nthash).decode())
-        else:
-            print("Data       : %s" % (hexlify(self['data'])).decode())
-        print()
+        pass
 
 class CREDHIST_FILE:
     def __init__(self, raw):
@@ -456,10 +449,10 @@ class CREDHIST_FILE:
             i += 4
 
     def decrypt_entry_by_index(self, entry_index, key):
-        self.credhist_entries_list[entry_index].decrypt(key)
+        pass
 
     def decrypt_entry_by_guid(self, guid, key):
-        self.credhist_entries[guid].decrypt(key)
+        pass
 
     def decrypt(self, key):
         keys = [key]
@@ -486,13 +479,7 @@ class CREDHIST_FILE:
             e.dump()
 
     def summarize(self):
-        print('[CREDHIST FILE]')
-        print("Version        : 0x%.8x (%d)" % (self.version, self.version))
-        print("Current Guid   : %s" % bin_to_string(self.current_guid))
-        print()
-        for i, e in enumerate(self.credhist_entries_list):
-            print('[Entry #%d]' % i)
-            e.summarize()
+        pass
 
 class DomainKey(Structure):
     structure = (
@@ -1182,31 +1169,11 @@ def privatekeyblob_to_pkcs1(key):
     :param key:
     :return:
     '''
-    modulus = bytes_to_long(key['modulus'][::-1]) # n
-    prime1 = bytes_to_long(key['prime1'][::-1]) # p
-    prime2 = bytes_to_long(key['prime2'][::-1]) # q
-    exp1 = bytes_to_long(key['exponent1'][::-1])
-    exp2 = bytes_to_long(key['exponent2'][::-1])
-    coefficient = bytes_to_long(key['coefficient'][::-1])
-    privateExp = bytes_to_long(key['privateExponent'][::-1]) # d
-    if PY3:
-        long = int
-    pubExp = long(key['rsapubkey']['pubexp']) # e
-    # RSA.Integer(prime2).inverse(prime1) # u
-
-    r = RSA.construct((modulus, pubExp, privateExp, prime1, prime2))
-    return r
+    pass
 
 def deriveKeysFromUser(sid, password):
         # Will generate two keys, one with SHA1 and another with MD4
-        key1 = HMAC.new(SHA1.new(password.encode('utf-16le')).digest(), (sid + '\0').encode('utf-16le'), SHA1).digest()
-        key2 = HMAC.new(MD4.new(password.encode('utf-16le')).digest(), (sid + '\0').encode('utf-16le'), SHA1).digest()
-        # For Protected users
-        tmpKey = pbkdf2_hmac('sha256', MD4.new(password.encode('utf-16le')).digest(), sid.encode('utf-16le'), 10000)
-        tmpKey2 = pbkdf2_hmac('sha256', tmpKey, sid.encode('utf-16le'), 1)[:16]
-        key3 = HMAC.new(tmpKey2, (sid + '\0').encode('utf-16le'), SHA1).digest()[:20]
-
-        return [key1, key2, key3]
+        pass
 
 def deriveKeysFromUserkey(sid, pwdhash):
     if len(pwdhash) == 20:

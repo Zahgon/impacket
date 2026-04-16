@@ -437,4 +437,4 @@ class DCSYNCRelayClient(ProtocolClient):
             self.session = None
 
     def keepAlive(self):
-        return
+        pass

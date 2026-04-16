@@ -116,7 +116,7 @@ class RPC_HKEY(NDRSTRUCT):
         self['context_handle_uuid'] = b'\x00'*16
 
     def isNull(self):
-        return self['context_handle_uuid'] == b'\x00'*16
+        pass
 
 # 2.2.6 RVALENT
 class RVALENT(NDRSTRUCT):
@@ -692,40 +692,7 @@ def checkNullString(string):
         return string
 
 def packValue(valueType, value):
-    if valueType == REG_DWORD:
-        retData = pack('<L', value)
-    elif valueType == REG_DWORD_BIG_ENDIAN:
-        retData = pack('>L', value)
-    elif valueType == REG_EXPAND_SZ:
-        try:
-            retData = checkNullString(value).encode('utf-16le')
-        except UnicodeDecodeError:
-            import sys
-            retData = value.decode(sys.getfilesystemencoding()).encode('utf-16le')
-    elif valueType == REG_MULTI_SZ:
-        try:
-            v = checkNullString(value)
-            # REG_MULTI_SZ must end with 2 null-bytes
-            if v[-2:-1] != '\x00':
-                v = v + '\x00'
-            retData = v.encode('utf-16le')
-        except UnicodeDecodeError:
-            import sys
-            retData = value.decode(sys.getfilesystemencoding()).encode('utf-16le')
-    elif valueType == REG_QWORD:
-        retData = pack('<Q', value)
-    elif valueType == REG_QWORD_LITTLE_ENDIAN:
-        retData = pack('>Q', value)
-    elif valueType == REG_SZ:
-        try:
-            retData = checkNullString(value).encode('utf-16le')
-        except UnicodeDecodeError:
-            import sys
-            retData = value.decode(sys.getfilesystemencoding()).encode('utf-16le')
-    else:
-        retData = value
-
-    return retData
+    pass
 
 def unpackValue(valueType, value):
     if valueType == REG_DWORD:
@@ -748,16 +715,10 @@ def unpackValue(valueType, value):
     return retData
 
 def hOpenClassesRoot(dce, samDesired = MAXIMUM_ALLOWED):
-    request = OpenClassesRoot()
-    request['ServerName'] = NULL
-    request['samDesired'] = samDesired
-    return dce.request(request)
+    pass
 
 def hOpenCurrentUser(dce, samDesired = MAXIMUM_ALLOWED):
-    request = OpenCurrentUser()
-    request['ServerName'] = NULL
-    request['samDesired'] = samDesired
-    return dce.request(request)
+    pass
 
 def hOpenLocalMachine(dce, samDesired = MAXIMUM_ALLOWED):
     request = OpenLocalMachine()
@@ -766,16 +727,10 @@ def hOpenLocalMachine(dce, samDesired = MAXIMUM_ALLOWED):
     return dce.request(request)
 
 def hOpenPerformanceData(dce, samDesired = MAXIMUM_ALLOWED):
-    request = OpenPerformanceData()
-    request['ServerName'] = NULL
-    request['samDesired'] = samDesired
-    return dce.request(request)
+    pass
 
 def hOpenUsers(dce, samDesired = MAXIMUM_ALLOWED):
-    request = OpenUsers()
-    request['ServerName'] = NULL
-    request['samDesired'] = samDesired
-    return dce.request(request)
+    pass
 
 def hBaseRegCloseKey(dce, hKey):
     request = BaseRegCloseKey()
@@ -798,10 +753,7 @@ def hBaseRegCreateKey(dce, hKey, lpSubKey, lpClass = NULL, dwOptions = 0x0000000
     return dce.request(request)
 
 def hBaseRegDeleteKey(dce, hKey, lpSubKey):
-    request = BaseRegDeleteKey()
-    request['hKey'] = hKey
-    request['lpSubKey'] = checkNullString(lpSubKey)
-    return dce.request(request)
+    pass
 
 def hBaseRegEnumKey(dce, hKey, dwIndex, lpftLastWriteTime = NULL):
     request = BaseRegEnumKey()
@@ -850,31 +802,16 @@ def hBaseRegEnumValue(dce, hKey, dwIndex, dataLen=256):
     return resp
 
 def hBaseRegFlushKey(dce, hKey):
-    request = BaseRegFlushKey()
-    request['hKey'] = hKey
-    return dce.request(request)
+    pass
 
 def hBaseRegGetKeySecurity(dce, hKey, securityInformation = OWNER_SECURITY_INFORMATION ):
-    request = BaseRegGetKeySecurity()
-    request['hKey'] = hKey
-    request['SecurityInformation'] = securityInformation
-    request['pRpcSecurityDescriptorIn']['lpSecurityDescriptor'] = NULL
-    request['pRpcSecurityDescriptorIn']['cbInSecurityDescriptor'] = 1024
-
-    return dce.request(request)
+    pass
 
 def hBaseRegLoadKey(dce, hKey, lpSubKey, lpFile):
-    request = BaseRegLoadKey()
-    request['hKey'] = hKey
-    request['lpSubKey'] = checkNullString(lpSubKey)
-    request['lpFile'] = checkNullString(lpFile)
-    return dce.request(request)
+    pass
 
 def hBaseRegUnLoadKey(dce, hKey, lpSubKey):
-    request = BaseRegUnLoadKey()
-    request['hKey'] = hKey
-    request['lpSubKey'] = checkNullString(lpSubKey)
-    return dce.request(request)
+    pass
 
 def hBaseRegOpenKey(dce, hKey, lpSubKey, dwOptions=0x00000001, samDesired = MAXIMUM_ALLOWED):
     request = BaseRegOpenKey()
@@ -924,19 +861,10 @@ def hBaseRegQueryValue(dce, hKey, lpValueName, dataLen=512):
     return resp['lpType'], unpackValue(resp['lpType'], resp['lpData'])
 
 def hBaseRegReplaceKey(dce, hKey, lpSubKey, lpNewFile, lpOldFile):
-    request = BaseRegReplaceKey()
-    request['hKey'] = hKey
-    request['lpSubKey'] = checkNullString(lpSubKey)
-    request['lpNewFile'] = checkNullString(lpNewFile)
-    request['lpOldFile'] = checkNullString(lpOldFile)
-    return dce.request(request)
+    pass
 
 def hBaseRegRestoreKey(dce, hKey, lpFile, flags=REG_REFRESH_HIVE):
-    request = BaseRegRestoreKey()
-    request['hKey'] = hKey
-    request['lpFile'] = checkNullString(lpFile)
-    request['Flags'] = flags
-    return dce.request(request)
+    pass
 
 def hBaseRegSaveKey(dce, hKey, lpFile, pSecurityAttributes = NULL):
     request = BaseRegSaveKey()
@@ -946,75 +874,27 @@ def hBaseRegSaveKey(dce, hKey, lpFile, pSecurityAttributes = NULL):
     return dce.request(request)
 
 def hBaseRegSetValue(dce, hKey, lpValueName, dwType, lpData):
-    request = BaseRegSetValue()
-    request['hKey'] = hKey
-    request['lpValueName'] = checkNullString(lpValueName)
-    request['dwType'] = dwType
-    request['lpData'] = packValue(dwType,lpData)
-    request['cbData'] = len(request['lpData'])
-    return dce.request(request)
+    pass
 
 def hBaseRegGetVersion(dce, hKey):
-    request = BaseRegGetVersion()
-    request['hKey'] = hKey
-    return dce.request(request)
+    pass
 
 def hOpenCurrentConfig(dce, samDesired = MAXIMUM_ALLOWED):
-    request = OpenCurrentConfig()
-    request['ServerName'] = NULL
-    request['samDesired'] = samDesired
-    return dce.request(request)
+    pass
 
 def hBaseRegQueryMultipleValues(dce, hKey, val_listIn):
     # ToDo, check the result to see whether we need to
     # have a bigger buffer for the data to receive
-    request = BaseRegQueryMultipleValues()
-    request['hKey'] = hKey
-
-    for item in  val_listIn:
-        itemn = RVALENT()
-        itemn['ve_valuename'] = checkNullString(item['ValueName'])
-        itemn['ve_valuelen'] = len(itemn['ve_valuename'])
-        itemn['ve_valueptr'] = NULL
-        itemn['ve_type'] = item['ValueType']
-        request['val_listIn'].append(itemn)
-
-    request['num_vals'] = len(request['val_listIn'])
-    request['lpvalueBuf'] = list(b' '*128)
-    request['ldwTotsize'] = 128
-
-    resp = dce.request(request)
-    retVal = list()
-    for item in resp['val_listOut']:
-        itemn = dict()
-        itemn['ValueName'] = item['ve_valuename']
-        itemn['ValueData'] = unpackValue(item['ve_type'], resp['lpvalueBuf'][item['ve_valueptr'] : item['ve_valueptr']+item['ve_valuelen']])
-        retVal.append(itemn)
-
-    return retVal
+    pass
 
 def hBaseRegSaveKeyEx(dce, hKey, lpFile, pSecurityAttributes = NULL, flags=1):
-    request = BaseRegSaveKeyEx()
-    request['hKey'] = hKey
-    request['lpFile'] = checkNullString(lpFile)
-    request['pSecurityAttributes'] = pSecurityAttributes
-    request['Flags'] = flags
-    return dce.request(request)
+    pass
 
 def hOpenPerformanceText(dce, samDesired = MAXIMUM_ALLOWED):
-    request = OpenPerformanceText()
-    request['ServerName'] = NULL
-    request['samDesired'] = samDesired
-    return dce.request(request)
+    pass
 
 def hOpenPerformanceNlsText(dce, samDesired = MAXIMUM_ALLOWED):
-    request = OpenPerformanceNlsText()
-    request['ServerName'] = NULL
-    request['samDesired'] = samDesired
-    return dce.request(request)
+    pass
 
 def hBaseRegDeleteValue(dce, hKey, lpValueName):
-    request = BaseRegDeleteValue()
-    request['hKey'] = hKey
-    request['lpValueName'] = checkNullString(lpValueName)
-    return dce.request(request)
+    pass

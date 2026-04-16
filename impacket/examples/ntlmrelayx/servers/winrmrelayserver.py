@@ -74,15 +74,10 @@ class WinRMRelayServer(Thread):
                 LOG.error("(WinRM): %s" % str(e))
 
         def handle_one_request(self):
-            try:
-                http.server.SimpleHTTPRequestHandler.handle_one_request(self)
-            except KeyboardInterrupt:
-                raise
-            except Exception as e:
-                LOG.debug("(WinRM): Exception:", exc_info=True)
+            pass
 
         def log_message(self, format, *args):
-            return
+            pass
 
         def send_error(self, code, message=None):
             if message.find('RPC_OUT') >=0 or message.find('RPC_IN'):
@@ -174,35 +169,13 @@ class WinRMRelayServer(Thread):
             return token, messageType
 
         def do_HEAD(self):
-            self.send_response(200)
-            self.send_header('Content-type', 'text/html')
-            self.end_headers()
+            pass
 
         def do_OPTIONS(self):
-            self.send_response(200)
-            self.send_header('Allow',
-                             'GET, HEAD, POST, PUT, DELETE, OPTIONS, PROPFIND, PROPPATCH, MKCOL, LOCK, UNLOCK, MOVE, COPY')
-            self.send_header('Content-Length', '0')
-            self.send_header('Connection', 'close')
-            self.end_headers()
-            return
+            pass
 
         def do_PROPFIND(self):
-            proxy = False
-            if (".jpg" in self.path) or (".JPG" in self.path):
-                content = b"""<?xml version="1.0"?><D:multistatus xmlns:D="DAV:"><D:response><D:href>http://webdavrelay/file/image.JPG/</D:href><D:propstat><D:prop><D:creationdate>2016-11-12T22:00:22Z</D:creationdate><D:displayname>image.JPG</D:displayname><D:getcontentlength>4456</D:getcontentlength><D:getcontenttype>image/jpeg</D:getcontenttype><D:getetag>4ebabfcee4364434dacb043986abfffe</D:getetag><D:getlastmodified>Mon, 20 Mar 2017 00:00:22 GMT</D:getlastmodified><D:resourcetype></D:resourcetype><D:supportedlock></D:supportedlock><D:ishidden>0</D:ishidden></D:prop><D:status>HTTP/1.1 200 OK</D:status></D:propstat></D:response></D:multistatus>"""
-            else:
-                content = b"""<?xml version="1.0"?><D:multistatus xmlns:D="DAV:"><D:response><D:href>http://webdavrelay/file/</D:href><D:propstat><D:prop><D:creationdate>2016-11-12T22:00:22Z</D:creationdate><D:displayname>a</D:displayname><D:getcontentlength></D:getcontentlength><D:getcontenttype></D:getcontenttype><D:getetag></D:getetag><D:getlastmodified>Mon, 20 Mar 2017 00:00:22 GMT</D:getlastmodified><D:resourcetype><D:collection></D:collection></D:resourcetype><D:supportedlock></D:supportedlock><D:ishidden>0</D:ishidden></D:prop><D:status>HTTP/1.1 200 OK</D:status></D:propstat></D:response></D:multistatus>"""
-
-            token, messageType = self.strip_blob(proxy)
-
-            # Should we relay or -in locally?
-            if self.relayToHost is False and not self.server.config.disableMulti:
-                self.do_local_auth(messageType, token, proxy)
-                return
-            else:
-                # We can start the relay process
-                self.do_relay(messageType, token, proxy, content)
+            pass
 
         def do_AUTHHEAD(self, message = b'', proxy=False):
             if proxy:
@@ -242,26 +215,11 @@ class WinRMRelayServer(Thread):
             return self.do_GETPOST()
 
         def do_POST(self):
-            wsmanidentify = self.headers.get('WSMANIDENTIFY') # Test-WSMan without error
-            if wsmanidentify == 'unauthenticated':
-                LOG.info("HTTP: WS-Management request, sending 200 OK")
-                self.send_response(200)
-                self.send_header('WWW-Authenticate', 'Negotiate')
-                self.send_header('Content-type', 'text/html')
-                self.send_header('Content-Length','0')
-                self.send_header('Connection','keep-alive')
-                self.end_headers()
-                return
-            return self.do_GETPOST()
+            pass
 
         def do_CONNECT(self):
             # Client is using our server as a Proxy
-            proxy = True
-            token, messageType = self.strip_blob(proxy)
-
-            # We can't do the multirelay trick so we just relay the connection
-            self.do_relay(messageType, token, proxy)
-            return
+            pass
 
         def do_GETPOST(self):
 

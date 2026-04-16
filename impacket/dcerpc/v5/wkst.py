@@ -1017,171 +1017,55 @@ def hNetrWkstaGetInfo(dce, level):
     return dce.request(request)
 
 def hNetrWkstaUserEnum(dce, level, preferredMaximumLength=0xffffffff):
-    request = NetrWkstaUserEnum()
-    request['ServerName'] = '\x00'*10
-    request['UserInfo']['Level'] = level
-    request['UserInfo']['WkstaUserInfo']['tag'] = level
-    request['PreferredMaximumLength'] = preferredMaximumLength
-    return dce.request(request)
+    pass
 
 def hNetrWkstaTransportEnum(dce, level, resumeHandle = 0, preferredMaximumLength = 0xffffffff):
-    request = NetrWkstaTransportEnum()
-    request['ServerName'] = '\x00'*10
-    request['TransportInfo']['Level'] = level
-    request['TransportInfo']['WkstaTransportInfo']['tag'] = level
-    request['ResumeHandle'] = resumeHandle
-    request['PreferredMaximumLength'] = preferredMaximumLength
-    return dce.request(request)
+    pass
 
 def hNetrWkstaSetInfo(dce, level, wkstInfo):
-    request = NetrWkstaSetInfo()
-    request['ServerName'] = '\x00'*10
-    request['Level'] = level
-    request['WkstaInfo']['tag'] = level
-    request['WkstaInfo']['WkstaInfo%d'% level] = wkstInfo
-    return dce.request(request)
+    pass
 
 def hNetrWorkstationStatisticsGet(dce, serviceName, level, options):
-    request = NetrWorkstationStatisticsGet()
-    request['ServerName'] = '\x00'*10
-    request['ServiceName'] = serviceName
-    request['Level'] = level
-    request['Options'] = options
-    return dce.request(request)
+    pass
 
 def hNetrGetJoinInformation(dce, nameBuffer):
-    request = NetrGetJoinInformation()
-    request['ServerName'] = '\x00'*10
-    request['NameBuffer'] = nameBuffer
-    return dce.request(request)
+    pass
 
 def hNetrJoinDomain2(dce, domainNameParam, machineAccountOU, accountName, password, options):
-    request = NetrJoinDomain2()
-    request['ServerName'] = '\x00'*10
-    request['DomainNameParam'] = checkNullString(domainNameParam)
-    request['MachineAccountOU'] = checkNullString(machineAccountOU)
-    request['AccountName'] = checkNullString(accountName)
-    if password == NULL:
-        request['Password'] = NULL
-    else:
-        request['Password']['Buffer'] = password
-    request['Options'] = options
-    return dce.request(request)
+    pass
 
 def hNetrUnjoinDomain2(dce, accountName, password, options):
-    request = NetrUnjoinDomain2()
-    request['ServerName'] = '\x00'*10
-    request['AccountName'] = checkNullString(accountName)
-    if password == NULL:
-        request['Password'] = NULL
-    else:
-        request['Password']['Buffer'] = password
-    request['Options'] = options
-    return dce.request(request)
+    pass
 
 def hNetrRenameMachineInDomain2(dce, machineName, accountName, password, options):
-    request = NetrRenameMachineInDomain2()
-    request['ServerName'] = '\x00'*10
-    request['MachineName'] = checkNullString(machineName)
-    request['AccountName'] = checkNullString(accountName)
-    if password == NULL:
-        request['Password'] = NULL
-    else:
-        request['Password']['Buffer'] = password
-    request['Options'] = options
-    return dce.request(request)
+    pass
 
 def hNetrValidateName2(dce, nameToValidate, accountName, password, nameType):
-    request = NetrValidateName2()
-    request['ServerName'] = '\x00'*10
-    request['NameToValidate'] = checkNullString(nameToValidate)
-    request['AccountName'] = checkNullString(accountName)
-    if password == NULL:
-        request['Password'] = NULL
-    else:
-        request['Password']['Buffer'] = password
-    request['NameType'] = nameType
-    return dce.request(request)
+    pass
 
 def hNetrGetJoinableOUs2(dce, domainNameParam, accountName, password, OUCount):
-    request = NetrGetJoinableOUs2()
-    request['ServerName'] = '\x00'*10
-    request['DomainNameParam'] = checkNullString(domainNameParam)
-    request['AccountName'] = checkNullString(accountName)
-    if password == NULL:
-        request['Password'] = NULL
-    else:
-        request['Password']['Buffer'] = password
-    request['OUCount'] = OUCount
-    return dce.request(request)
+    pass
 
 def hNetrAddAlternateComputerName(dce, alternateName, domainAccount, encryptedPassword):
-    request = NetrAddAlternateComputerName()
-    request['ServerName'] = '\x00'*10
-    request['AlternateName'] = checkNullString(alternateName)
-    request['DomainAccount'] = checkNullString(domainAccount)
-    if encryptedPassword == NULL:
-        request['EncryptedPassword'] = NULL
-    else:
-        request['EncryptedPassword']['Buffer'] = encryptedPassword
-    return dce.request(request)
+    pass
 
 def hNetrRemoveAlternateComputerName(dce, alternateName, domainAccount, encryptedPassword):
-    request = NetrRemoveAlternateComputerName()
-    request['ServerName'] = '\x00'*10
-    request['AlternateName'] = checkNullString(alternateName)
-    request['DomainAccount'] = checkNullString(domainAccount)
-    if encryptedPassword == NULL:
-        request['EncryptedPassword'] = NULL
-    else:
-        request['EncryptedPassword']['Buffer'] = encryptedPassword
-    return dce.request(request)
+    pass
 
 def hNetrSetPrimaryComputerName(dce, primaryName, domainAccount, encryptedPassword):
-    request = NetrSetPrimaryComputerName()
-    request['ServerName'] = '\x00'*10
-    request['PrimaryName'] = checkNullString(primaryName)
-    request['DomainAccount'] = checkNullString(domainAccount)
-    if encryptedPassword == NULL:
-        request['EncryptedPassword'] = NULL
-    else:
-        request['EncryptedPassword']['Buffer'] = encryptedPassword
-    return dce.request(request)
+    pass
 
 def hNetrEnumerateComputerNames(dce, nameType):
-    request = NetrEnumerateComputerNames()
-    request['ServerName'] = '\x00'*10
-    request['NameType'] = nameType
-    return dce.request(request)
+    pass
 
 def hNetrUseAdd(dce, level, infoStruct):
-    request = NetrUseAdd()
-    request['ServerName'] = '\x00'*10
-    request['Level'] = level
-    request['InfoStruct']['tag'] = level
-    request['InfoStruct']['UseInfo%d' % level] = infoStruct
-    return dce.request(request)
+    pass
 
 def hNetrUseEnum(dce, level, resumeHandle = 0, preferredMaximumLength = 0xffffffff):
-    request = NetrUseEnum()
-    request['ServerName'] = '\x00'*10
-    request['InfoStruct']['Level'] = level
-    request['InfoStruct']['UseInfo']['tag'] = level
-    request['InfoStruct']['UseInfo']['Level%d'%level]['Buffer'] = NULL
-    request['PreferredMaximumLength'] = preferredMaximumLength
-    request['ResumeHandle'] = resumeHandle
-    return dce.request(request)
+    pass
 
 def hNetrUseGetInfo(dce, useName, level):
-    request = NetrUseGetInfo()
-    request['ServerName'] = '\x00'*10
-    request['UseName'] = checkNullString(useName)
-    request['Level'] = level
-    return dce.request(request)
+    pass
 
 def hNetrUseDel(dce, useName, forceLevel=USE_LOTS_OF_FORCE):
-    request = NetrUseDel()
-    request['ServerName'] = '\x00'*10
-    request['UseName'] = checkNullString(useName)
-    request['ForceLevel'] = forceLevel
-    return dce.request(request)
+    pass

@@ -275,22 +275,7 @@ def transformKey(InputKey):
 
 def decryptSecret(key, value):
     # [MS-LSAD] Section 5.1.2
-    plainText = b''
-    key0 = key
-    for i in range(0, len(value), 8):
-        cipherText = value[:8]
-        tmpStrKey = key0[:7]
-        tmpKey = transformKey(tmpStrKey)
-        Crypt1 = DES.new(tmpKey, DES.MODE_ECB)
-        plainText += Crypt1.decrypt(cipherText)
-        key0 = key0[7:]
-        value = value[8:]
-        # AdvanceKey
-        if len(key0) < 7:
-            key0 = key[len(key0):]
-
-    secret = LSA_SECRET_XP(plainText)
-    return (secret['Secret'])
+    pass
 
 def encryptSecret(key, value):
     # [MS-LSAD] Section 5.1.2
@@ -317,21 +302,7 @@ def encryptSecret(key, value):
 
 def SamDecryptNTLMHash(encryptedHash, key):
     # [MS-SAMR] Section 2.2.11.1.1
-    Block1 = encryptedHash[:8]
-    Block2 = encryptedHash[8:]
-
-    Key1 = key[:7]
-    Key1 = transformKey(Key1)
-    Key2 = key[7:14]
-    Key2 = transformKey(Key2)
-
-    Crypt1 = DES.new(Key1, DES.MODE_ECB)
-    Crypt2 = DES.new(Key2, DES.MODE_ECB)
-
-    plain1 = Crypt1.decrypt(Block1)
-    plain2 = Crypt2.decrypt(Block2)
-
-    return plain1 + plain2
+    pass
 
 def SamEncryptNTLMHash(encryptedHash, key):
     # [MS-SAMR] Section 2.2.11.1.1

@@ -133,7 +133,7 @@ class ICMP6(Header):
         return self.HEADER_SIZE
     
     def get_ip_protocol_number(self):
-        return self.IP_PROTOCOL_NUMBER
+        pass
 
     def __str__(self):        
         type = self.get_type()
@@ -197,139 +197,74 @@ class ICMP6(Header):
         self.set_checksum(self.compute_checksum(checksum_array))
         
     def is_informational_message(self):
-        return self.icmp_messages[self.get_type()][self.MSG_TYPE_INDEX] == self.INFORMATIONAL_MESSAGE
+        pass
         
     def is_error_message(self):
-        return self.icmp_messages[self.get_type()][self.MSG_TYPE_INDEX] == self.ERROR_MESSAGE
+        pass
     
     def is_well_formed(self):
-        well_formed = True
-        
-        #Check that the message type is known
-        well_formed &= self.get_type() in self.icmp_messages.keys()
-        
-        #Check that the code is known (zero, if there are no codes defined)
-        code_dictionary = self.icmp_messages[self.get_type()][self.CODES_INDEX]
-        if (code_dictionary is None):
-            well_formed &= self.get_code() == 0
-        else:            
-            well_formed &= self.get_code() in code_dictionary.keys()
-            
-        return well_formed 
+        pass
         
 ############################################################################
 
     @classmethod
     def Echo_Request(class_object, id, sequence_number, arbitrary_data = None):
-        return class_object.__build_echo_message(ICMP6.ECHO_REQUEST, id, sequence_number, arbitrary_data)
+        pass
     
     @classmethod
     def Echo_Reply(class_object, id, sequence_number, arbitrary_data = None):
-        return class_object.__build_echo_message(ICMP6.ECHO_REPLY, id, sequence_number, arbitrary_data)
+        pass
     
     @classmethod
     def __build_echo_message(class_object, type, id, sequence_number, arbitrary_data):
         #Build ICMP6 header
-        icmp_packet = ICMP6()
-        icmp_packet.set_type(type)
-        icmp_packet.set_code(0)
-        
-        #Pack ICMP payload
-        icmp_bytes = struct.pack('>H', id)
-        icmp_bytes += struct.pack('>H', sequence_number)
-        if (arbitrary_data is not None):
-            icmp_bytes += array_tobytes(array.array('B', arbitrary_data))
-        icmp_payload = Data()
-        icmp_payload.set_data(icmp_bytes)
-        
-        #Link payload to header
-        icmp_packet.contains(icmp_payload)
-        
-        return icmp_packet
+        pass
     
     
 ############################################################################
     @classmethod
     def Destination_Unreachable(class_object, code, originating_packet_data = None):
-        unused_bytes = [0x00, 0x00, 0x00, 0x00]
-        return class_object.__build_error_message(ICMP6.DESTINATION_UNREACHABLE, code, unused_bytes, originating_packet_data)
+        pass
 
     @classmethod
     def Packet_Too_Big(class_object, MTU, originating_packet_data = None):
-        MTU_bytes = struct.pack('!L', MTU)
-        return class_object.__build_error_message(ICMP6.PACKET_TOO_BIG, 0, MTU_bytes, originating_packet_data)
+        pass
     
     @classmethod
     def Time_Exceeded(class_object, code, originating_packet_data = None):
-        unused_bytes = [0x00, 0x00, 0x00, 0x00]
-        return class_object.__build_error_message(ICMP6.TIME_EXCEEDED, code, unused_bytes, originating_packet_data)
+        pass
 
     @classmethod
     def Parameter_Problem(class_object, code, pointer, originating_packet_data = None):
-        pointer_bytes = struct.pack('!L', pointer)
-        return class_object.__build_error_message(ICMP6.PARAMETER_PROBLEM, code, pointer_bytes, originating_packet_data)
+        pass
     
     @classmethod    
     def __build_error_message(class_object, type, code, data, originating_packet_data):
         #Build ICMP6 header
-        icmp_packet = ICMP6()
-        icmp_packet.set_type(type)
-        icmp_packet.set_code(code)
-        
-        #Pack ICMP payload
-        icmp_bytes = array_tobytes(array.array('B', data))
-        if (originating_packet_data is not None):
-            icmp_bytes += array_tobytes(array.array('B', originating_packet_data))
-        icmp_payload = Data()
-        icmp_payload.set_data(icmp_bytes)
-        
-        #Link payload to header
-        icmp_packet.contains(icmp_payload)
-        
-        return icmp_packet
+        pass
 
 ############################################################################
 
     @classmethod
     def Neighbor_Solicitation(class_object, target_address):
-        return class_object.__build_neighbor_message(ICMP6.NEIGHBOR_SOLICITATION, target_address)
+        pass
     
     @classmethod
     def Neighbor_Advertisement(class_object, target_address):
-        return class_object.__build_neighbor_message(ICMP6.NEIGHBOR_ADVERTISEMENT, target_address)
+        pass
 
     @classmethod
     def __build_neighbor_message(class_object, msg_type, target_address):
         #Build ICMP6 header
-        icmp_packet = ICMP6()
-        icmp_packet.set_type(msg_type)
-        icmp_packet.set_code(0)
-        
-        # Flags + Reserved
-        icmp_bytes = array_tobytes(array.array('B', [0x00] * 4))
-        
-        # Target Address: The IP address of the target of the solicitation.
-        # It MUST NOT be a multicast address.
-        icmp_bytes += array_tobytes(array.array('B', IP6_Address(target_address).as_bytes()))
-        
-        icmp_payload = Data()
-        icmp_payload.set_data(icmp_bytes)
-        
-        #Link payload to header
-        icmp_packet.contains(icmp_payload)
-        
-        return icmp_packet
+        pass
 
 ############################################################################
 
     def get_target_address(self):
-        return IP6_Address(self.child().get_bytes()[4:20])
+        pass
 
     def set_target_address(self, target_address):
-        address = IP6_Address(target_address)
-        payload_bytes = self.child().get_bytes()
-        payload_bytes[4:20] = address.get_bytes()
-        self.child().set_bytes(payload_bytes)
+        pass
 
     #  0 1 2 3 4 5 6 7 
     # +-+-+-+-+-+-+-+-+
@@ -337,93 +272,54 @@ class ICMP6(Header):
     # +-+-+-+-+-+-+-+-+
 
     def get_neighbor_advertisement_flags(self):
-        return self.child().get_byte(0)
+        pass
 
     def set_neighbor_advertisement_flags(self, flags):
-        self.child().set_byte(0, flags)
+        pass
 
     def get_router_flag(self):
-        return (self.get_neighbor_advertisement_flags() & 0x80) != 0
+        pass
     
     def set_router_flag(self, flag_value):
-        curr_flags = self.get_neighbor_advertisement_flags()
-        if flag_value:
-            curr_flags |= 0x80
-        else:
-            curr_flags &= ~0x80
-        self.set_neighbor_advertisement_flags(curr_flags)
+        pass
     
     def get_solicited_flag(self):
-        return (self.get_neighbor_advertisement_flags() & 0x40) != 0
+        pass
     
     def set_solicited_flag(self, flag_value):
-        curr_flags = self.get_neighbor_advertisement_flags()
-        if flag_value:
-            curr_flags |= 0x40
-        else:
-            curr_flags &= ~0x40
-        self.set_neighbor_advertisement_flags(curr_flags)
+        pass
     
     def get_override_flag(self):
-        return (self.get_neighbor_advertisement_flags() & 0x20) != 0
+        pass
     
     def set_override_flag(self, flag_value):
-        curr_flags = self.get_neighbor_advertisement_flags()
-        if flag_value:
-            curr_flags |= 0x20
-        else:
-            curr_flags &= ~0x20
-        self.set_neighbor_advertisement_flags(curr_flags)
+        pass
 
 ############################################################################
     @classmethod
     def Node_Information_Query(class_object, code, payload = None):
-        return class_object.__build_node_information_message(ICMP6.NODE_INFORMATION_QUERY, code, payload)
+        pass
 
     @classmethod
     def Node_Information_Reply(class_object, code, payload = None):
-        return class_object.__build_node_information_message(ICMP6.NODE_INFORMATION_REPLY, code, payload)
+        pass
         
     @classmethod
     def __build_node_information_message(class_object, type, code, payload = None):
         #Build ICMP6 header
-        icmp_packet = ICMP6()
-        icmp_packet.set_type(type)
-        icmp_packet.set_code(code)
-        
-        #Pack ICMP payload
-        qtype = 0
-        flags = 0
-        nonce = [0x00] * 8
-        
-        icmp_bytes = struct.pack('>H', qtype)
-        icmp_bytes += struct.pack('>H', flags)
-        icmp_bytes += array_tobytes(array.array('B', nonce))
-        
-        if payload is not None:
-            icmp_bytes += array_tobytes(array.array('B', payload))
-        
-        icmp_payload = Data()
-        icmp_payload.set_data(icmp_bytes)
-        
-        #Link payload to header
-        icmp_packet.contains(icmp_payload)
-
-        return icmp_packet
+        pass
     
     def get_qtype(self):
-        return self.child().get_word(0)
+        pass
 
     def set_qtype(self, qtype):
-        self.child().set_word(0, qtype)
+        pass
 
     def get_nonce(self):
-        return self.child().get_bytes()[4:12]
+        pass
 
     def set_nonce(self, nonce):
-        payload_bytes = self.child().get_bytes()
-        payload_bytes[4:12] = array.array('B', nonce)
-        self.child().set_bytes(payload_bytes)
+        pass
 
     #  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5
     # +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -437,94 +333,62 @@ class ICMP6(Header):
         self.child().set_word(2, flags)
 
     def get_flag_T(self):
-        return (self.get_flags() & 0x0001) != 0
+        pass
     
     def set_flag_T(self, flag_value):
-        curr_flags = self.get_flags()
-        if flag_value:
-            curr_flags |= 0x0001
-        else:
-            curr_flags &= ~0x0001
-        self.set_flags(curr_flags)
+        pass
         
     def get_flag_A(self):
-        return (self.get_flags() & 0x0002) != 0
+        pass
     
     def set_flag_A(self, flag_value):
-        curr_flags = self.get_flags()
-        if flag_value:
-            curr_flags |= 0x0002
-        else:
-            curr_flags &= ~0x0002
-        self.set_flags(curr_flags)
+        pass
 
     def get_flag_C(self):
-        return (self.get_flags() & 0x0004) != 0
+        pass
     
     def set_flag_C(self, flag_value):
-        curr_flags = self.get_flags()
-        if flag_value:
-            curr_flags |= 0x0004
-        else:
-            curr_flags &= ~0x0004
-        self.set_flags(curr_flags)
+        pass
 
     def get_flag_L(self):
-        return (self.get_flags() & 0x0008) != 0
+        pass
     
     def set_flag_L(self, flag_value):
-        curr_flags = self.get_flags()
-        if flag_value:
-            curr_flags |= 0x0008
-        else:
-            curr_flags &= ~0x0008
-        self.set_flags(curr_flags)
+        pass
 
     def get_flag_S(self):
-        return (self.get_flags() & 0x0010) != 0
+        pass
     
     def set_flag_S(self, flag_value):
-        curr_flags = self.get_flags()
-        if flag_value:
-            curr_flags |= 0x0010
-        else:
-            curr_flags &= ~0x0010
-        self.set_flags(curr_flags)
+        pass
 
     def get_flag_G(self):
-        return (self.get_flags() & 0x0020) != 0
+        pass
     
     def set_flag_G(self, flag_value):
-        curr_flags = self.get_flags()
-        if flag_value:
-            curr_flags |= 0x0020
-        else:
-            curr_flags &= ~0x0020
-        self.set_flags(curr_flags)
+        pass
 
     def set_node_information_data(self, data):
-        payload_bytes = self.child().get_bytes()
-        payload_bytes[12:] = array.array('B', data)
-        self.child().set_bytes(payload_bytes)
+        pass
 
     def get_note_information_data(self):
-        return self.child().get_bytes()[12:]
+        pass
 
 ############################################################################
     def get_echo_id(self):
-        return self.child().get_word(0)
+        pass
     
     def get_echo_sequence_number(self):
-        return self.child().get_word(2)
+        pass
     
     def get_echo_arbitrary_data(self):
-        return self.child().get_bytes()[4:]
+        pass
     
     def get_mtu(self):
-        return self.child().get_long(0)
+        pass
         
     def get_parm_problem_pointer(self):
-        return self.child().get_long(0)
+        pass
         
     def get_originating_packet_data(self):
-        return self.child().get_bytes()[4:]
+        pass

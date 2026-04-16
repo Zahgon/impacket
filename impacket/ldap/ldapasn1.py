@@ -52,15 +52,7 @@ maxInt = univ.Integer(2147483647)
 
 class DefaultSequenceAndSetBaseMixin:
     def getComponentByPosition(self, idx, default=univ.noValue, instantiate=True):
-        for cls in self.__class__.__bases__:
-            if cls is not DefaultSequenceAndSetBaseMixin:
-                try:
-                    component = cls.getComponentByPosition(self, idx)#, default, instantiate)
-                except AttributeError:
-                    continue
-                if component is None:
-                    return self.setComponentByPosition(idx).getComponentByPosition(idx)# , default, instantiate)
-                return component
+        pass
 
 
 class ResultCode(univ.Enumerated):
@@ -600,18 +592,17 @@ class SDFlagsControl(Control):
         return decodedControlValue
 
     def getCriticality(self):
-        return self['criticality']
+        pass
 
     def setCriticality(self, value):
-        self['criticality'] = value
+        pass
 
     def getFlags(self):
         self.decodeControlValue()
         return self._flags
 
     def setFlags(self, value):
-        self._flags = value
-        self.encodeControlValue()
+        pass
 
 class SimplePagedResultsControlValue(univ.Sequence):
     componentType = namedtype.NamedTypes(
@@ -639,18 +630,16 @@ class SimplePagedResultsControl(Control):
         return decodedControlValue
 
     def getCriticality(self):
-        return self['criticality']
+        pass
 
     def setCriticality(self, value):
-        self['criticality'] = value
+        pass
 
     def getSize(self):
-        self.decodeControlValue()
-        return self._size
+        pass
 
     def setSize(self, value):
-        self._size = value
-        self.encodeControlValue()
+        pass
 
     def getCookie(self):
         self.decodeControlValue()

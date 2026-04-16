@@ -1646,24 +1646,12 @@ def ComputeNetlogonCredential(inputData, Sk):
 
 # Section 3.1.4.4.1
 def ComputeNetlogonCredentialAES(inputData, Sk):
-    IV=b'\x00'*16
-    Crypt1 = AES.new(Sk, AES.MODE_CFB, IV)
-    return Crypt1.encrypt(inputData)
+    pass
 
 # Section 3.1.4.3.1
 def ComputeSessionKeyAES(sharedSecret, clientChallenge, serverChallenge, sharedSecretHash = None):
     # added the ability to receive hashes already
-    if sharedSecretHash is None:
-        M4SS = ntlm.NTOWFv1(sharedSecret)
-    else:
-        M4SS = sharedSecretHash
-
-    hm = hmac.new(key=M4SS, digestmod=hashlib.sha256)
-    hm.update(clientChallenge)
-    hm.update(serverChallenge)
-    sessionKey = hm.digest()
-
-    return sessionKey[:16]
+    pass
 
 # 3.1.4.3.2 Strong-key Session-Key
 def ComputeSessionKeyStrongKey(sharedSecret, clientChallenge, serverChallenge, sharedSecretHash = None):
@@ -1716,33 +1704,11 @@ def ComputeNetlogonSignatureMD5(authSignature, message, confounder, sessionKey):
 
 def ComputeNetlogonAuthenticatorAES(clientStoredCredential, sessionKey):
     # [MS-NRPC] Section 3.1.4.5
-    timestamp = int(time.time())
-
-    authenticator = NETLOGON_AUTHENTICATOR()
-    authenticator['Timestamp'] = timestamp
-
-    credential = unpack('<I', clientStoredCredential[:4])[0] + timestamp
-    if credential > 0xffffffff:
-        credential &= 0xffffffff
-    credential = pack('<I', credential)
-
-    authenticator['Credential'] = ComputeNetlogonCredentialAES(credential + clientStoredCredential[4:], sessionKey)
-    return authenticator
+    pass
 
 def ComputeNetlogonAuthenticator(clientStoredCredential, sessionKey):
     # [MS-NRPC] Section 3.1.4.5
-    timestamp = int(time.time())
-
-    authenticator = NETLOGON_AUTHENTICATOR()
-    authenticator['Timestamp'] = timestamp
-
-    credential = unpack('<I', clientStoredCredential[:4])[0] + timestamp
-    if credential > 0xffffffff:
-        credential &= 0xffffffff
-    credential = pack('<I', credential)
-
-    authenticator['Credential'] = ComputeNetlogonCredential(credential + clientStoredCredential[4:], sessionKey)
-    return authenticator
+    pass
 
 def encryptSequenceNumberRC4(sequenceNum, checkSum, sessionKey):
     # [MS-NRPC] Section 3.3.4.2.1, point 9
@@ -2771,147 +2737,46 @@ def hNetrServerAuthenticate3(dce, primaryName, accountName, secureChannelType, c
     return dce.request(request)
 
 def hDsrGetDcNameEx2(dce, computerName, accountName, allowableAccountControlBits, domainName, domainGuid, siteName, flags):
-    request = DsrGetDcNameEx2()
-    request['ComputerName'] = checkNullString(computerName)
-    request['AccountName'] = checkNullString(accountName)
-    request['AllowableAccountControlBits'] = allowableAccountControlBits
-    request['DomainName'] = checkNullString(domainName)
-    request['DomainGuid'] = domainGuid
-    request['SiteName'] = checkNullString(siteName)
-    request['Flags'] = flags
-    return dce.request(request)
+    pass
 
 def hDsrGetDcNameEx(dce, computerName, domainName, domainGuid, siteName, flags):
-    request = DsrGetDcNameEx()
-    request['ComputerName'] = checkNullString(computerName)
-    request['DomainName'] = checkNullString(domainName)
-    request['DomainGuid'] = domainGuid
-    request['SiteName'] = siteName
-    request['Flags'] = flags
-    return dce.request(request)
+    pass
 
 def hDsrGetDcName(dce, computerName, domainName, domainGuid, siteGuid, flags):
-    request = DsrGetDcName()
-    request['ComputerName'] = checkNullString(computerName)
-    request['DomainName'] = checkNullString(domainName)
-    request['DomainGuid'] = domainGuid
-    request['SiteGuid'] = siteGuid
-    request['Flags'] = flags
-    return dce.request(request)
+    pass
 
 def hNetrGetAnyDCName(dce, serverName, domainName):
-    request = NetrGetAnyDCName()
-    request['ServerName'] = checkNullString(serverName)
-    request['DomainName'] = checkNullString(domainName)
-    return dce.request(request)
+    pass
 
 def hNetrGetDCName(dce, serverName, domainName):
-    request = NetrGetDCName()
-    request['ServerName'] = checkNullString(serverName)
-    request['DomainName'] = checkNullString(domainName)
-    return dce.request(request)
+    pass
 
 def hDsrGetSiteName(dce, computerName):
-    request = DsrGetSiteName()
-    request['ComputerName'] = checkNullString(computerName)
-    return dce.request(request)
+    pass
 
 def hDsrGetDcSiteCoverageW(dce, serverName):
-    request = DsrGetDcSiteCoverageW()
-    request['ServerName'] = checkNullString(serverName)
-    return dce.request(request)
+    pass
 
 def hNetrServerAuthenticate2(dce, primaryName, accountName, secureChannelType, computerName, clientCredential, negotiateFlags):
-    request = NetrServerAuthenticate2()
-    request['PrimaryName'] = checkNullString(primaryName)
-    request['AccountName'] = checkNullString(accountName)
-    request['SecureChannelType'] = secureChannelType
-    request['ClientCredential'] = clientCredential
-    request['ComputerName'] = checkNullString(computerName)
-    request['NegotiateFlags'] = negotiateFlags
-    return dce.request(request)
+    pass
 
 def hNetrServerAuthenticate(dce, primaryName, accountName, secureChannelType, computerName, clientCredential):
-    request = NetrServerAuthenticate()
-    request['PrimaryName'] = checkNullString(primaryName)
-    request['AccountName'] = checkNullString(accountName)
-    request['SecureChannelType'] = secureChannelType
-    request['ClientCredential'] = clientCredential
-    request['ComputerName'] = checkNullString(computerName)
-    return dce.request(request)
+    pass
 
 def hNetrServerPasswordGet(dce, primaryName, accountName, accountType, computerName, authenticator):
-    request = NetrServerPasswordGet()
-    request['PrimaryName'] = checkNullString(primaryName)
-    request['AccountName'] = checkNullString(accountName)
-    request['AccountType'] = accountType
-    request['ComputerName'] = checkNullString(computerName)
-    request['Authenticator'] = authenticator
-    return dce.request(request)
+    pass
 
 def hNetrServerTrustPasswordsGet(dce, trustedDcName, accountName, secureChannelType, computerName, authenticator):
-    request = NetrServerTrustPasswordsGet()
-    request['TrustedDcName'] = checkNullString(trustedDcName)
-    request['AccountName'] = checkNullString(accountName)
-    request['SecureChannelType'] = secureChannelType
-    request['ComputerName'] = checkNullString(computerName)
-    request['Authenticator'] = authenticator
-    return dce.request(request)
+    pass
 
 def hNetrServerPasswordSet2(dce, primaryName, accountName, secureChannelType, computerName, authenticator, clearNewPasswordBlob):
-    request = NetrServerPasswordSet2()
-    request['PrimaryName'] = checkNullString(primaryName)
-    request['AccountName'] = checkNullString(accountName)
-    request['SecureChannelType'] = secureChannelType
-    request['ComputerName'] = checkNullString(computerName)
-    request['Authenticator'] = authenticator
-    request['ClearNewPassword'] = clearNewPasswordBlob
-    return dce.request(request)
+    pass
 
 def hNetrLogonGetDomainInfo(dce, serverName, computerName, authenticator, returnAuthenticator=0, level=1):
-    request = NetrLogonGetDomainInfo()
-    request['ServerName'] = checkNullString(serverName)
-    request['ComputerName'] = checkNullString(computerName)
-    request['Authenticator'] = authenticator
-    if returnAuthenticator == 0:
-        request['ReturnAuthenticator']['Credential'] = b'\x00'*8
-        request['ReturnAuthenticator']['Timestamp'] = 0
-    else:
-        request['ReturnAuthenticator'] = returnAuthenticator
-
-    request['Level'] = 1
-    if level == 1:
-        request['WkstaBuffer']['tag'] = 1
-        request['WkstaBuffer']['WorkstationInfo']['DnsHostName'] = NULL
-        request['WkstaBuffer']['WorkstationInfo']['SiteName'] = NULL
-        request['WkstaBuffer']['WorkstationInfo']['OsName'] = ''
-        request['WkstaBuffer']['WorkstationInfo']['Dummy1'] = NULL
-        request['WkstaBuffer']['WorkstationInfo']['Dummy2'] = NULL
-        request['WkstaBuffer']['WorkstationInfo']['Dummy3'] = NULL
-        request['WkstaBuffer']['WorkstationInfo']['Dummy4'] = NULL
-    else:
-        request['WkstaBuffer']['tag'] = 2
-        request['WkstaBuffer']['LsaPolicyInfo']['LsaPolicy'] = NULL
-    return dce.request(request)
+    pass
 
 def hNetrLogonGetCapabilities(dce, serverName, computerName, authenticator, returnAuthenticator=0, queryLevel=1):
-    request = NetrLogonGetCapabilities()
-    request['ServerName'] = checkNullString(serverName)
-    request['ComputerName'] = checkNullString(computerName)
-    request['Authenticator'] = authenticator
-    if returnAuthenticator == 0:
-        request['ReturnAuthenticator']['Credential'] = b'\x00'*8
-        request['ReturnAuthenticator']['Timestamp'] = 0
-    else:
-        request['ReturnAuthenticator'] = returnAuthenticator
-    request['QueryLevel'] = queryLevel
-    return dce.request(request)
+    pass
 
 def hNetrServerGetTrustInfo(dce, trustedDcName, accountName, secureChannelType, computerName, authenticator):
-    request = NetrServerGetTrustInfo()
-    request['TrustedDcName'] = checkNullString(trustedDcName)
-    request['AccountName'] = checkNullString(accountName)
-    request['SecureChannelType'] = secureChannelType
-    request['ComputerName'] = checkNullString(computerName)
-    request['Authenticator'] = authenticator
-    return dce.request(request)
+    pass

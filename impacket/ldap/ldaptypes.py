@@ -213,10 +213,10 @@ class ACCESS_MASK(Structure):
         return self['Mask'] & priv == priv
 
     def setPriv(self, priv):
-        self['Mask'] |= priv
+        pass
 
     def removePriv(self, priv):
-        self['Mask'] ^= priv
+        pass
 
 """
 ACCESS_ALLOWED_ACE as described in 2.4.4.2
@@ -265,15 +265,11 @@ class ACCESS_ALLOWED_OBJECT_ACE(Structure):
 
     @staticmethod
     def checkInheritedObjectType(flags):
-        if flags & ACCESS_ALLOWED_OBJECT_ACE.ACE_INHERITED_OBJECT_TYPE_PRESENT:
-            return 16
-        return 0
+        pass
 
     @staticmethod
     def checkObjectType(flags):
-        if flags & ACCESS_ALLOWED_OBJECT_ACE.ACE_OBJECT_TYPE_PRESENT:
-            return 16
-        return 0
+        pass
 
     def getData(self):
         # Set the correct flags

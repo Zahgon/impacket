@@ -148,24 +148,16 @@ OPNUMS = {
 # HELPER FUNCTIONS
 ################################################################################
 def hinq_if_ids(dce):
-    request = inq_if_ids()
-    return dce.request(request)
+    pass
 
 def hinq_stats(dce, count = 4):
-    request = inq_stats()
-    request['count'] = count
-    return dce.request(request)
+    pass
 
 def his_server_listening(dce):
-    request = is_server_listening()
-    return dce.request(request, checkError=False)
+    pass
 
 def hstop_server_listening(dce):
-    request = stop_server_listening()
-    return dce.request(request)
+    pass
 
 def hinq_princ_name(dce, authn_proto=0, princ_name_size=1):
-    request = inq_princ_name()
-    request['authn_proto'] = authn_proto
-    request['princ_name_size'] = princ_name_size
-    return dce.request(request, checkError=False)
+    pass

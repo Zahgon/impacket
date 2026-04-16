@@ -77,7 +77,7 @@ class SMBAttack(ProtocolAttack):
                 self.installService = serviceinstall.ServiceInstall(SMBClient, self.config.exeFile)
 
     def __answer(self, data):
-        self.__answerTMP += data
+        pass
 
     def run(self):
         # Here PUT YOUR CODE!

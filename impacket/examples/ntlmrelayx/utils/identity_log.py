@@ -26,6 +26,4 @@ class IdentityFilter(logging.Filter):
     """Injects .identity into every LogRecord so %(identity)s works in formatters."""
     def filter(self, record):
         # Will be "" if not set
-        identity = _get_identity()
-        record.identity = "%s -> " % identity if identity else ''
-        return True
+        pass

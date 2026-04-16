@@ -36,7 +36,7 @@ class SMTPSocksRelay(SocksRelay):
 
     @staticmethod
     def getProtocolPort():
-        return 25
+        pass
 
     def getServerEhlo(self):
         for key in list(self.activeRelays.keys()):

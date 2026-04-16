@@ -36,12 +36,7 @@ PROTOCOL_ATTACKS = {}
 
 def _wrap_run_with_identity(run_func):
     def _wrapped(self, *a, **k):
-        if self.target is not None and self.relay_client is not None:
-            connection_identifier = '%s://%s/%s@%s [%s]' % (self.target.scheme, self.domain, self.username, self.target.hostname, self.relay_client.client_id)
-            with identity_context(connection_identifier):
-                return run_func(self, *a, **k)
-        else:
-            return run_func(self, *a, **k)
+        pass
     return _wrapped
 
 class ProtocolAttack(Thread):

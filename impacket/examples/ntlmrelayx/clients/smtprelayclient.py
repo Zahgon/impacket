@@ -87,4 +87,4 @@ class SMTPRelayClient(ProtocolClient):
 
     def keepAlive(self):
         # Send a NOOP
-        self.session.noop()
+        pass

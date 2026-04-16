@@ -199,74 +199,31 @@ OPNUMS = {
 ################################################################################
 class IEnumVdsObject(IRemUnknown2):
     def Next(self, celt=0xffff):
-        request = IEnumVdsObject_Next()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        request['celt'] = celt
-        try:
-            resp = self.request(request, uuid = self.get_iPid())
-        except Exception as e:
-            resp = e.get_packet()
-            # If it is S_FALSE(1) means less items were returned
-            if resp['ErrorCode'] != 1:
-                raise
-        interfaces = list()
-        for interface in resp['ppObjectArray']:
-            interfaces.append(IRemUnknown2(INTERFACE(self.get_cinstance(), ''.join(interface['abData']), self.get_ipidRemUnknown(), target = self.get_target())))
-        return interfaces
+        pass
 
 class IVdsProvider(IRemUnknown2):
     def GetProperties(self):
-        request = IVdsProvider_GetProperties()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        resp = self.request(request, uuid = self.get_iPid())
-        return resp 
+        pass
 
 class IVdsServiceInitialization(IRemUnknown2):
     def __init__(self, interface):
         IRemUnknown2.__init__(self, interface)
 
     def Initialize(self):
-        request = IVdsServiceInitialization_Initialize()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        request['pwszMachineName'] = '\x00'
-        resp = self.request(request, uuid = self.get_iPid())
-        return resp 
+        pass
 
 class IVdsService(IRemUnknown2):
     def __init__(self, interface):
         IRemUnknown2.__init__(self, interface)
 
     def IsServiceReady(self):
-        request = IVdsService_IsServiceReady()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        try:
-            resp = self.request(request, uuid = self.get_iPid())
-        except Exception as e:
-            resp = e.get_packet()
-        return resp 
+        pass
 
     def WaitForServiceReady(self):
-        request = IVdsService_WaitForServiceReady()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        resp = self.request(request, uuid = self.get_iPid())
-        return resp 
+        pass
 
     def GetProperties(self):
-        request = IVdsService_GetProperties()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        resp = self.request(request, uuid = self.get_iPid())
-        return resp 
+        pass
 
     def QueryProviders(self, masks):
-        request = IVdsService_QueryProviders()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        request['masks'] = masks
-        resp = self.request(request, uuid = self.get_iPid())
-        return IEnumVdsObject(INTERFACE(self.get_cinstance(), ''.join(resp['ppEnum']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
+        pass

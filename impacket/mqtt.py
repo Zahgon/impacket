@@ -221,10 +221,10 @@ class MQTTSessionError(Exception):
         return self.error
 
     def getErrorPacket(self):
-        return self.packet
+        pass
 
     def getErrorString(self):
-        return self.errorString
+        pass
 
     def __str__(self):
         return self.errorString
@@ -239,7 +239,7 @@ class MQTTConnection:
         self.connectSocket()
 
     def getSocket(self):
-        return self._socket
+        pass
 
     def connectSocket(self):
         s = socket.socket()
@@ -372,25 +372,11 @@ class MQTTConnection:
         :param QoS: define the QoS requested
         :return:
         """
-        # ToDo: Support more than one topic
-        packet = MQTT_UnSubscribe()
-        packet['MessageID'] = messageID
-        packet['Topics'] = MQTT_String()
-        packet['Topics']['Name'] = topic
-        packet.setQoS( QoS )
-
-        return self.sendReceive(packet)
+        pass
 
     def publish(self, topic, message, messageID = 1, QoS=0):
 
-        packet = MQTT_Publish()
-        packet['Topic'] = MQTT_String()
-        packet['Topic']['Name'] = topic
-        packet['Message'] = message
-        packet['MessageID'] = messageID
-        packet.setQoS( QoS )
-
-        return self.sendReceive(packet)
+        pass
 
     def disconnect(self):
         return self.send(str(MQTT_Disconnect()))

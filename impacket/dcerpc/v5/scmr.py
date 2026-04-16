@@ -1180,34 +1180,14 @@ def hRDeleteService(dce, hService):
     return dce.request(request)
 
 def hRLockServiceDatabase(dce, hSCManager):
-    request = RLockServiceDatabase()
-    request['hSCManager'] = hSCManager
-    return dce.request(request)
+    pass
 
 
 def hRQueryServiceObjectSecurity(dce, hService, dwSecurityInformation, cbBufSize=0):
-    request = RQueryServiceObjectSecurity()
-    request['hService'] = hService
-    request['dwSecurityInformation'] = dwSecurityInformation
-    request['cbBufSize'] = cbBufSize
-    try:
-        resp = dce.request(request)
-    except DCERPCSessionError as e:
-        if e.get_error_code() == system_errors.ERROR_INSUFFICIENT_BUFFER:
-            resp = e.get_packet()
-            request['cbBufSize'] = resp['pcbBytesNeeded']
-            resp = dce.request(request)
-        else:
-            raise
-    return resp
+    pass
 
 def hRSetServiceObjectSecurity(dce, hService, dwSecurityInformation, lpSecurityDescriptor, cbBufSize ):
-    request = RSetServiceObjectSecurity()
-    request['hService'] = hService
-    request['dwSecurityInformation'] = dwSecurityInformation
-    request['lpSecurityDescriptor'] = lpSecurityDescriptor
-    request['cbBufSize'] = cbBufSize
-    return dce.request(request)
+    pass
 
 def hRQueryServiceStatus(dce, hService ):
     request = RQueryServiceStatus()
@@ -1215,21 +1195,13 @@ def hRQueryServiceStatus(dce, hService ):
     return dce.request(request)
 
 def hRSetServiceStatus(dce, hServiceStatus, lpServiceStatus ):
-    request = RSetServiceStatus()
-    request['hServiceStatus'] = hServiceStatus
-    request['lpServiceStatus'] = lpServiceStatus
-    return dce.request(request)
+    pass
 
 def hRUnlockServiceDatabase(dce, Lock ):
-    request = RUnlockServiceDatabase()
-    request['Lock'] = Lock
-    return dce.request(request)
+    pass
 
 def hRNotifyBootConfigStatus(dce, lpMachineName, BootAcceptable ):
-    request = RNotifyBootConfigStatus()
-    request['lpMachineName'] = lpMachineName
-    request['BootAcceptable'] = BootAcceptable
-    return dce.request(request)
+    pass
 
 def hRChangeServiceConfigW(dce, hService, dwServiceType=SERVICE_NO_CHANGE, dwStartType=SERVICE_NO_CHANGE, dwErrorControl=SERVICE_NO_CHANGE, lpBinaryPathName=NULL, lpLoadOrderGroup=NULL, lpdwTagId=NULL, lpDependencies=NULL, dwDependSize=0, lpServiceStartName=NULL, lpPassword=NULL, dwPwSize=0, lpDisplayName=NULL):
     changeServiceConfig = RChangeServiceConfigW()
@@ -1270,69 +1242,10 @@ def hRCreateServiceW(dce, hSCManager, lpServiceName, lpDisplayName, dwDesiredAcc
     return dce.request(createService)
 
 def hREnumDependentServicesW(dce, hService, dwServiceState, cbBufSize ):
-    enumDependentServices = REnumDependentServicesW()
-    enumDependentServices['hService'] = hService
-    enumDependentServices['dwServiceState'] = dwServiceState
-    enumDependentServices['cbBufSize'] = cbBufSize
-    return dce.request(enumDependentServices)
+    pass
 
 def hREnumServicesStatusW(dce, hSCManager, dwServiceType=SERVICE_WIN32_OWN_PROCESS|SERVICE_KERNEL_DRIVER|SERVICE_FILE_SYSTEM_DRIVER|SERVICE_WIN32_SHARE_PROCESS|SERVICE_INTERACTIVE_PROCESS, dwServiceState=SERVICE_STATE_ALL):
-    class ENUM_SERVICE_STATUSW2(NDRSTRUCT):
-        # This is a little trick, since the original structure is slightly different
-        # but instead of parsing the LPBYTE buffer at hand, we just do it with the aid
-        # of the NDR library, although the pointers are swapped from the original specification.
-        # Why is this? Well.. since we're getting an LPBYTE back, it's just a copy of the remote's memory
-        # where the pointers are actually POINTING to the data.
-        # Sadly, the pointers are not aligned based on the services records, so we gotta do this
-        # It should be easier in C of course.
-        class STR(NDRPOINTER):
-            referent = (
-                ('Data', WIDESTR),
-            )
-        structure = (
-            ('lpServiceName',STR),
-            ('lpDisplayName',STR),
-            ('ServiceStatus',SERVICE_STATUS),
-        )
-
-    enumServicesStatus = REnumServicesStatusW()
-    enumServicesStatus['hSCManager'] = hSCManager
-    enumServicesStatus['dwServiceType'] = dwServiceType
-    enumServicesStatus['dwServiceState'] = dwServiceState
-    enumServicesStatus['cbBufSize'] = 0
-    enumServicesStatus['lpResumeIndex'] = NULL
-
-    try:
-        resp = dce.request(enumServicesStatus)
-    except DCERPCSessionError as e:
-        if e.get_error_code() == system_errors.ERROR_MORE_DATA:
-            resp = e.get_packet()
-            enumServicesStatus['cbBufSize'] = resp['pcbBytesNeeded']
-            resp = dce.request(enumServicesStatus)
-        else:
-            raise
-    
-    # Now we're supposed to have all services returned. Now we gotta parse them
-
-    enumArray = NDRUniConformantArray()
-    enumArray.item = ENUM_SERVICE_STATUSW2
-
-    enumArray.setArraySize(resp['lpServicesReturned'])
-
-    data = b''.join(resp['lpBuffer'])
-    enumArray.fromString(data)
-    data = data[4:]
-    # Since the pointers here are pointing to the actual data, we have to reparse
-    # the referents
-    for record in enumArray['Data']:
-        offset =  record.fields['lpDisplayName'].fields['ReferentID']-4
-        name = WIDESTR(data[offset:])
-        record['lpDisplayName'] = name['Data']
-        offset =  record.fields['lpServiceName'].fields['ReferentID']-4
-        name = WIDESTR(data[offset:])
-        record['lpServiceName'] = name['Data']
-
-    return enumArray['Data']
+    pass
 
 def hROpenSCManagerW(dce, lpMachineName='DUMMY\x00', lpDatabaseName='ServicesActive\x00', dwDesiredAccess=SERVICE_START | SERVICE_STOP | SERVICE_CHANGE_CONFIG | SERVICE_QUERY_CONFIG | SERVICE_QUERY_STATUS | SERVICE_ENUMERATE_DEPENDENTS | SC_MANAGER_ENUMERATE_SERVICE):
     openSCManager = ROpenSCManagerW()
@@ -1365,10 +1278,7 @@ def hRQueryServiceConfigW(dce, hService):
     return resp
 
 def hRQueryServiceLockStatusW(dce, hSCManager, cbBufSize ):
-    queryServiceLock = RQueryServiceLockStatusW()
-    queryServiceLock['hSCManager'] = hSCManager
-    queryServiceLock['cbBufSize'] = cbBufSize
-    return dce.request(queryServiceLock)
+    pass
 
 def hRStartServiceW(dce, hService, argc=0, argv=NULL ):
     startService = RStartServiceW()
@@ -1384,25 +1294,10 @@ def hRStartServiceW(dce, hService, argc=0, argv=NULL ):
     return dce.request(startService)
 
 def hRGetServiceDisplayNameW(dce, hSCManager, lpServiceName, lpcchBuffer ):
-    getServiceDisplay = RGetServiceDisplayNameW()
-    getServiceDisplay['hSCManager'] = hSCManager
-    getServiceDisplay['lpServiceName'] = checkNullString(lpServiceName)
-    getServiceDisplay['lpcchBuffer'] = lpcchBuffer
-    return dce.request(getServiceDisplay)
+    pass
 
 def hRGetServiceKeyNameW(dce, hSCManager, lpDisplayName, lpcchBuffer ):
-    getServiceKeyName = RGetServiceKeyNameW()
-    getServiceKeyName['hSCManager'] = hSCManager
-    getServiceKeyName['lpDisplayName'] = checkNullString(lpDisplayName)
-    getServiceKeyName['lpcchBuffer'] = lpcchBuffer
-    return dce.request(getServiceKeyName)
+    pass
 
 def hREnumServiceGroupW(dce, hSCManager, dwServiceType, dwServiceState, cbBufSize, lpResumeIndex = NULL, pszGroupName = NULL ):
-    enumServiceGroup = REnumServiceGroupW()
-    enumServiceGroup['hSCManager'] = hSCManager
-    enumServiceGroup['dwServiceType'] = dwServiceType
-    enumServiceGroup['dwServiceState'] = dwServiceState
-    enumServiceGroup['cbBufSize'] = cbBufSize
-    enumServiceGroup['lpResumeIndex'] = lpResumeIndex
-    enumServiceGroup['pszGroupName'] = pszGroupName
-    return dce.request(enumServiceGroup)
+    pass

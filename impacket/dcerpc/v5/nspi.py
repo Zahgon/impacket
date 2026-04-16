@@ -69,7 +69,7 @@ class handle_t(NDRSTRUCT):
         self['context_handle_uuid'] = b'\x00'*16
 
     def isNull(self):
-        return self['context_handle_uuid'] == b'\x00'*16
+        pass
 
 # 2.2.1 Permitted Property Type Values
 PtypEmbeddedTable = 0x0000000D
@@ -995,25 +995,10 @@ def checkNullString(string):
         return string
 
 def get_guid_from_dn(legacyDN):
-    legacyDN = str(legacyDN)
-    guid = legacyDN[legacyDN.rfind("=")+1:]
-
-    return uuid.string_to_bin(guid)
+    pass
 
 def get_dn_from_guid(guid, minimize=False):
-    if minimize:
-        # MS-OXNSPI
-        dn_template = "/guid="
-    else:
-        # MS-NSPI and MS-OXNSPI
-        dn_template = "/o=NT5/ou=00000000000000000000000000000000/cn="
-
-    guid_bin = string_to_bin(guid)
-
-    if PY2:
-        return "%s%s" % (dn_template, binascii.hexlify(guid_bin))
-    else:
-        return "%s%s" % (dn_template, str(binascii.hexlify(guid_bin), 'ascii'))
+    pass
 
 class EXCH_SID(LDAP_SID):
     def __str__(self):
@@ -1028,339 +1013,55 @@ def getUnixTime(t):
     return t
 
 def simplifyPropertyRow(rowSetElem):
-    row = {}
-
-    for prop in rowSetElem['lpProps']:
-        prop_name_in_union = prop['Value'].structure[0][0]
-        prop_value = prop['Value'].fields[prop_name_in_union]
-
-        PropTag = prop['ulPropTag']
-
-        if isinstance(prop_value, SHORT) or \
-           isinstance(prop_value, USHORT) or \
-           isinstance(prop_value, LONG) or \
-           isinstance(prop_value, ULONG):
-            row[PropTag] = int(prop_value['Data'])
-        elif isinstance(prop_value, LPWSTR):
-            if PropTag in [0x8c38001f]:
-                # What is this field for?
-                row[PropTag] = ExchBinaryObject(prop_value['Data'].encode("utf-16le")[:-2])
-            else:
-                row[PropTag] = prop_value['Data'][:-1]
-        elif isinstance(prop_value, LPSTR):
-            row[PropTag] = prop_value['Data'][:-1]
-        elif isinstance(prop_value, Binary_r):
-            value = b''.join(prop_value['lpb'])
-
-            if PropTag in [0x80270102, 0x8c750102]:
-                value = EXCH_SID(value)
-            elif PropTag == 0x300b0102:
-                value = value[:-1].decode("utf-8")
-            elif value[4:20] == GUID_NSPI and value[20:24] == b'\x01\x00\x00\x00' and value[:4] == b'\x00\x00\x00\x00':
-                value = PermanentEntryID(value)
-            elif value[:4] == b'\x87\x00\x00\x00' and value[20:24] == b'\x01\x00\x00\x00' and len(value) == 32:
-                value = EphemeralEntryID(value)
-            elif PropTag in [0x8c6d0102, 0x68c40102, 0x8c730102, 0x0ff80102]:
-                value = uuid.bin_to_string(value).lower()
-            elif PropTag == 0x0ff60102:
-                value = unpack('<l', value)[0]
-            else:
-                value = ExchBinaryObject(value)
-
-            row[PropTag] = value
-        elif isinstance(prop_value, BinaryArray_r):
-            array = []
-            for value in prop_value['lpbin']:
-                array.append(b''.join(value['lpb']))
-            row[PropTag] = array
-        elif isinstance(prop_value, StringArray_r):
-            array = []
-            for value in prop_value['lppszA']:
-                array.append(value['Data'][:-1])
-            row[PropTag] = array
-        elif isinstance(prop_value, WStringArray_r):
-            array = []
-            for value in prop_value['lppszW']:
-                array.append(value['Data'][:-1])
-            row[PropTag] = array
-        elif isinstance(prop_value, FILETIME):
-            row[PropTag] = datetime.fromtimestamp( \
-                getUnixTime(unpack('<Q', prop_value.getData())[0]))
-        else:
-            row[PropTag] = prop_value
-
-    return row
+    pass
 
 def simplifyPropertyRowSet(propertyRowSet):
-    ret = []
-
-    for rowSet in propertyRowSet['aRow']:
-        ret.append(simplifyPropertyRow(rowSet))
-
-    return ret
+    pass
 
 def hNspiBind(dce, pStat=None):
-    request = NspiBind()
-
-    if pStat == None:
-        request['pStat']['CodePage'] = CP_TELETEX
-    else:
-        request['pStat'] = pStat
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiUnbind(dce, handler):
-    request = NspiUnbind()
-    request['contextHandle'] = handler
-
-    resp = dce.request(request, checkError=False)
-    return resp
+    pass
 
 def hNspiUpdateStat(dce, handler, pStat, plDelta=NULL):
-    request = NspiUpdateStat()
-    request['hRpc'] = handler
-    request['pStat'] = pStat
-    request['plDelta'] = plDelta
-
-    resp = dce.request(request, checkError=False)
-    return resp
+    pass
 
 def hNspiQueryRows(dce, handler, dwFlags=fSkipObjects, pStat=None, ContainerID=0,
         Count=50, pPropTags=[], pPropTagsRaw=NULL, lpETable=[]):
-    request = NspiQueryRows()
-    request['hRpc'] = handler
-    request['dwFlags'] = dwFlags
-    request['Count'] = Count
-
-    if pStat == None:
-        request['pStat']['ContainerID'] = ContainerID
-    else:
-        request['pStat'] = pStat
-
-    if len(pPropTags) > 0:
-        for aulPropTag in pPropTags:
-            prop = DWORD()
-            prop['Data'] = aulPropTag
-            request['pPropTags']['aulPropTag'].append(prop)
-        request['pPropTags']['cValues'] = len(pPropTags)
-        request.fields['pPropTags'].fields['Data'].fields['aulPropTag'].fields['MaximumCount'] = len(pPropTags) + 1
-    else:
-        request['pPropTags'] = pPropTagsRaw
-
-    if len(lpETable) > 0:
-        for mID in lpETable:
-            elem = DWORD()
-            elem['Data'] = mID
-            request['lpETable'].append(elem)
-        request['dwETableCount'] = len(lpETable)
-    else:
-        request['lpETable'] = NULL
-        request['dwETableCount'] = 0
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiSeekEntries(dce, handler, displayName, ContainerID=0, SortType=0, \
         lpETable=[], lpETableRaw=NULL, pPropTags=[], pPropTagsRaw=NULL):
-    request = NspiSeekEntries()
-    request['hRpc'] = handler
-    request['pStat']['ContainerID'] = ContainerID
-
-    # MS-OXNSPI 3.1.4.1.9.9
-    # If the SortType field in the input parameter pStat has any value other than
-    # SortTypeDisplayName, the server MUST return the value GeneralFailure.
-    request['pStat']['SortType'] = SortTypeDisplayName
-
-    # MS-OXNSPI 3.1.4.1.9.10
-    # If the SortType field in the input parameter pStat is SortTypeDisplayName and the property
-    # specified in the input parameter pTarget is anything other than PidTagDisplayName (with either
-    # the Property Type PtypString8 or PtypString), the server MUST return the value
-    # GeneralFailure.
-    request['pTarget']['ulPropTag'] = 0x3001001F
-    request['pTarget']['Value']['tag'] = 0x0000001F
-    request['pTarget']['Value']['lpszW'] = checkNullString(displayName)
-
-    if len(lpETable) > 0:
-        for mID in lpETable:
-            elem = DWORD()
-            elem['Data'] = mID
-            request['lpETable'].append(elem)
-    else:
-        request['lpETable'] = lpETableRaw
-
-    if len(pPropTags) > 0:
-        for aulPropTag in pPropTags:
-            prop = DWORD()
-            prop['Data'] = aulPropTag
-            request['pPropTags']['aulPropTag'].append(prop)
-        request.fields['pPropTags'].fields['aulPropTag'].fields['MaximumCount'] = len(pPropTags) + 1
-    else:
-        request['pPropTags'] = pPropTagsRaw
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiDNToMId(dce, handler, pNames=[]):
-    request = NspiDNToMId()
-    request['hRpc'] = handler
-    request['pNames']['Count'] = len(pNames)
-
-    for name in pNames:
-        lpstr = LPSTR()
-        lpstr['Data'] = checkNullString(name)
-        request['pNames']['Strings'].append(lpstr)
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiGetPropList(dce, handler, dwMId=0, dwFlags=fSkipObjects, CodePage=CP_TELETEX):
-    request = NspiGetPropList()
-    request['hRpc'] = handler
-    request['dwMId'] = dwMId
-    request['dwFlags'] = dwFlags
-    request['CodePage'] = CodePage
-    resp = dce.request(request)
-
-    return resp
+    pass
 
 def hNspiGetProps(dce, handler, ContainerID=0, CurrentRec=0, dwFlags=fSkipObjects, CodePage=CP_TELETEX, pPropTags=[]):
-    request = NspiGetProps()
-    request['hRpc'] = handler
-    request['dwFlags'] = dwFlags
-
-    request['pStat']['CurrentRec'] = CurrentRec
-    request['pStat']['ContainerID'] = ContainerID
-    request['pStat']['CodePage'] = CodePage
-
-    for aulPropTag in pPropTags:
-        prop = DWORD()
-        prop['Data'] = aulPropTag
-        request['pPropTags']['aulPropTag'].append(prop)
-    request['pPropTags']['cValues'] = len(pPropTags) + 1
-    request.fields['pPropTags'].fields['Data'].fields['aulPropTag'].fields['MaximumCount'] = len(pPropTags) + 1
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiGetSpecialTable(dce, handler, dwFlags=NspiUnicodeStrings, pStat=STAT(), lpVersion=NULL):
-    request = NspiGetSpecialTable()
-    request['hRpc'] = handler
-    request['dwFlags'] = dwFlags
-    request['pStat'] = pStat
-    request['lpVersion'] = lpVersion
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 # Lookups specified LegacyDN or CN={ulType},CN={dwLocaleID},CN=Display-Templates,CN=Addressing in Configuration Naming Context
 def hNspiGetTemplateInfo(dce, handler, pDN=NULL, dwLocaleID=0, ulType=0, dwCodePage=0, dwFlags=0xFFFFFFFF):
-    request = NspiGetTemplateInfo()
-    request['hRpc'] = handler
-    request['dwFlags'] = dwFlags
-    request['ulType'] = ulType
-    request['pDN'] = checkNullString(pDN)
-    request['dwCodePage'] = dwCodePage
-    request['dwLocaleID'] = dwLocaleID
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiModLinkAtt(dce, handler, dwFlags, ulPropTag, dwMId, lpEntryIds):
-    request = NspiModLinkAtt()
-    request['hRpc'] = handler
-    request['dwFlags'] = dwFlags
-    request['ulPropTag'] = ulPropTag
-    request['dwMId'] = dwMId
-
-    for lpEntryId in lpEntryIds:
-        prop = Binary_r()
-        prop['lpb'] = lpEntryId.getData()
-        prop['cValues'] = len(prop['lpb'])
-        request['lpEntryIds']['lpbin'].append(prop)
-    request['lpEntryIds']['cValues'] = len(lpEntryIds)
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiQueryColumns(dce, handler, dwFlags=NspiUnicodeProptypes):
-    request = NspiQueryColumns()
-    request['hRpc'] = handler
-    request['dwFlags'] = dwFlags
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiGetNamesFromIDs(dce, handler, lpguid=EMPTY_UUID, pPropTags=[], pPropTagsRaw=NULL):
-    request = NspiGetNamesFromIDs()
-    request['hRpc'] = handler
-    request['lpguid'] = lpguid
-
-    if len(pPropTags) > 0:
-        for aulPropTag in pPropTags:
-            prop = DWORD()
-            prop['Data'] = aulPropTag
-            request['pPropTags']['aulPropTag'].append(prop)
-        request['pPropTags']['cValues'] = len(pPropTags)
-        request.fields['pPropTags'].fields['Data'].fields['aulPropTag'].fields['MaximumCount'] = len(pPropTags) + 1
-    elif pPropTagsRaw == NULL:
-        request.fields['pPropTags'] = NULL
-    else:
-        request['pPropTags'] = pPropTagsRaw
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiResolveNames(dce, handler, ContainerID=0, pPropTags=[], pPropTagsRaw=NULL, paStr=[]):
-    request = NspiResolveNames()
-    request['hRpc'] = handler
-    request['pStat']['ContainerID'] = ContainerID
-
-    if len(pPropTags) > 0:
-        for aulPropTag in pPropTags:
-            prop = DWORD()
-            prop['Data'] = aulPropTag
-            request['pPropTags']['aulPropTag'].append(prop)
-        request['pPropTags']['cValues'] = len(pPropTags)
-        request.fields['pPropTags'].fields['Data'].fields['aulPropTag'].fields['MaximumCount'] = len(pPropTags) + 1
-    elif pPropTagsRaw == NULL:
-        request.fields['pPropTags'] = NULL
-    else:
-        request['pPropTags'] = pPropTagsRaw
-
-    if len(paStr) > 0:
-        for paStrElem in paStr:
-            value = LPSTR()
-            value['Data'] = checkNullString(paStrElem)
-            request['paStr']['Strings'].append(value)
-        request['paStr']['Count'] = len(paStr)
-
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hNspiResolveNamesW(dce, handler, ContainerID=0, pPropTags=[], pPropTagsRaw=NULL, paStr=[]):
-    request = NspiResolveNamesW()
-    request['hRpc'] = handler
-    request['pStat']['ContainerID'] = ContainerID
-
-    if len(pPropTags) > 0:
-        for aulPropTag in pPropTags:
-            prop = DWORD()
-            prop['Data'] = aulPropTag
-            request['pPropTags']['aulPropTag'].append(prop)
-        request['pPropTags']['cValues'] = len(pPropTags)
-        request.fields['pPropTags'].fields['Data'].fields['aulPropTag'].fields['MaximumCount'] = len(pPropTags) + 1
-    elif pPropTagsRaw == NULL:
-        request.fields['pPropTags'] = NULL
-    else:
-        request['pPropTags'] = pPropTagsRaw
-
-    if len(paStr) > 0:
-        for paStrElem in paStr:
-            value = LPWSTR()
-            value['Data'] = checkNullString(paStrElem)
-            request['paStr']['Strings'].append(value)
-        request['paStr']['Count'] = len(paStr)
-
-    resp = dce.request(request)
-    return resp
+    pass

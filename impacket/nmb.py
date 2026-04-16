@@ -199,8 +199,7 @@ def encode_name(name, nametype, scope):
 
 # Internal method for use in encode_name()
 def _do_first_level_encoding(m):
-    s = ord(m.group(0))
-    return string.ascii_uppercase[s >> 4] + string.ascii_uppercase[s & 0x0f]
+    pass
 
 def decode_name(name):
     # ToDo: Rewrite this simpler, we're using less than written
@@ -230,8 +229,7 @@ def decode_name(name):
         return offset + 1, decoded_name, decoded_domain
 
 def _do_first_level_decoding(m):
-    s = m.group(0)
-    return chr(((ord(s[0]) - ord('A')) << 4) | (ord(s[1]) - ord('A')))
+    pass
 
 ERRCLASS_QUERY = 0x00
 ERRCLASS_SESSION = 0xf0
@@ -267,10 +265,10 @@ class NetBIOSError(Exception):
         return self.get_error_code()
 
     def get_error_string(self):
-        return str(self)
+        pass
 
     def getErrorString(self):
-        return str(self)
+        pass
 
     def __str__(self):
         if self.error_code is not None:
@@ -567,26 +565,25 @@ class NetBIOS:
 
     # Set the default NetBIOS domain nameserver.
     def set_nameserver(self, nameserver):
-        self.__nameserver = nameserver
+        pass
 
     # Return the default NetBIOS domain nameserver, or None if none is specified.
     def get_nameserver(self):
-        return self.__nameserver
+        pass
 
     # Set the broadcast address to be used for query.
     def set_broadcastaddr(self, broadcastaddr):
-        self.__broadcastaddr = broadcastaddr
+        pass
 
     # Return the broadcast address to be used, or BROADCAST_ADDR if default broadcast address is used.   
     def get_broadcastaddr(self):
-        return self.__broadcastaddr
+        pass
 
     # Returns a NBPositiveNameQueryResponse instance containing the host information for nbname.
     # If a NetBIOS domain nameserver has been specified, it will be used for the query.
     # Otherwise, the query is broadcasted on the broadcast address.
     def gethostbyname(self, nbname, qtype = TYPE_WORKSTATION, scope = None, timeout = 1):
-        resp = self.name_query_request(nbname, self.__nameserver, qtype, scope, timeout)
-        return resp
+        pass
 
     # Returns a list of NBNodeEntry instances containing node status information for nbname.
     # If destaddr contains an IP address, then this will become an unicast query on the destaddr.
@@ -604,41 +601,13 @@ class NetBIOS:
         return entries[0]['NAME'].strip().decode('latin-1')
 
     def getmacaddress(self):
-        return self.mac
+        pass
 
     def name_registration_request(self, nbname, destaddr, qtype, scope, nb_flags=0, nb_address='0.0.0.0'):
-        netbios_name = nbname.upper()
-        qn_label = encode_name(netbios_name, qtype, scope)
-
-        p = NAME_REGISTRATION_REQUEST()
-        p['NAME_TRN_ID'] = rand.randint(1, 32000)
-        p['QUESTION_NAME'] = qn_label[:-1] + b'\x00'
-        p['RR_NAME'] = qn_label[:-1] + b'\x00'
-        p['TTL'] = 0xffff
-        p['NB_FLAGS'] = nb_flags
-        p['NB_ADDRESS'] = socket.inet_aton(nb_address)
-        if not destaddr:
-            p['FLAGS'] |= NM_FLAGS_BROADCAST
-            destaddr = self.__broadcastaddr
-
-        res = self.send(p, destaddr, 1)
-        return res
+        pass
 
     def name_query_request(self, nbname, destaddr = None, qtype = TYPE_SERVER, scope = None, timeout = 1):
-        netbios_name = nbname.upper()
-        qn_label = encode_name(netbios_name, qtype, scope)
-
-        p = NAME_QUERY_REQUEST()
-        p['NAME_TRN_ID'] = rand.randint(1, 32000)
-        p['QUESTION_NAME'] = qn_label[:-1] + b'\x00'
-        p['FLAGS'] = NM_FLAGS_RD
-        if not destaddr:
-            p['FLAGS'] |= NM_FLAGS_BROADCAST
-
-            destaddr = self.__broadcastaddr
-
-        res = self.send(p, destaddr, timeout)
-        return NBPositiveNameQueryResponse(res['ANSWERS'])
+        pass
 
     def node_status_request(self, nbname, destaddr, type, scope, timeout):
         netbios_name = nbname.upper()
@@ -941,65 +910,10 @@ class NetBIOSTCPSession(NetBIOSSession):
                 pass
 
     def polling_read(self, read_length, timeout):
-        data = b''
-        if timeout is None:
-            timeout = 3600
-
-        time_left = timeout
-        CHUNK_TIME = 0.025
-        bytes_left = read_length
-
-        while bytes_left > 0:
-            try:
-                ready, _, _ = select.select([self._sock.fileno()], [], [], 0)
-
-                if not ready:
-                    if time_left <= 0:
-                        raise NetBIOSTimeout
-                    else:
-                        time.sleep(CHUNK_TIME)
-                        time_left -= CHUNK_TIME
-                        continue
-
-                received = self._sock.recv(bytes_left)
-                if len(received) == 0:
-                    raise NetBIOSError('Error while reading from remote', ERRCLASS_OS, None)
-
-                data = data + received
-                bytes_left = read_length - len(data)
-            except select.error as ex:
-                if ex.errno != errno.EINTR and ex.errno != errno.EAGAIN:
-                    raise NetBIOSError('Error occurs while reading from remote', ERRCLASS_OS, ex.errno)
-
-        return bytes(data)
+        pass
 
     def non_polling_read(self, read_length, timeout):
-        data = b''
-        if timeout is None:
-            timeout = 3600
-
-        start_time = time.time()
-        bytes_left = read_length
-
-        while bytes_left > 0:
-            self._sock.settimeout(timeout)
-            try:
-                received = self._sock.recv(bytes_left)
-            except socket.timeout:
-                raise NetBIOSTimeout
-            except Exception as ex:
-                raise NetBIOSError('Error occurs while reading from remote', ERRCLASS_OS, ex.errno)
-
-            if (time.time() - start_time) > timeout:
-                raise NetBIOSTimeout
-
-            if len(received) == 0:
-                raise NetBIOSError('Error while reading from remote', ERRCLASS_OS, None)
-
-            data = data + received
-            bytes_left = read_length - len(data)
-
-        return bytes(data)
+        pass
 
     def __read(self, timeout = None):
         data = self.read_function(4, timeout)

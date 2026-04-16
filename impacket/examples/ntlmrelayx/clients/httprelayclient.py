@@ -127,8 +127,7 @@ class HTTPRelayClient(ProtocolClient):
 
     def keepAlive(self):
         # Do a HEAD for favicon.ico
-        self.session.request('HEAD','/favicon.ico')
-        self.session.getresponse()
+        pass
 
 class HTTPSRelayClient(HTTPRelayClient):
     PLUGIN_NAME = "HTTPS"

@@ -660,7 +660,7 @@ def checkNullString(string):
         return string
 
 def hSchRpcHighestVersion(dce):
-    return dce.request(SchRpcHighestVersion())
+    pass
 
 def hSchRpcRegisterTask(dce, path, xml, flags, sddl, logonType, pCreds = ()):
     request = SchRpcRegisterTask()
@@ -678,70 +678,34 @@ def hSchRpcRegisterTask(dce, path, xml, flags, sddl, logonType, pCreds = ()):
     return dce.request(request)
 
 def hSchRpcRetrieveTask(dce, path, lpcwszLanguagesBuffer = '\x00', pulNumLanguages=0 ):
-    schRpcRetrieveTask = SchRpcRetrieveTask()
-    schRpcRetrieveTask['path'] = checkNullString(path)
-    schRpcRetrieveTask['lpcwszLanguagesBuffer'] = lpcwszLanguagesBuffer
-    schRpcRetrieveTask['pulNumLanguages'] = pulNumLanguages
-    return dce.request(schRpcRetrieveTask)
+    pass
 
 def hSchRpcCreateFolder(dce, path, sddl = NULL):
-    schRpcCreateFolder = SchRpcCreateFolder()
-    schRpcCreateFolder['path'] = checkNullString(path)
-    schRpcCreateFolder['sddl'] = sddl
-    schRpcCreateFolder['flags'] = 0
-    return dce.request(schRpcCreateFolder)
+    pass
 
 def hSchRpcSetSecurity(dce, path, sddl, flags):
-    schRpcSetSecurity = SchRpcSetSecurity()
-    schRpcSetSecurity['path'] = checkNullString(path)
-    schRpcSetSecurity['sddl'] = checkNullString(sddl)
-    schRpcSetSecurity['flags'] = flags
-    return dce.request(schRpcSetSecurity)
+    pass
 
 def hSchRpcGetSecurity(dce, path, securityInformation=0xffffffff):
-    schRpcGetSecurity = SchRpcGetSecurity()
-    schRpcGetSecurity['path'] = checkNullString(path)
-    schRpcGetSecurity['securityInformation'] = securityInformation
-    return dce.request(schRpcGetSecurity)
+    pass
 
 def hSchRpcEnumFolders(dce, path, flags=TASK_ENUM_HIDDEN, startIndex=0, cRequested=0xffffffff):
-    schRpcEnumFolders = SchRpcEnumFolders()
-    schRpcEnumFolders['path'] = checkNullString(path)
-    schRpcEnumFolders['flags'] = flags
-    schRpcEnumFolders['startIndex'] = startIndex
-    schRpcEnumFolders['cRequested'] = cRequested
-    return dce.request(schRpcEnumFolders)
+    pass
 
 def hSchRpcEnumTasks(dce, path, flags=TASK_ENUM_HIDDEN, startIndex=0, cRequested=0xffffffff):
-    schRpcEnumTasks = SchRpcEnumTasks()
-    schRpcEnumTasks['path'] = checkNullString(path)
-    schRpcEnumTasks['flags'] = flags
-    schRpcEnumTasks['startIndex'] = startIndex
-    schRpcEnumTasks['cRequested'] = cRequested
-    return dce.request(schRpcEnumTasks)
+    pass
 
 def hSchRpcEnumInstances(dce, path, flags=TASK_ENUM_HIDDEN):
-    schRpcEnumInstances = SchRpcEnumInstances()
-    schRpcEnumInstances['path'] = checkNullString(path)
-    schRpcEnumInstances['flags'] = flags
-    return dce.request(schRpcEnumInstances)
+    pass
 
 def hSchRpcGetInstanceInfo(dce, guid):
-    schRpcGetInstanceInfo = SchRpcGetInstanceInfo()
-    schRpcGetInstanceInfo['guid'] = guid
-    return dce.request(schRpcGetInstanceInfo)
+    pass
 
 def hSchRpcStopInstance(dce, guid, flags = 0):
-    schRpcStopInstance = SchRpcStopInstance()
-    schRpcStopInstance['guid'] = guid
-    schRpcStopInstance['flags'] = flags
-    return dce.request(schRpcStopInstance)
+    pass
 
 def hSchRpcStop(dce, path, flags = 0):
-    schRpcStop= SchRpcStop()
-    schRpcStop['path'] = checkNullString(path)
-    schRpcStop['flags'] = flags
-    return dce.request(schRpcStop)
+    pass
 
 def hSchRpcRun(dce, path, pArgs=(), flags=0, sessionId=0, user = NULL):
     schRpcRun = SchRpcRun()
@@ -763,20 +727,10 @@ def hSchRpcDelete(dce, path, flags = 0):
     return dce.request(schRpcDelete)
 
 def hSchRpcRename(dce, path, newName, flags = 0):
-    schRpcRename = SchRpcRename()
-    schRpcRename['path'] = checkNullString(path)
-    schRpcRename['newName'] = checkNullString(newName)
-    schRpcRename['flags'] = flags
-    return dce.request(schRpcRename)
+    pass
 
 def hSchRpcScheduledRuntimes(dce, path, start = NULL, end = NULL, flags = 0, cRequested = 10):
-    schRpcScheduledRuntimes = SchRpcScheduledRuntimes()
-    schRpcScheduledRuntimes['path'] = checkNullString(path)
-    schRpcScheduledRuntimes['start'] = start
-    schRpcScheduledRuntimes['end'] = end
-    schRpcScheduledRuntimes['flags'] = flags
-    schRpcScheduledRuntimes['cRequested'] = cRequested
-    return dce.request(schRpcScheduledRuntimes)
+    pass
 
 def hSchRpcGetLastRunInfo(dce, path):
     schRpcGetLastRunInfo = SchRpcGetLastRunInfo()
@@ -784,21 +738,10 @@ def hSchRpcGetLastRunInfo(dce, path):
     return dce.request(schRpcGetLastRunInfo)
 
 def hSchRpcGetTaskInfo(dce, path, flags = 0):
-    schRpcGetTaskInfo = SchRpcGetTaskInfo()
-    schRpcGetTaskInfo['path'] = checkNullString(path)
-    schRpcGetTaskInfo['flags'] = flags
-    return dce.request(schRpcGetTaskInfo)
+    pass
 
 def hSchRpcGetNumberOfMissedRuns(dce, path):
-    schRpcGetNumberOfMissedRuns = SchRpcGetNumberOfMissedRuns()
-    schRpcGetNumberOfMissedRuns['path'] = checkNullString(path)
-    return dce.request(schRpcGetNumberOfMissedRuns)
+    pass
 
 def hSchRpcEnableTask(dce, path, enabled = True):
-    schRpcEnableTask = SchRpcEnableTask()
-    schRpcEnableTask['path'] = checkNullString(path)
-    if enabled is True:
-        schRpcEnableTask['enabled'] = 1
-    else:
-        schRpcEnableTask['enabled'] = 0
-    return dce.request(schRpcEnableTask)
+    pass

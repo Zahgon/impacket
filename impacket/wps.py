@@ -101,13 +101,13 @@ class TLVContainer(object):
         return ((k, self.builder(k).from_ary(v)) for k,v in self.elems)
     
     def all(self, kind):
-        return [e[1] for e in self if e[0] == kind]
+        pass
     
     def __contains__(self, kind):
         return len(self.all(kind)) != 0
     
     def first(self, kind):
-        return self.all(kind)[0]
+        pass
     
     def to_ary(self):
         ary = array.array('B')

@@ -830,11 +830,7 @@ class LDAPAttack(ProtocolAttack):
 
         # https://github.com/dirkjanm/krbrelayx/blob/master/dnstool.py
         def get_next_serial(server, zone):
-            dnsresolver = dns.resolver.Resolver()
-            dnsresolver.nameservers = [server]
-            res = dnsresolver.resolve(zone, 'SOA',tcp=True)
-            for answer in res:
-                return answer.serial + 1
+            pass
 
         try:
             dns_naming_context = next((nc for nc in self.client.server.info.naming_contexts if "domaindnszones" in nc.lower()))

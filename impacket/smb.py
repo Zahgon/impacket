@@ -323,19 +323,7 @@ FILE_OVERWRITE_IF               = 0x00000005 # If the file already exists, it SH
 
 
 def strerror(errclass, errcode):
-    if errclass == 0x01:
-        return 'OS error', ERRDOS.get(errcode, 'Unknown error')
-    elif errclass == 0x02:
-        return 'Server error', ERRSRV.get(errcode, 'Unknown error')
-    elif errclass == 0x03:
-        return 'Hardware error', ERRHRD.get(errcode, 'Unknown error')
-    # This is not a standard error class for SMB
-    #elif errclass == 0x80:
-    #    return 'Browse error', ERRBROWSE.get(errcode, 'Unknown error')
-    elif errclass == 0xff:
-        return 'Bad command', 'Bad command. Please file bug report'
-    else:
-        return 'Unknown error', 'Unknown error'
+    pass
 
 # Raised when an error has occurred during a session
 class SessionError(Exception):
@@ -682,37 +670,27 @@ class SMB_DATE:
     
     @property
     def year(self):
-        return self._year + 1980
+        pass
     
     @year.setter
     def year(self, value):
-        value = value - 1980
-        if value < 0 or value > 119:
-            raise ValueError("Invalid year component.")
-        
-        self._year = value
+        pass
     
     @property
     def month(self):
-        return self._month
+        pass
     
     @month.setter
     def month(self, value):
-        if value < 0 or value > 12:
-            raise ValueError("Invalid month component.")
-        
-        self._month = value
+        pass
     
     @property
     def day(self):
-        return self._day
+        pass
     
     @day.setter
     def day(self, value):
-        if value < 0 or value > 31:
-            raise ValueError("Invalid day component.")
-        
-        self._day = value
+        pass
     
     def pack(self):
         return ((self._year << 9) & 0xFE00) + ((self._month << 5) & 0x01E0) + (self._day & 0x001F)
@@ -737,10 +715,7 @@ class SMB_DATE:
         
         :return SMB_DATE: The class representation of the packed data bytes.
         """
-        
-        s = SMBDateStruct()
-        pack_into(">H", s, 0, data)
-        return cls.from_struct(s)
+        pass
         
     @classmethod
     def from_struct(cls, s):
@@ -751,8 +726,7 @@ class SMB_DATE:
         
         :return SMB_DATE: The class representation of the struct object.
         """
-        
-        return cls(s.y + 1980, s.m, s.d)
+        pass
 
 class SMBTimeStruct(BigEndianStructure):
     _fields_ = [
@@ -780,36 +754,27 @@ class SMB_TIME:
     
     @property
     def hour(self):
-        return self._hour
+        pass
     
     @hour.setter
     def hour(self, value):
-        if value < 0 or value > 23:
-            raise ValueError("Invalid hour component.")
-        
-        self._hour = value
+        pass
     
     @property
     def minutes(self):
-        return self._minutes
+        pass
     
     @minutes.setter
     def minutes(self, value):
-        if value < 0 or value > 59:
-            raise ValueError("Invalid minutes component.")
-        
-        self._minutes = value
+        pass
     
     @property
     def seconds(self):
-        return self._seconds
+        pass
     
     @seconds.setter
     def seconds(self, value):
-        if value < 0 or value > 59:
-            raise ValueError("Invalid seconds component.")
-        
-        self._seconds = value
+        pass
 
     def pack(self):
         return ((self._hour << 11) & 0xF800) + ((self._minutes << 5) & 0x07E0) + (self._seconds & 0x001F)
@@ -834,10 +799,7 @@ class SMB_TIME:
         
         :return SMB_TIME: The class representation of the packed data bytes.
         """
-        
-        s = SMBTimeStruct()
-        pack_into(">H", s, 0, data)
-        return cls.from_struct(s)
+        pass
         
     @classmethod
     def from_struct(cls, s):
@@ -848,8 +810,7 @@ class SMB_TIME:
         
         :return SMB_TIME: The class representation of the struct object.
         """
-        
-        return cls(s.h, s.m, s.s)
+        pass
 
 # Contains information about a SMB shared device/service
 class SharedDevice:
@@ -865,7 +826,7 @@ class SharedDevice:
         return self.__type
 
     def get_comment(self):
-        return self.__comment
+        pass
 
     def __repr__(self):
         return '<SharedDevice instance: name=' + self.__name + ', type=' + str(self.__type) + ', comment="' + self.__comment + '">'
@@ -897,77 +858,74 @@ class SharedFile:
             self.__longname = longname
 
     def get_ctime(self):
-        return self.__ctime
+        pass
 
     def get_ctime_epoch(self):
-        return self.__convert_smbtime(self.__ctime)
+        pass
 
     def get_wtime(self):
-        return self.__wtime
+        pass
 
     def get_wtime_epoch(self):
-        return self.__convert_smbtime(self.__wtime)
+        pass
 
     def get_mtime(self):
-        return self.__mtime
+        pass
 
     def get_mtime_epoch(self):
-        return self.__convert_smbtime(self.__mtime)
+        pass
 
     def get_atime(self):
-        return self.__atime
+        pass
 
     def get_atime_epoch(self):
-        return self.__convert_smbtime(self.__atime)
+        pass
 
     def get_filesize(self):
-        return self.__filesize
+        pass
 
     def get_allocsize(self):
-        return self.__allocsize
+        pass
 
     def get_attributes(self):
-        return self.__attribs
+        pass
 
     def is_archive(self):
-        return self.__attribs & ATTR_ARCHIVE
+        pass
 
     def is_compressed(self):
-        return self.__attribs & ATTR_COMPRESSED
+        pass
 
     def is_normal(self):
-        return self.__attribs & ATTR_NORMAL
+        pass
 
     def is_hidden(self):
-        return self.__attribs & ATTR_HIDDEN
+        pass
 
     def is_readonly(self):
-        return self.__attribs & ATTR_READONLY
+        pass
 
     def is_temporary(self):
-        return self.__attribs & ATTR_TEMPORARY
+        pass
 
     def is_directory(self):
-        return self.__attribs & ATTR_DIRECTORY
+        pass
 
     def is_system(self):
-        return self.__attribs & ATTR_SYSTEM
+        pass
 
     def get_shortname(self):
-        return self.__shortname
+        pass
 
     def get_longname(self):
-        return self.__longname
+        pass
 
     def __repr__(self):
         return '<SharedFile instance: shortname="' + self.__shortname + '", longname="' + self.__longname + '", filesize=' + str(self.__filesize) + '>'
 
     @staticmethod
     def __convert_smbtime(t):
-        x = t >> 32
-        y = t & 0xffffffff
-        geo_cal_offset = 11644473600.0  # = 369.0 * 365.25 * 24 * 60 * 60 - (3.0 * 24 * 60 * 60 + 6.0 * 60 * 60)
-        return (x * 4.0 * (1 << 30) + (y & 0xfff00000)) * 1.0e-7 - geo_cal_offset
+        pass
 
 
 # Contain information about a SMB machine
@@ -2806,7 +2764,7 @@ class SMB(object):
 
     @staticmethod
     def ntlm_supported():
-        return False
+        pass
 
     def getKerberos(self):
         return self._doKerberos
@@ -2841,24 +2799,20 @@ class SMB(object):
         return prev_timeout
 
     def get_timeout(self):
-        return self.__timeout
+        pass
 
     @contextmanager
     def use_timeout(self, timeout):
-        prev_timeout = self.set_timeout(timeout)
-        try:
-            yield
-        finally:
-            self.set_timeout(prev_timeout)
+        pass
 
     def get_session(self):
-        return self._sess
+        pass
 
     def get_tid(self):
-        return self.tid
+        pass
 
     def get_fid(self):
-        return self.fid
+        pass
 
     def isGuestSession(self):
         return self._action & SMB_SETUP_GUEST
@@ -2877,14 +2831,7 @@ class SMB(object):
 
     @staticmethod
     def __decode_trans(params, data):
-        totparamcnt, totdatacnt, _, paramcnt, paramoffset, paramds, datacnt, dataoffset, datads, setupcnt = unpack('<HHHHHHHHHB', params[:19])
-        if paramcnt + paramds < totparamcnt or datacnt + datads < totdatacnt:
-            has_more = 1
-        else:
-            has_more = 0
-        paramoffset = paramoffset - 55 - setupcnt * 2
-        dataoffset = dataoffset - 55 - setupcnt * 2
-        return has_more, params[20:20 + setupcnt * 2], data[paramoffset:paramoffset + paramcnt], data[dataoffset:dataoffset + datacnt]
+        pass
 
     # TODO: Move this to NewSMBPacket, it belongs there
     def signSMB(self, packet, signingSessionKey, signingChallengeResponse):
@@ -2923,13 +2870,7 @@ class SMB(object):
 
     def checkSignSMB(self, packet, signingSessionKey, signingChallengeResponse):
         # Let's check
-        signature = packet['SecurityFeatures']
-        #print "Signature received: %r " % signature
-        self.signSMB(packet, signingSessionKey, signingChallengeResponse)
-        #print "Signature calculated: %r" % packet['SecurityFeatures']
-        if self._SignatureVerificationEnabled is not True:
-           self._SignSequenceNumber -= 1
-        return packet['SecurityFeatures'] == signature
+        pass
 
     def sendSMB(self,smb):
         smb['Uid'] = self._uid
@@ -3015,37 +2956,7 @@ class SMB(object):
             return parsePacket( NewSMBPacket( data = negPacket))
 
     def tree_connect(self, path, password = '', service = SERVICE_ANY):
-        LOG.warning("[MS-CIFS] This is an original Core Protocol command.This command has been deprecated.Client Implementations SHOULD use SMB_COM_TREE_CONNECT_ANDX")
-
-        # return 0x800
-        if password:
-            # Password is only encrypted if the server passed us an "encryption" during protocol dialect
-            if self._dialects_parameters['ChallengeLength'] > 0:
-                # this code is untested
-                password = self.get_ntlmv1_response(ntlm.compute_lmhash(password))
-
-        if not unicode_support:
-            if unicode_convert:
-                path = str(path)
-            else:
-                raise Exception('SMB: Can\t conver path from unicode!')
-
-        smb = NewSMBPacket()
-        treeConnect = SMBCommand(SMB.SMB_COM_TREE_CONNECT)
-        treeConnect['Parameters'] = SMBTreeConnect_Parameters()
-        treeConnect['Data']       = SMBTreeConnect_Data()
-        treeConnect['Data']['Path'] = path.upper()
-        treeConnect['Data']['Password'] = password
-        treeConnect['Data']['Service'] = service
-        smb.addCommand(treeConnect)
-        self.sendSMB(smb)
-
-        while 1:
-            smb = self.recvSMB()
-            if smb.isValidAnswer(SMB.SMB_COM_TREE_CONNECT):
-                # XXX Here we are ignoring the rest of the response
-                return smb['Tid']
-            return smb['Tid']
+        pass
 
     def get_uid(self):
         return self._uid
@@ -3145,19 +3056,10 @@ class SMB(object):
         self._SigningSessionKey = key
 
     def get_encryption_key(self):
-        if 'Challenge' in self._dialects_data.fields:
-            return self._dialects_data['Challenge']
-        else:
-            return None
+        pass
 
     def get_server_time(self):
-        timestamp = self._dialects_parameters['HighDateTime']
-        timestamp <<= 32
-        timestamp |= self._dialects_parameters['LowDateTime']
-        timestamp -= 116444736000000000
-        timestamp //= 10000000
-        d = datetime.datetime.fromtimestamp(timestamp, tz=datetime.timezone.utc)
-        return d.strftime("%a, %d %b %Y %H:%M:%S GMT")
+        pass
 
     def disconnect_tree(self, tid):
         smb = NewSMBPacket()
@@ -3169,77 +3071,10 @@ class SMB(object):
         self.recvSMB()
 
     def open(self, tid, filename, open_mode, desired_access):
-        filename = filename.replace('/', '\\')
-        filename = filename.encode('utf-16le') if self.__flags2 & SMB.FLAGS2_UNICODE else filename
-
-        smb = NewSMBPacket()
-        smb['Tid']    = tid
-
-        openFile = SMBCommand(SMB.SMB_COM_OPEN)
-        openFile['Parameters'] = SMBOpen_Parameters()
-        openFile['Parameters']['DesiredAccess']    = desired_access
-        openFile['Parameters']['OpenMode']         = open_mode
-        openFile['Parameters']['SearchAttributes'] = ATTR_READONLY | ATTR_HIDDEN | ATTR_ARCHIVE
-        openFile['Data']       = SMBOpen_Data(flags=self.__flags2)
-        openFile['Data']['FileName'] = filename
-
-        smb.addCommand(openFile)
-
-        self.sendSMB(smb)
-
-        smb = self.recvSMB()
-        if smb.isValidAnswer(SMB.SMB_COM_OPEN):
-            # XXX Here we are ignoring the rest of the response
-            openFileResponse   = SMBCommand(smb['Data'][0])
-            openFileParameters = SMBOpenResponse_Parameters(openFileResponse['Parameters'])
-
-            return (
-                openFileParameters['Fid'],
-                openFileParameters['FileAttributes'],
-                openFileParameters['LastWriten'],
-                openFileParameters['FileSize'],
-                openFileParameters['GrantedAccess'],
-            )
+        pass
 
     def open_andx(self, tid, filename, open_mode, desired_access):
-        filename = filename.replace('/', '\\')
-        filename = filename.encode('utf-16le') if self.__flags2 & SMB.FLAGS2_UNICODE else filename
-
-        smb = NewSMBPacket()
-        smb['Tid']    = tid
-
-        openFile = SMBCommand(SMB.SMB_COM_OPEN_ANDX)
-        openFile['Parameters'] = SMBOpenAndX_Parameters()
-        openFile['Parameters']['DesiredAccess']    = desired_access
-        openFile['Parameters']['OpenMode']         = open_mode
-        openFile['Parameters']['SearchAttributes'] = ATTR_READONLY | ATTR_HIDDEN | ATTR_ARCHIVE
-        openFile['Data']       = SMBOpenAndX_Data(flags=self.__flags2)
-        openFile['Data']['FileName'] = filename
-
-        if self.__flags2 & SMB.FLAGS2_UNICODE:
-            openFile['Data']['Pad'] = 0x0
-
-        smb.addCommand(openFile)
-
-        self.sendSMB(smb)
-
-        smb = self.recvSMB()
-        if smb.isValidAnswer(SMB.SMB_COM_OPEN_ANDX):
-            # XXX Here we are ignoring the rest of the response
-            openFileResponse   = SMBCommand(smb['Data'][0])
-            openFileParameters = SMBOpenAndXResponse_Parameters(openFileResponse['Parameters'])
-
-            return (
-                openFileParameters['Fid'],
-                openFileParameters['FileAttributes'],
-                openFileParameters['LastWriten'],
-                openFileParameters['FileSize'],
-                openFileParameters['GrantedAccess'],
-                openFileParameters['FileType'],
-                openFileParameters['IPCState'],
-                openFileParameters['Action'],
-                openFileParameters['ServerFid'],
-            )
+        pass
 
     def close(self, tid, fid):
         smb = NewSMBPacket()
@@ -3257,33 +3092,7 @@ class SMB(object):
         return 0
 
     def send_trans(self, tid, setup, name, param, data, noAnswer = 0):
-        smb = NewSMBPacket()
-        smb['Tid']    = tid
-
-        transCommand = SMBCommand(SMB.SMB_COM_TRANSACTION)
-        transCommand['Parameters'] = SMBTransaction_Parameters()
-        transCommand['Data'] = SMBTransaction_Data()
-
-        transCommand['Parameters']['Setup'] = setup
-        transCommand['Parameters']['TotalParameterCount'] = len(param)
-        transCommand['Parameters']['TotalDataCount'] = len(data)
-
-        transCommand['Parameters']['ParameterCount'] = len(param)
-        transCommand['Parameters']['ParameterOffset'] = 32+3+28+len(setup)+len(name)
-
-        transCommand['Parameters']['DataCount'] = len(data)
-        transCommand['Parameters']['DataOffset'] = transCommand['Parameters']['ParameterOffset'] + len(param)
-
-        transCommand['Data']['Name'] = name
-        transCommand['Data']['Trans_Parameters'] = param
-        transCommand['Data']['Trans_Data'] = data
-
-        if noAnswer:
-           transCommand['Parameters']['Flags'] = TRANS_NO_RESPONSE
-
-        smb.addCommand(transCommand)
-
-        self.sendSMB(smb)
+        pass
 
     def send_trans2(self, tid, setup, name, param, data):
         smb = NewSMBPacket()
@@ -3390,22 +3199,22 @@ class SMB(object):
         return self.__server_dns_domain_name
 
     def get_server_dns_host_name(self):
-        return self.__server_dns_host_name
+        pass
 
     def get_server_os(self):
-        return self.__server_os
+        pass
 
     def get_server_os_major(self):
-        return self.__server_os_major
+        pass
 
     def get_server_os_minor(self):
-        return self.__server_os_minor
+        pass
 
     def get_server_os_build(self):
-        return self.__server_os_build
+        pass
 
     def set_server_os(self, os):
-        self.__server_os = os
+        pass
 
     def get_server_lanman(self):
         return self.__server_lanman
@@ -3414,7 +3223,7 @@ class SMB(object):
         # Login is required if share mode is user.
         # Otherwise only public services or services in share mode
         # are allowed.
-        return (self._dialects_parameters['SecurityMode'] & SMB.SECURITY_SHARE_MASK) == SMB.SECURITY_SHARE_USER
+        pass
 
     def is_signing_required(self):
         return self._SignatureRequired
@@ -3888,51 +3697,7 @@ class SMB(object):
             raise Exception('Error: Could not login successfully')
 
     def waitNamedPipe(self, tid, pipe, timeout = 5, noAnswer = 0):
-        smb = NewSMBPacket()
-        smb['Tid']    = tid
-
-        transCommand = SMBCommand(SMB.SMB_COM_TRANSACTION)
-        transCommand['Parameters'] = SMBTransaction_Parameters()
-        transCommand['Data'] = SMBTransaction_Data()
-
-        setup = '\x53\x00\x00\x00'
-        name = '\\PIPE%s\x00' % pipe
-        if self.__flags2 & SMB.FLAGS2_UNICODE:
-            start_of_name = 32+3+28+len(setup)#32 is smb_header,28 is parameter,3 is wordcount and bytecount
-            start_pad = 2-(start_of_name%2)
-            name = start_pad*b'\x00' + name.encode('utf-16le')
-            end_of_name = start_of_name+len(name) 
-            pad_len = 4-(end_of_name%4)
-            name += pad_len*b'\x00'
-        else:
-            name = name.encode('utf-8')
-        transCommand['Parameters']['Setup'] = setup
-        transCommand['Parameters']['TotalParameterCount'] = 0
-        transCommand['Parameters']['TotalDataCount'] = 0
-        transCommand['Parameters']['MaxParameterCount'] = 0
-        transCommand['Parameters']['MaxDataCount'] = 0
-        transCommand['Parameters']['Timeout'] = timeout * 1000
-
-        transCommand['Parameters']['ParameterCount'] = 0
-        transCommand['Parameters']['ParameterOffset'] = 32+3+28+len(setup)+len(name)
-
-        transCommand['Parameters']['DataCount'] = 0
-        transCommand['Parameters']['DataOffset'] = 0
-
-        transCommand['Data']['Name'] = name
-        transCommand['Data']['Trans_Parameters'] = ''
-        transCommand['Data']['Trans_Data'] = ''
-
-        if noAnswer:
-           transCommand['Parameters']['Flags'] = TRANS_NO_RESPONSE
-
-        smb.addCommand(transCommand)
-        self.sendSMB(smb)
-
-        smb = self.recvSMB()
-        if smb.isValidAnswer(SMB.SMB_COM_TRANSACTION):
-           return 1
-        return 0
+        pass
 
     def read(self, tid, fid, offset=0, max_size = None, wait_answer=1):
         if not max_size:
@@ -4018,29 +3783,7 @@ class SMB(object):
         return None
 
     def read_raw(self, tid, fid, offset=0, max_size = None, wait_answer=1):
-        if not max_size:
-            max_size = self._dialects_parameters['MaxBufferSize'] # Read in multiple KB blocks
-
-        # max_size is not working, because although it would, the server returns an error (More data avail)
-        smb = NewSMBPacket()
-        smb['Tid']    = tid
-
-        readRaw = SMBCommand(SMB.SMB_COM_READ_RAW)
-        readRaw['Parameters'] = SMBReadRaw_Parameters()
-        readRaw['Parameters']['Fid'] = fid
-        readRaw['Parameters']['Offset'] = offset
-        readRaw['Parameters']['MaxCount'] = max_size
-        smb.addCommand(readRaw)
-
-        self.sendSMB(smb)
-        if wait_answer:
-            data = self._sess.recv_packet(self.__timeout).get_trailer()
-            if not data:
-                # If there is no data it means there was an error
-                data = self.read_andx(tid, fid, offset, max_size)
-            return data
-
-        return None
+        pass
 
     def write(self,tid,fid,data, offset = 0, wait_answer=1):
         smb = NewSMBPacket()
@@ -4126,47 +3869,13 @@ class SMB(object):
         return None
 
     def write_raw(self,tid,fid,data, offset = 0, wait_answer=1):
-        LOG.warning("[MS-CIFS] This command was introduced in the CorePlus dialect, but is often listed as part of the LAN Manager 1.0 dialect.This command has been deprecated.Clients SHOULD use SMB_COM_WRITE_ANDX")
-        smb = NewSMBPacket()
-        smb['Tid']    = tid
-
-        writeRaw = SMBCommand(SMB.SMB_COM_WRITE_RAW)
-        writeRaw['Parameters'] = SMBWriteRaw_Parameters()
-        writeRaw['Parameters']['Fid'] = fid
-        writeRaw['Parameters']['Offset'] = offset
-        writeRaw['Parameters']['Count'] = len(data)
-        writeRaw['Parameters']['DataLength'] = 0
-        writeRaw['Parameters']['DataOffset'] = 0
-        smb.addCommand(writeRaw)
-
-        self.sendSMB(smb)
-        self._sess.send_packet(data)
-
-        if wait_answer:
-            smb = self.recvSMB()
-            if smb.isValidAnswer(SMB.SMB_COM_WRITE_RAW):
-                return smb
-        return None
+        pass
 
     def TransactNamedPipe(self, tid, fid, data = '', noAnswer = 0, waitAnswer = 1, offset = 0):
-        self.send_trans(tid,pack('<HH', 0x26, fid),'\\PIPE\\\x00','',data, noAnswer = noAnswer)
-
-        if noAnswer or not waitAnswer:
-            return
-        smb = self.recvSMB()
-        if smb.isValidAnswer(SMB.SMB_COM_TRANSACTION):
-           transResponse = SMBCommand(smb['Data'][0])
-           transParameters = SMBTransactionResponse_Parameters(transResponse['Parameters'])
-           return transResponse['Data'][-transParameters['TotalDataCount']:] # Remove Potential Prefix Padding
-        return None
+        pass
 
     def TransactNamedPipeRecv(self):
-        s = self.recvSMB()
-        if s.isValidAnswer(SMB.SMB_COM_TRANSACTION):
-           transResponse = SMBCommand(s['Data'][0])
-           transParameters = SMBTransactionResponse_Parameters(transResponse['Parameters'])
-           return transResponse['Data'][-transParameters['TotalDataCount']:] # Remove Potential Prefix Padding
-        return None
+        pass
 
     def nt_create_andx(self, tid, filename, smb_packet = None, cmd = None, shareAccessMode = FILE_SHARE_READ | FILE_SHARE_WRITE, disposition = FILE_OPEN, accessMask = READ_CONTROL | FILE_WRITE_ATTRIBUTES | FILE_READ_ATTRIBUTES | FILE_WRITE_EA | FILE_READ_EA | FILE_APPEND_DATA | FILE_WRITE_DATA):
         filename = filename.replace('/', '\\')
@@ -4340,17 +4049,7 @@ class SMB(object):
             self.disconnect_tree(tid)
 
     def stor_file_nonraw(self, service, filename, callback, mode = FILE_OVERWRITE_IF, offset = 0, password = None, shareAccessMode = FILE_SHARE_READ):
-        filename = filename.replace('/', '\\')
-
-        fid = -1
-        tid = self.tree_connect_andx('\\\\' + self.__remote_name + '\\' + service, password)
-        try:
-            fid = self.nt_create_andx(tid, filename, shareAccessMode = shareAccessMode, disposition = mode)
-            self.__nonraw_stor_file(tid, fid, offset, 0, callback)
-        finally:
-            if fid >= 0:
-                self.close(tid, fid)
-            self.disconnect_tree(tid)
+        pass
 
     def check_dir(self, service, path, password = None):
         path = path.replace('/', '\\')
@@ -4452,30 +4151,7 @@ class SMB(object):
             self.disconnect_tree(tid)
 
     def rename(self, service, old_path, new_path, password = None):
-        old_path = old_path.replace('/', '\\')
-        new_path = new_path.replace('/', '\\')
-        tid = self.tree_connect_andx('\\\\' + self.__remote_name + '\\' + service, password)
-        try:
-            smb = NewSMBPacket()
-            smb['Tid'] = tid
-            smb['Mid'] = 0
-
-            renameCmd = SMBCommand(SMB.SMB_COM_RENAME)
-            renameCmd['Parameters'] = SMBRename_Parameters()
-            renameCmd['Parameters']['SearchAttributes'] = ATTR_SYSTEM | ATTR_HIDDEN | ATTR_DIRECTORY
-            renameCmd['Data'] = SMBRename_Data(flags = self.__flags2)
-            renameCmd['Data']['OldFileName'] = old_path.encode('utf-16le') if self.__flags2 & SMB.FLAGS2_UNICODE else old_path
-            renameCmd['Data']['NewFileName'] = new_path.encode('utf-16le') if self.__flags2 & SMB.FLAGS2_UNICODE else new_path
-            smb.addCommand(renameCmd)
-
-            self.sendSMB(smb)
-
-            smb = self.recvSMB()
-            if smb.isValidAnswer(SMB.SMB_COM_RENAME):
-               return 1
-            return 0
-        finally:
-            self.disconnect_tree(tid)
+        pass
 
     def writeFile(self, treeId, fileId, data, offset = 0):
         if (self._dialects_parameters['Capabilities'] & SMB.CAP_LARGE_WRITEX) and self._SignatureEnabled is False:
@@ -4511,53 +4187,7 @@ class SMB(object):
         :param data: Subcommand data bytes if any, depends on transaction subcommand.
         :return: Buffer relative to requested subcommand.
         """
-        smb_packet = NewSMBPacket()
-        smb_packet['Tid'] = tid
-        #    setup depends on NT_TRANSACT subcommands so it may be 0.
-        setup_bytes = pack('<H', setup) if setup != '' else ''
-
-        transCommand = SMBCommand(SMB.SMB_COM_NT_TRANSACT)
-        transCommand['Parameters'] = SMBNTTransaction_Parameters()
-        transCommand['Parameters']['MaxDataCount'] = self._dialects_parameters['MaxBufferSize']
-        transCommand['Parameters']['Setup'] = setup_bytes
-        transCommand['Parameters']['Function'] = subcommand
-        transCommand['Parameters']['TotalParameterCount'] = len(param)
-        transCommand['Parameters']['TotalDataCount'] = len(data)
-        transCommand['Parameters']['MaxParameterCount'] = max_param_count
-        transCommand['Parameters']['MaxSetupCount'] = 0
-
-        transCommand['Data'] = SMBNTTransaction_Data()
-
-        # SMB header size + SMB_COM_NT_TRANSACT parameters size + length of setup bytes.
-        offset = 32 + 3 + 38 + len(setup_bytes)
-        transCommand['Data']['Pad1'] = ''
-        if offset % 4 != 0:
-            transCommand['Data']['Pad1'] = '\0' * (4 - offset % 4)
-            offset += (4 - offset % 4)  # pad1 length
-
-        if len(param) > 0:
-            transCommand['Parameters']['ParameterOffset'] = offset
-        else:
-            transCommand['Parameters']['ParameterOffset'] = 0
-
-        offset += len(param)
-        transCommand['Data']['Pad2'] = ''
-        if offset % 4 != 0:
-            transCommand['Data']['Pad2'] = '\0' * (4 - offset % 4)
-            offset += (4 - offset % 4)
-
-        if len(data) > 0:
-            transCommand['Parameters']['DataOffset'] = offset
-        else:
-            transCommand['Parameters']['DataOffset'] = 0
-
-        transCommand['Parameters']['DataCount'] = len(data)
-        transCommand['Parameters']['ParameterCount'] = len(param)
-        transCommand['Data']['NT_Trans_Parameters'] = param
-        transCommand['Data']['NT_Trans_Data'] = data
-        smb_packet.addCommand(transCommand)
-
-        self.sendSMB(smb_packet)
+        pass
 
     def query_sec_info(self, tid, fid, additional_information=7):
         """
@@ -4568,31 +4198,11 @@ class SMB(object):
         :param additional_information: SecurityInfoFields. default = owner + group + dacl ie. 7
         :return: security descriptor buffer
         """
-        self.send_nt_trans(tid, subcommand=0x0006, max_param_count=4,
-                           param=pack('<HHL', fid, 0x0000, additional_information))
-        resp = self.recvSMB()
-        if resp.isValidAnswer(SMB.SMB_COM_NT_TRANSACT):
-            nt_trans_response = SMBCommand(resp['Data'][0])
-            nt_trans_parameters = SMBNTTransactionResponse_Parameters(nt_trans_response['Parameters'])
-            # Remove Potential Prefix Padding
-            return nt_trans_response['Data'][-nt_trans_parameters['TotalDataCount']:]
+        pass
 
     def echo(self, text = '', count = 1):
 
-        smb = NewSMBPacket()
-        comEcho = SMBCommand(SMB.SMB_COM_ECHO)
-        comEcho['Parameters'] = SMBEcho_Parameters()
-        comEcho['Data']       = SMBEcho_Data()
-        comEcho['Parameters']['EchoCount'] = count
-        comEcho['Data']['Data'] = text
-        smb.addCommand(comEcho)
-
-        self.sendSMB(smb)
-
-        for i in range(count):
-            resp = self.recvSMB()
-            resp.isValidAnswer(SMB.SMB_COM_ECHO)
-        return True
+        pass
 
 ERRDOS = { 1: 'Invalid function',
            2: 'File not found',

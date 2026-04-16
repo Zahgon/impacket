@@ -50,14 +50,14 @@ class ServiceInstall:
 
     @property
     def serviceName(self):
-        return self.__service_name
+        pass
 
     @property
     def binaryServiceName(self):
-        return self.__binary_service_name
+        pass
 
     def getShare(self):
-        return self.share
+        pass
 
     def getShares(self):
         # Setup up a DCE SMBTransport with the connection already in place

@@ -1420,251 +1420,100 @@ def hLsarOpenPolicy2(dce, desiredAccess = MAXIMUM_ALLOWED):
     return dce.request(request)
 
 def hLsarOpenPolicy(dce, desiredAccess = MAXIMUM_ALLOWED):
-    request = LsarOpenPolicy()
-    request['SystemName'] = NULL
-    request['ObjectAttributes']['RootDirectory'] = NULL
-    request['ObjectAttributes']['ObjectName'] = NULL
-    request['ObjectAttributes']['SecurityDescriptor'] = NULL
-    request['ObjectAttributes']['SecurityQualityOfService'] = NULL
-    request['DesiredAccess'] = desiredAccess
-    return dce.request(request)
+    pass
 
 def hLsarQueryInformationPolicy2(dce, policyHandle, informationClass):
-    request = LsarQueryInformationPolicy2()
-    request['PolicyHandle'] = policyHandle
-    request['InformationClass'] = informationClass
-    return dce.request(request)
+    pass
 
 def hLsarQueryInformationPolicy(dce, policyHandle, informationClass):
-    request = LsarQueryInformationPolicy()
-    request['PolicyHandle'] = policyHandle
-    request['InformationClass'] = informationClass
-    return dce.request(request)
+    pass
 
 def hLsarQueryDomainInformationPolicy(dce, policyHandle, informationClass):
-    request = LsarQueryInformationPolicy()
-    request['PolicyHandle'] = policyHandle
-    request['InformationClass'] = informationClass
-    return dce.request(request)
+    pass
 
 def hLsarEnumerateAccounts(dce, policyHandle, preferedMaximumLength=0xffffffff):
-    request = LsarEnumerateAccounts()
-    request['PolicyHandle'] = policyHandle
-    request['PreferedMaximumLength'] = preferedMaximumLength
-    return dce.request(request)
+    pass
 
 def hLsarEnumerateAccountsWithUserRight(dce, policyHandle, UserRight):
-    request = LsarEnumerateAccountsWithUserRight()
-    request['PolicyHandle'] = policyHandle
-    request['UserRight'] = UserRight
-    return dce.request(request)
+    pass
 
 def hLsarEnumerateTrustedDomainsEx(dce, policyHandle, enumerationContext=0, preferedMaximumLength=0xffffffff):
-    request = LsarEnumerateTrustedDomainsEx()
-    request['PolicyHandle'] = policyHandle
-    request['EnumerationContext'] = enumerationContext
-    request['PreferedMaximumLength'] = preferedMaximumLength
-    return dce.request(request)
+    pass
 
 def hLsarEnumerateTrustedDomains(dce, policyHandle, enumerationContext=0, preferedMaximumLength=0xffffffff):
-    request = LsarEnumerateTrustedDomains()
-    request['PolicyHandle'] = policyHandle
-    request['EnumerationContext'] = enumerationContext
-    request['PreferedMaximumLength'] = preferedMaximumLength
-    return dce.request(request)
+    pass
 
 def hLsarOpenAccount(dce, policyHandle, accountSid, desiredAccess=MAXIMUM_ALLOWED):
-    request = LsarOpenAccount()
-    request['PolicyHandle'] = policyHandle
-    request['AccountSid'].fromCanonical(accountSid)
-    request['DesiredAccess'] = desiredAccess
-    return dce.request(request)
+    pass
 
 def hLsarClose(dce, objectHandle):
-    request = LsarClose()
-    request['ObjectHandle'] = objectHandle
-    return dce.request(request)
+    pass
 
 def hLsarCreateAccount(dce, policyHandle, accountSid, desiredAccess=MAXIMUM_ALLOWED):
-    request = LsarCreateAccount()
-    request['PolicyHandle'] = policyHandle
-    request['AccountSid'].fromCanonical(accountSid)
-    request['DesiredAccess'] = desiredAccess
-    return dce.request(request)
+    pass
 
 def hLsarDeleteObject(dce, objectHandle):
-    request = LsarDeleteObject()
-    request['ObjectHandle'] = objectHandle
-    return dce.request(request)
+    pass
 
 def hLsarEnumeratePrivilegesAccount(dce, accountHandle):
-    request = LsarEnumeratePrivilegesAccount()
-    request['AccountHandle'] = accountHandle
-    return dce.request(request)
+    pass
 
 def hLsarGetSystemAccessAccount(dce, accountHandle):
-    request = LsarGetSystemAccessAccount()
-    request['AccountHandle'] = accountHandle
-    return dce.request(request)
+    pass
 
 def hLsarSetSystemAccessAccount(dce, accountHandle, systemAccess):
-    request = LsarSetSystemAccessAccount()
-    request['AccountHandle'] = accountHandle
-    request['SystemAccess'] = systemAccess
-    return dce.request(request)
+    pass
 
 def hLsarAddPrivilegesToAccount(dce, accountHandle, privileges):
-    request = LsarAddPrivilegesToAccount()
-    request['AccountHandle'] = accountHandle
-    request['Privileges']['PrivilegeCount'] = len(privileges)
-    request['Privileges']['Control'] = 0
-    for priv in privileges:
-        request['Privileges']['Privilege'].append(priv)
-
-    return dce.request(request)
+    pass
 
 def hLsarRemovePrivilegesFromAccount(dce, accountHandle, privileges, allPrivileges = False):
-    request = LsarRemovePrivilegesFromAccount()
-    request['AccountHandle'] = accountHandle
-    request['Privileges']['Control'] = 0
-    if privileges != NULL:
-        request['Privileges']['PrivilegeCount'] = len(privileges)
-        for priv in privileges:
-            request['Privileges']['Privilege'].append(priv)
-    else:
-        request['Privileges']['PrivilegeCount'] = NULL
-    request['AllPrivileges'] = allPrivileges
-
-    return dce.request(request)
+    pass
 
 def hLsarEnumerateAccountRights(dce, policyHandle, accountSid):
-    request = LsarEnumerateAccountRights()
-    request['PolicyHandle'] = policyHandle
-    request['AccountSid'].fromCanonical(accountSid)
-    return dce.request(request)
+    pass
 
 def hLsarAddAccountRights(dce, policyHandle, accountSid, userRights):
-    request = LsarAddAccountRights()
-    request['PolicyHandle'] = policyHandle
-    request['AccountSid'].fromCanonical(accountSid)
-    request['UserRights']['EntriesRead'] = len(userRights)
-    for userRight in userRights:
-        right = RPC_UNICODE_STRING()
-        right['Data'] = userRight
-        request['UserRights']['UserRights'].append(right)
-
-    return dce.request(request)
+    pass
 
 def hLsarRemoveAccountRights(dce, policyHandle, accountSid, userRights):
-    request = LsarRemoveAccountRights()
-    request['PolicyHandle'] = policyHandle
-    request['AccountSid'].fromCanonical(accountSid)
-    request['UserRights']['EntriesRead'] = len(userRights)
-    for userRight in userRights:
-        right = RPC_UNICODE_STRING()
-        right['Data'] = userRight
-        request['UserRights']['UserRights'].append(right)
-
-    return dce.request(request)
+    pass
 
 def hLsarCreateSecret(dce, policyHandle, secretName, desiredAccess=MAXIMUM_ALLOWED):
-    request = LsarCreateSecret()
-    request['PolicyHandle'] = policyHandle
-    request['SecretName'] = secretName
-    request['DesiredAccess'] = desiredAccess
-    return dce.request(request)
+    pass
 
 def hLsarOpenSecret(dce, policyHandle, secretName, desiredAccess=MAXIMUM_ALLOWED):
-    request = LsarOpenSecret()
-    request['PolicyHandle'] = policyHandle
-    request['SecretName'] = secretName
-    request['DesiredAccess'] = desiredAccess
-    return dce.request(request)
+    pass
 
 def hLsarSetSecret(dce, secretHandle, encryptedCurrentValue, encryptedOldValue):
-    request = LsarOpenSecret()
-    request['SecretHandle'] = secretHandle
-    if encryptedCurrentValue != NULL:
-        request['EncryptedCurrentValue']['Length'] = len(encryptedCurrentValue)
-        request['EncryptedCurrentValue']['MaximumLength'] = len(encryptedCurrentValue)
-        request['EncryptedCurrentValue']['Buffer'] = list(encryptedCurrentValue)
-    if encryptedOldValue != NULL:
-        request['EncryptedOldValue']['Length'] = len(encryptedOldValue)
-        request['EncryptedOldValue']['MaximumLength'] = len(encryptedOldValue)
-        request['EncryptedOldValue']['Buffer'] = list(encryptedOldValue)
-    return dce.request(request)
+    pass
 
 def hLsarQuerySecret(dce, secretHandle):
-    request = LsarQuerySecret()
-    request['SecretHandle'] = secretHandle
-    request['EncryptedCurrentValue']['Buffer'] = NULL
-    request['EncryptedOldValue']['Buffer'] = NULL
-    request['OldValueSetTime'] = NULL
-    return dce.request(request)
+    pass
 
 def hLsarRetrievePrivateData(dce, policyHandle, keyName):
-    request = LsarRetrievePrivateData()
-    request['PolicyHandle'] = policyHandle
-    request['KeyName'] = keyName
-    retVal = dce.request(request)
-    return b''.join(retVal['EncryptedData']['Buffer'])
+    pass
 
 def hLsarStorePrivateData(dce, policyHandle, keyName, encryptedData):
-    request = LsarStorePrivateData()
-    request['PolicyHandle'] = policyHandle
-    request['KeyName'] = keyName
-    if encryptedData != NULL:
-        request['EncryptedData']['Length'] = len(encryptedData)
-        request['EncryptedData']['MaximumLength'] = len(encryptedData)
-        request['EncryptedData']['Buffer'] = list(encryptedData)
-    else:
-        request['EncryptedData'] = NULL
-    return dce.request(request)
+    pass
 
 def hLsarEnumeratePrivileges(dce, policyHandle, enumerationContext = 0, preferedMaximumLength = 0xffffffff):
-    request = LsarEnumeratePrivileges()
-    request['PolicyHandle'] = policyHandle
-    request['EnumerationContext'] = enumerationContext
-    request['PreferedMaximumLength'] = preferedMaximumLength
-    return dce.request(request)
+    pass
 
 def hLsarLookupPrivilegeValue(dce, policyHandle, name):
-    request = LsarLookupPrivilegeValue()
-    request['PolicyHandle'] = policyHandle
-    request['Name'] = name
-    return dce.request(request)
+    pass
 
 def hLsarLookupPrivilegeName(dce, policyHandle, luid):
-    request = LsarLookupPrivilegeName()
-    request['PolicyHandle'] = policyHandle
-    request['Value'] = luid
-    return dce.request(request)
+    pass
 
 def hLsarQuerySecurityObject(dce, policyHandle, securityInformation = OWNER_SECURITY_INFORMATION):
-    request = LsarQuerySecurityObject()
-    request['PolicyHandle'] = policyHandle
-    request['SecurityInformation'] = securityInformation
-    retVal =  dce.request(request)
-    return b''.join(retVal['SecurityDescriptor']['SecurityDescriptor'])
+    pass
 
 def hLsarSetSecurityObject(dce, policyHandle, securityInformation, securityDescriptor):
-    request = LsarSetSecurityObject()
-    request['PolicyHandle'] = policyHandle
-    request['SecurityInformation'] = securityInformation
-    request['SecurityDescriptor']['Length'] = len(securityDescriptor)
-    request['SecurityDescriptor']['SecurityDescriptor'] = list(securityDescriptor)
-    return dce.request(request)
+    pass
 
 def hLsarSetInformationPolicy2(dce, policyHandle, informationClass, policyInformation):
-    request = LsarSetInformationPolicy2()
-    request['PolicyHandle'] = policyHandle
-    request['InformationClass'] = informationClass
-    request['PolicyInformation'] = policyInformation
-    return dce.request(request)
+    pass
 
 def hLsarSetInformationPolicy(dce, policyHandle, informationClass, policyInformation):
-    request = LsarSetInformationPolicy()
-    request['PolicyHandle'] = policyHandle
-    request['InformationClass'] = informationClass
-    request['PolicyInformation'] = policyInformation
-    return dce.request(request)
+    pass

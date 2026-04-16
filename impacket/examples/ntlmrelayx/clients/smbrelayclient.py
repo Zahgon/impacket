@@ -250,14 +250,7 @@ class SMBRelayClient(ProtocolClient):
 
     def keepAlive(self):
         # SMB Keep Alive more or less every 5 minutes
-        if self.keepAliveHits >= (250 / KEEP_ALIVE_TIMER):
-            # Time to send a packet
-            # Just a tree connect / disconnect to avoid the session timeout
-            tid = self.session.connectTree('IPC$')
-            self.session.disconnectTree(tid)
-            self.keepAliveHits = 1
-        else:
-            self.keepAliveHits +=1
+        pass
 
     def killConnection(self):
         if self.session is not None:
@@ -304,7 +297,7 @@ class SMBRelayClient(ProtocolClient):
         return True
 
     def setUid(self,uid):
-        self._uid = uid
+        pass
 
     def sendNegotiate(self, negotiateMessage):
         negoMessage = NTLMAuthNegotiate()
@@ -427,49 +420,7 @@ class SMBRelayClient(ProtocolClient):
             return sessionData['SecurityBlob']
 
     def sendStandardSecurityAuth(self, sessionSetupData):
-        v1client = self.session.getSMBServer()
-        flags2 = v1client.get_flags()[1]
-        v1client.set_flags(flags2=flags2 & (~SMB.FLAGS2_EXTENDED_SECURITY))
-        if sessionSetupData['Account'] != '':
-            smb = NewSMBPacket()
-            smb['Flags1'] = 8
-
-            sessionSetup = SMBCommand(SMB.SMB_COM_SESSION_SETUP_ANDX)
-            sessionSetup['Parameters'] = SMBSessionSetupAndX_Parameters()
-            sessionSetup['Data'] = SMBSessionSetupAndX_Data()
-
-            sessionSetup['Parameters']['MaxBuffer'] = 65535
-            sessionSetup['Parameters']['MaxMpxCount'] = 2
-            sessionSetup['Parameters']['VCNumber'] = os.getpid()
-            sessionSetup['Parameters']['SessionKey'] = v1client._dialects_parameters['SessionKey']
-            sessionSetup['Parameters']['AnsiPwdLength'] = len(sessionSetupData['AnsiPwd'])
-            sessionSetup['Parameters']['UnicodePwdLength'] = len(sessionSetupData['UnicodePwd'])
-            sessionSetup['Parameters']['Capabilities'] = SMB.CAP_RAW_MODE
-
-            sessionSetup['Data']['AnsiPwd'] = sessionSetupData['AnsiPwd']
-            sessionSetup['Data']['UnicodePwd'] = sessionSetupData['UnicodePwd']
-            sessionSetup['Data']['Account'] = sessionSetupData['Account']
-            sessionSetup['Data']['PrimaryDomain'] = sessionSetupData['PrimaryDomain']
-            sessionSetup['Data']['NativeOS'] = 'Unix'
-            sessionSetup['Data']['NativeLanMan'] = 'Samba'
-
-            smb.addCommand(sessionSetup)
-
-            v1client.sendSMB(smb)
-            smb = v1client.recvSMB()
-            try:
-                smb.isValidAnswer(SMB.SMB_COM_SESSION_SETUP_ANDX)
-            except:
-                return None, STATUS_LOGON_FAILURE
-            else:
-                v1client.set_uid(smb['Uid'])
-                return smb, STATUS_SUCCESS
-        else:
-            # Anonymous login, send STATUS_ACCESS_DENIED so we force the client to send his credentials
-            clientResponse = None
-            errorCode = STATUS_ACCESS_DENIED
-
-        return clientResponse, errorCode
+        pass
 
     def sendAuth(self, authenticateMessageBlob, serverChallenge=None):
 
@@ -602,25 +553,7 @@ class SMBRelayClient(ProtocolClient):
         return smb, errorCode
 
     def getStandardSecurityChallenge(self):
-        if self.session.getDialect() == SMB_DIALECT:
-            return self.session.getSMBServer().get_encryption_key()
-        else:
-            return None
+        pass
 
     def isAdmin(self):
-        rpctransport = SMBTransport(self.session.getRemoteHost(), 445, r'\svcctl', smb_connection=self.session)
-        dce = rpctransport.get_dce_rpc()
-        try:
-            dce.connect()
-        except:
-            pass
-        else:
-            dce.bind(scmr.MSRPC_UUID_SCMR)
-            try:
-                # 0xF003F - SC_MANAGER_ALL_ACCESS
-                # http://msdn.microsoft.com/en-us/library/windows/desktop/ms685981(v=vs.85).aspx
-                ans = scmr.hROpenSCManagerW(dce,'{}\x00'.format(self.target.hostname),'ServicesActive\x00', 0xF003F)
-                return "TRUE"
-            except scmr.DCERPCException as e:
-                pass
-        return "FALSE"
+        pass

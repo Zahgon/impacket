@@ -940,7 +940,7 @@ def NTOWFv2( user, password, domain, hash = ''):
     return hmac_md5(theHash, user.upper().encode('utf-16le') + domain.encode('utf-16le'))
 
 def LMOWFv2( user, password, domain, lmhash = ''):
-    return NTOWFv2( user, password, domain, lmhash)
+    pass
 
 
 def computeResponseNTLMv2(flags, serverChallenge, clientChallenge, serverName, domain, user, password, lmhash='',
@@ -997,17 +997,7 @@ class NTLM_HTTP(object):
 
     @classmethod
     def get_instance(cls,msg_64):
-        msg = None
-        msg_type = 0
-        if msg_64 != '':
-            msg = base64.b64decode(msg_64[5:]) # Remove the 'NTLM '
-            msg_type = msg[8]
-    
-        for _cls in NTLM_HTTP.__subclasses__():
-            if msg_type == _cls.MSG_TYPE:
-                instance = _cls()
-                instance.fromString(msg)
-                return instance
+        pass
 
     
 class NTLM_HTTP_AuthRequired(NTLM_HTTP):

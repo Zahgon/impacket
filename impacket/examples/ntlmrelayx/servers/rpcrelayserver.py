@@ -53,64 +53,13 @@ class RPCRelayServer(Thread):
             socketserver.BaseRequestHandler.__init__(self, request, client_address, server)
 
         def setup(self):
-            self.transport = DCERPCServer(self.request)
-            IObjectExporterCallBacks = {
-                5: self.send_ServerAlive2Response,
-            }
-            self.transport.addCallbacks(bin_to_uuidtup(IID_IObjectExporter), "135", IObjectExporterCallBacks)
-
-            IEPMCallBacks = {
-                3: self.handle_epmap
-            }
-            self.transport.addCallbacks(bin_to_uuidtup(MSRPC_UUID_PORTMAP), "135", IEPMCallBacks)
-
-            if self.server.config.target is None:
-                # Reflection mode, defaults to SMB at the target, for now
-                self.server.config.target = TargetsProcessor(singleTarget='SMB://%s:445/' % self.client_address[0])
+            pass
 
         def handle_epmap(self, data):
-            request = ept_map(data)
-
-            resp = ept_mapResponse()
-            tow_arr = twr_p_t_array()
-            resp['status'] = 0
-            resp['num_towers'] = 1
-            req_handle = ept_lookup_handle_t()
-            req_handle['context_handle_attributes'] = 0
-            req_handle['context_handle_uuid'] = b'\00'*20
-            resp['entry_handle'] = req_handle
-            resp_tower = b''.join(request['map_tower']['tower_octet_string']) # just reflect the tower back
-
-            resp_tower_p = twr_p_t()
-            resp_tower_p['tower_length'] = len(resp_tower)
-            resp_tower_p['tower_octet_string'] = resp_tower
-            resp_tower_p['ReferentID'] = 3
-            tow_arr['Data'].append(resp_tower_p)
-            tow_arr['MaximumCount'] = request['max_towers']
-            resp['ITowers'] = tow_arr
-            return resp
+            pass
 
         def send_ServerAlive2Response(self, request):
-            response = ServerAlive2Response()
-
-            stringBindings = [(TOWERID_DOD_TCP, self.target.hostname)]
-            securityBindings = [(RPC_C_AUTHN_WINNT, "")]
-
-            array = b''
-            for wTowerId, aNetworkAddr in stringBindings:
-                array += wTowerId.to_bytes(1, byteorder='little')  # formatting in a ushort is performed later
-                array += aNetworkAddr.encode('utf8') + b'\x00'
-            array += b'\x00' * (2 - (len(array) % 2))  # Fix alignment
-            response['ppdsaOrBindings']['wSecurityOffset'] = len(array)
-            for wAuthnSvc, aPrincName in securityBindings:
-                array += wAuthnSvc.to_bytes(1, byteorder='little')
-                array += b'\xff'  # This should be \xff\xff but as it's formatted on a ushort, it doesn't work |-(
-                array += aPrincName.encode('utf8') + b'\x00'
-            array += b'\x00' * (2 - (len(array) % 2))  # Fix alignment
-            response['ppdsaOrBindings']['wNumEntries'] = len(array)
-            response['ppdsaOrBindings']['aStringArray'] = array
-
-            return response
+            pass
 
         def handle(self):
             try:

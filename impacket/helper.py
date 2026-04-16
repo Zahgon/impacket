@@ -23,11 +23,7 @@ import impacket.ImpactPacket as ip
 
 
 def rebind(f):
-    functools.wraps(f)
-    def rebinder(*args, **kwargs):
-        return f(*args, **kwargs)
-        
-    return rebinder
+    pass
 
 class Field(object):
     def __init__(self, index):
@@ -55,16 +51,10 @@ class Bit(Field):
         self.off_mask = (~self.mask) & 0xff
         
     def getter(self, o):
-        return (o.header.get_byte(self.index) & self.mask) != 0
+        pass
     
     def setter(self, o, value=True):
-        b = o.header.get_byte(self.index)
-        if value:
-            b |= self.mask
-        else:
-            b &= self.off_mask
-        
-        o.header.set_byte(self.index, b) 
+        pass
 
 class Byte(Field):
     
@@ -72,10 +62,10 @@ class Byte(Field):
         Field.__init__(self, index)
         
     def getter(self, o):
-        return o.header.get_byte(self.index)
+        pass
     
     def setter(self, o, value):
-        o.header.set_byte(self.index, value)
+        pass
         
 class Word(Field):
     def __init__(self, index, order="!"):
@@ -83,10 +73,10 @@ class Word(Field):
         self.order = order
         
     def getter(self, o):
-        return o.header.get_word(self.index, self.order)
+        pass
     
     def setter(self, o, value):
-        o.header.set_word(self.index, value, self.order)
+        pass
 
 class Long(Field):        
     def __init__(self, index, order="!"):
@@ -94,28 +84,21 @@ class Long(Field):
         self.order = order
         
     def getter(self, o):
-        return o.header.get_long(self.index, self.order)
+        pass
     
     def setter(self, o, value):
-        o.header.set_long(self.index, value, self.order)
+        pass
         
 class ThreeBytesBigEndian(Field):
     def __init__(self, index):
         Field.__init__(self, index)
                 
     def getter(self, o):
-        b = ip.array_tobytes(o.header.get_bytes()[self.index:self.index+3])
-        #unpack requires a string argument of length 4 and b is 3 bytes long
-        (value,) = struct.unpack('!L', b'\x00'+b)
-        return value
+        pass
 
     def setter(self, o, value):
         # clear the bits
-        mask = ((~0xFFFFFF00) & 0xFF)
-        masked = o.header.get_long(self.index, ">") & mask
-        # set the bits 
-        nb = masked | ((value & 0x00FFFFFF) << 8)
-        o.header.set_long(self.index, nb, ">")
+        pass
 
 
 class ProtocolPacketMetaklass(type):

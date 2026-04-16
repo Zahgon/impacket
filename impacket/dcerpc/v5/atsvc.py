@@ -191,27 +191,13 @@ OPNUMS = {
 # HELPER FUNCTIONS
 ################################################################################
 def hNetrJobAdd(dce, serverName = NULL, atInfo = NULL):
-    netrJobAdd = NetrJobAdd()
-    netrJobAdd['ServerName'] = serverName
-    netrJobAdd['pAtInfo'] = atInfo
-    return dce.request(netrJobAdd)
+    pass
 
 def hNetrJobDel(dce, serverName = NULL, minJobId = 0, maxJobId = 0):
-    netrJobDel = NetrJobDel()
-    netrJobDel['ServerName'] = serverName
-    netrJobDel['MinJobId'] = minJobId
-    netrJobDel['MaxJobId'] = maxJobId
-    return dce.request(netrJobDel)
+    pass
 
 def hNetrJobEnum(dce, serverName = NULL, pEnumContainer = NULL, preferedMaximumLength = 0xffffffff):
-    netrJobEnum = NetrJobEnum()
-    netrJobEnum['ServerName'] = serverName
-    netrJobEnum['pEnumContainer']['Buffer'] = pEnumContainer
-    netrJobEnum['PreferedMaximumLength'] = preferedMaximumLength
-    return dce.request(netrJobEnum)
+    pass
 
 def hNetrJobGetInfo(dce, serverName = NULL, jobId = 0):
-    netrJobGetInfo = NetrJobGetInfo()
-    netrJobGetInfo['ServerName'] = serverName
-    netrJobGetInfo['JobId'] = jobId
-    return dce.request(netrJobGetInfo)
+    pass

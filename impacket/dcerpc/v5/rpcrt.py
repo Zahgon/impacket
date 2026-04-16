@@ -1365,10 +1365,7 @@ class DCERPC:
         # -1 is default fragment size: 0 for v5, 1300 y pico for v4
         #  0 is don't fragment
         #    other values are max fragment size
-        if fragment_size == -1:
-            self.set_default_max_fragment_size()
-        else:
-            self._max_user_frag = fragment_size
+        pass
 
     def set_default_max_fragment_size(self):
         # default is 0: don'fragment. v4 will override this method
@@ -1393,7 +1390,7 @@ class DCERPC:
         pass
 
     def get_idempotent(self):
-        return 0
+        pass
 
     def set_idempotent(self, flag):
         pass
@@ -1478,7 +1475,7 @@ class DCERPC_v5(DCERPC):
         self.__gss = None
 
     def set_aes(self, is_aes):
-        self.__aesNegociated = is_aes
+        pass
 
     def set_session_key(self, session_key):
         self.__sessionKey = session_key
@@ -2001,7 +1998,7 @@ class DCERPC_RawCall(MSRPCRequestHeader):
             self['uuid'] = uuid
 
     def setData(self, data):
-        self['pduData'] = data
+        pass
 
 # 2.2.6 Type Serialization Version 1
 class CommonHeader(NDRSTRUCT):
@@ -2071,7 +2068,7 @@ class DCERPCServer(Thread):
             self._sock.bind((self._listenAddress,self._listenPort))
 
     def set_client_socket(self, client_socket):
-        self._clientSock =client_socket
+        pass
 
     def log(self, msg, level=logging.INFO):
         self.__log.log(level,msg)
@@ -2090,14 +2087,10 @@ class DCERPCServer(Thread):
         self.log("Callback added for UUID %s V:%s" % ifaceUUID, level=logging.DEBUG)
 
     def setListenAddress(self,addr):
-        self._listenAddress=addr
-        self._sock = socket.socket()
-        self._sock.bind((self._listenAddress, self._listenPort))
+        pass
 
     def setListenPort(self, portNum):
-        self._listenPort = portNum
-        self._sock = socket.socket()
-        self._sock.bind((self._listenAddress,self._listenPort))
+        pass
 
     def getListenPort(self):
         return self._sock.getsockname()[1]

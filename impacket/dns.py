@@ -208,15 +208,15 @@ class DNS(ProtocolPacket):
     
     def set_transaction_id(self, value):
         'Set 16 bit message ID.'
-        self.header.set_word(0, value)
+        pass
     
     def get_transaction_id_tcp(self):
         'Get 16 bit message ID.'
-        return self.header.get_word(2)
+        pass
     
     def set_transaction_id_tcp(self, value):
         'Set 16 bit message ID.'
-        self.header.set_word(2, value)
+        pass
 
     def get_flags(self):
         'Get 16 bit flags.'
@@ -228,11 +228,11 @@ class DNS(ProtocolPacket):
 
     def get_flags_tcp(self):
         'Get 16 bit flags.'
-        return self.header.get_word(4)
+        pass
     
     def set_flags_tcp(self, value):
         'Set 16 bit flags.'
-        self.header.set_word(4, value)
+        pass
     
     def get_qdcount(self):
         'Get Unsigned 16 bit integer specifying the number of entries in the question section.'
@@ -240,15 +240,15 @@ class DNS(ProtocolPacket):
     
     def set_qdcount(self, value):
         'Set Unsigned 16 bit integer specifying the number of entries in the question section.'
-        self.header.set_word(4, value)
+        pass
     
     def get_qdcount_tcp(self):
         'Get Unsigned 16 bit integer specifying the number of entries in the question section.'
-        return self.header.get_word(6)
+        pass
     
     def set_qdcount_tcp(self, value):
         'Set Unsigned 16 bit integer specifying the number of entries in the question section.'
-        self.header.set_word(6, value)
+        pass
 
     def get_ancount(self):
         'Get Unsigned 16 bit integer specifying the number of resource records in the answer section'
@@ -256,7 +256,7 @@ class DNS(ProtocolPacket):
     
     def set_ancount(self, value):
         'Set Unsigned 16 bit integer specifying the number of resource records in the answer section'
-        self.header.set_word(6, value)
+        pass
     
     def get_nscount(self):
         'Get Unsigned 16 bit integer specifying the number of name server resource records in the authority section.'
@@ -264,7 +264,7 @@ class DNS(ProtocolPacket):
     
     def set_nscount(self, value):
         'Set Unsigned 16 bit integer specifying the number of name server resource records in the authority section.'
-        self.header.set_word(8, value)
+        pass
     
     def get_arcount(self):
         'Get Unsigned 16 bit integer specifying the number of resource records in the additional records section.'
@@ -272,7 +272,7 @@ class DNS(ProtocolPacket):
     
     def set_arcount(self, value):
         'Set Unsigned 16 bit integer specifying the number of resource records in the additional records section.'
-        self.header.set_word(10, value)
+        pass
     
     def get_questions(self):
         'Get a list of the DNS Question.'
@@ -296,23 +296,10 @@ class DNS(ProtocolPacket):
 
     def get_questions_tcp(self):
         'Get a list of the DNS Question.'
-        return self.__get_questions_tcp()[0]
+        pass
 
     def __get_questions_tcp(self):
-        aux = []
-        offset   = 2
-        qdcount = self.get_qdcount_tcp()
-        data    = self.get_body_as_string()
-        for _ in range(qdcount): # number of questions
-            offset, qname = self.parseCompressedMessage(data, offset)
-            qtype  = data[offset:offset+self.__TYPE_LEN]
-            offset  += self.__TYPE_LEN
-            qclass = data[offset:offset+self.__CLASS_LEN]
-            offset  += self.__CLASS_LEN
-            qtype  = struct.unpack("!H", qtype)[0]
-            qclass = struct.unpack("!H", qclass)[0]
-            aux.append((qname, qtype, qclass))
-        return (aux, offset)
+        pass
 
     def parseCompressedMessage(self, buf, offset=0):
         'Parse compressed message defined on rfc1035 4.1.4.'
@@ -522,55 +509,20 @@ class DNS(ProtocolPacket):
         return res
  
     def __get_questions_raw(self):
-        if self.get_qdcount() == 0:
-            return ''
-        questions_offset = self.__get_questions()[1]
-        raw_data  = self.get_body_as_string()[:questions_offset]
-        return raw_data
+        pass
 
     def __get_answers_raw(self):
-        if self.get_ancount() == 0:
-            return ''
-        questions_offset = self.__get_questions()[1]
-        answers_offset = self.__get_answers()[1]
-        raw_data  = self.get_body_as_string()[questions_offset: answers_offset]
-        return raw_data
+        pass
 
     def __get_authoritative_raw(self):
-        if self.get_nscount() == 0:
-            return ''
-        answers_offset = self.__get_answers()[1]
-        authoritative_offset = self.__get_authoritative()[1]
-        raw_data  = self.get_body_as_string()[answers_offset:authoritative_offset]
-        return raw_data
+        pass
 
     def __get_additionals_raw(self):
-        if self.get_arcount() == 0:
-            return ''
-        authoritative_offset = self.__get_authoritative()[1]
-        raw_data  = self.get_body_as_string()[authoritative_offset:]
-        return raw_data
+        pass
 
     def add_answer(self, answer_raw):
         '''Add a raw answer'''
-        questions_raw = self.__get_questions_raw()
-        answers_raw = self.__get_answers_raw()
-        authoritative_raw = self.__get_authoritative_raw()
-        additionals_raw = self.__get_additionals_raw()
-        
-        answers_raw += answer_raw
-        
-        body = questions_raw + answers_raw + authoritative_raw + additionals_raw
-        self.load_body(body) # It breaks children hierarchy
-        
-        # Increment the answer count  
-        cur_answer_count = self.get_ancount()+1
-        self.set_ancount(cur_answer_count)
+        pass
 
     def is_edns0(self):
-        additionals = self.get_additionals()
-        for item in additionals:
-            response_type = item[1]
-            if response_type == DNSType.OPT:
-                return True
-        return False
+        pass

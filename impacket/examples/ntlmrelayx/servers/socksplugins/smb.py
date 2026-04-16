@@ -65,7 +65,7 @@ class SMBSocksRelay(SocksRelay):
 
     @staticmethod
     def getProtocolPort():
-        return 445
+        pass
 
     def initConnection(self):
         # An incoming SMB Connection. Nice

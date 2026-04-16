@@ -213,11 +213,4 @@ OPNUMS = {
 ################################################################################
 
 def GkdiGetKey(dce, target_sd, l0 =-1, l1=-1, l2=-1, root_key_id=NULL):
-    request = GkdiRpcGetKey()
-    request['cbTargetSD'] = len(target_sd)
-    request['pbTargetSD'] = target_sd.getData()
-    request['pRootKeyID'] = root_key_id
-    request['L0KeyID'] = l0
-    request['L1KeyID'] = l1
-    request['L2KeyID'] = l2
-    return dce.request(request)
+    pass

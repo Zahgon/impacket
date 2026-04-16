@@ -122,7 +122,7 @@ class LDAPRelayClient(ProtocolClient):
 
     #This is a fake function for ldap3 which wants an NTLM client with specific methods
     def create_negotiate_message(self):
-        return self.negotiateMessage
+        pass
 
     def sendAuth(self, authenticateMessageBlob, serverChallenge=None):
         if unpack('B', authenticateMessageBlob[:1])[0] == SPNEGO_NegTokenResp.SPNEGO_NEG_TOKEN_RESP:
@@ -176,7 +176,7 @@ class LDAPRelayClient(ProtocolClient):
 
     #This is a fake function for ldap3 which wants an NTLM client with specific methods
     def create_authenticate_message(self):
-        return self.authenticateMessageBlob
+        pass
 
     #Placeholder function for ldap3
     def parse_challenge_message(self, message):
@@ -184,10 +184,7 @@ class LDAPRelayClient(ProtocolClient):
 
     def keepAlive(self):
         # Basic LDAP query to keep the connection alive
-        self.session.search(search_base='',
-            search_filter='(objectClass=*)',
-            search_scope='BASE',
-            attributes=['namingContexts'])
+        pass
 
 class LDAPSRelayClient(LDAPRelayClient):
     PLUGIN_NAME = "LDAPS"

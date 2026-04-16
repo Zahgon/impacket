@@ -20,10 +20,7 @@ try:
     any
 except NameError:
     def any(iterable):
-        for element in iterable:
-            if element:
-                return True
-        return False
+        pass
 
 
 class _RouteClassAttributeToGetattr(object):
@@ -52,34 +49,22 @@ class _RouteClassAttributeToGetattr(object):
 
 def _is_descriptor(obj):
     """Returns True if obj is a descriptor, False otherwise."""
-    return (
-            hasattr(obj, '__get__') or
-            hasattr(obj, '__set__') or
-            hasattr(obj, '__delete__'))
+    pass
 
 
 def _is_dunder(name):
     """Returns True if a __dunder__ name, False otherwise."""
-    return (name[:2] == name[-2:] == '__' and
-            name[2:3] != '_' and
-            name[-3:-2] != '_' and
-            len(name) > 4)
+    pass
 
 
 def _is_sunder(name):
     """Returns True if a _sunder_ name, False otherwise."""
-    return (name[0] == name[-1] == '_' and 
-            name[1:2] != '_' and
-            name[-2:-1] != '_' and
-            len(name) > 2)
+    pass
 
 
 def _make_class_unpicklable(cls):
     """Make the given class un-picklable."""
-    def _break_on_call_reduce(self):
-        raise TypeError('%r cannot be pickled' % self)
-    cls.__reduce__ = _break_on_call_reduce
-    cls.__module__ = '<unknown>'
+    pass
 
 
 class _EnumDict(dict):
@@ -398,46 +383,7 @@ class EnumMeta(type):
         * A mapping of member name -> value.
 
         """
-        metacls = cls.__class__
-        if type is None:
-            bases = (cls, )
-        else:
-            bases = (type, cls)
-        classdict = metacls.__prepare__(class_name, bases)
-        __order__ = []
-
-        # special processing needed for names?
-        if isinstance(names, str):
-            names = names.replace(',', ' ').split()
-        if isinstance(names, (tuple, list)) and isinstance(names[0], str):
-            names = [(e, i+1) for (i, e) in enumerate(names)]
-
-        # Here, names is either an iterable of (name, value) or a mapping.
-        for item in names:
-            if isinstance(item, str):
-                member_name, member_value = item, names[item]
-            else:
-                member_name, member_value = item
-            classdict[member_name] = member_value
-            __order__.append(member_name)
-        # only set __order__ in classdict if name/value was not from a mapping
-        if not isinstance(item, str):
-            classdict['__order__'] = ' '.join(__order__)
-        enum_class = metacls.__new__(metacls, class_name, bases, classdict)
-
-        # TODO: replace the frame hack if a blessed way to know the calling
-        # module is ever developed
-        if module is None:
-            try:
-                module = _sys._getframe(2).f_globals['__name__']
-            except (AttributeError, ValueError):
-                pass
-        if module is None:
-            _make_class_unpicklable(enum_class)
-        else:
-            enum_class.__module__ = module
-
-        return enum_class
+        pass
 
     @staticmethod
     def _get_mixins_(bases):
@@ -447,43 +393,7 @@ class EnumMeta(type):
         bases: the tuple of bases that was given to __new__
 
         """
-        if not bases or Enum is None:
-            return object, Enum
-        
-
-        # double check that we are not subclassing a class with existing
-        # enumeration members; while we're at it, see if any other data
-        # type has been mixed in so we can use the correct __new__
-        member_type = first_enum = None
-        for base in bases:
-            if  (base is not Enum and
-                    issubclass(base, Enum) and
-                    base._member_names_):
-                raise TypeError("Cannot extend enumerations")
-        # base is now the last base in bases
-        if not issubclass(base, Enum):
-            raise TypeError("new enumerations must be created as "
-                    "`ClassName([mixin_type,] enum_type)`")
-
-        # get correct mix-in type (either mix-in type of Enum subclass, or
-        # first base if last base is Enum)
-        if not issubclass(bases[0], Enum):
-            member_type = bases[0]     # first data type
-            first_enum = bases[-1]  # enum type
-        else:
-            for base in bases[0].__mro__:
-                # most common: (IntEnum, int, Enum, object)
-                # possible:    (<Enum 'AutoIntEnum'>, <Enum 'IntEnum'>,
-                #               <class 'int'>, <Enum 'Enum'>,
-                #               <class 'object'>)
-                if issubclass(base, Enum):
-                    if first_enum is None:
-                        first_enum = base
-                else:
-                    if member_type is None:
-                        member_type = base
-
-        return member_type, first_enum
+        pass
 
     if pyver < 3.0:
         @staticmethod
@@ -495,54 +405,7 @@ class EnumMeta(type):
             first_enum: enumeration to check for an overriding __new__
 
             """
-            # now find the correct __new__, checking to see of one was defined
-            # by the user; also check earlier enum classes in case a __new__ was
-            # saved as __member_new__
-            __new__ = classdict.get('__new__', None)
-            if __new__:
-                return None, True, True      # __new__, save_new, use_args
-
-            N__new__ = getattr(None, '__new__')
-            O__new__ = getattr(object, '__new__')
-            if Enum is None:
-                E__new__ = N__new__
-            else:
-                E__new__ = Enum.__dict__['__new__']
-            # check all possibles for __member_new__ before falling back to
-            # __new__
-            for method in ('__member_new__', '__new__'):
-                for possible in (member_type, first_enum):
-                    try:
-                        target = possible.__dict__[method]
-                    except (AttributeError, KeyError):
-                        target = getattr(possible, method, None)
-                    if target not in [
-                            None,
-                            N__new__,
-                            O__new__,
-                            E__new__,
-                            ]:
-                        if method == '__member_new__':
-                            classdict['__new__'] = target
-                            return None, False, True
-                        if isinstance(target, staticmethod):
-                            target = target.__get__(member_type)
-                        __new__ = target
-                        break
-                if __new__ is not None:
-                    break
-            else:
-                __new__ = object.__new__
-
-            # if a non-object.__new__ is used then whatever value/tuple was
-            # assigned to the enum member name will be passed to __new__ and to the
-            # new enum member's __init__
-            if __new__ is object.__new__:
-                use_args = False
-            else:
-                use_args = True
-
-            return __new__, False, use_args
+            pass
     else:
         @staticmethod
         def _find_new_(classdict, member_type, first_enum):
@@ -553,42 +416,7 @@ class EnumMeta(type):
             first_enum: enumeration to check for an overriding __new__
 
             """
-            # now find the correct __new__, checking to see of one was defined
-            # by the user; also check earlier enum classes in case a __new__ was
-            # saved as __member_new__
-            __new__ = classdict.get('__new__', None)
-
-            # should __new__ be saved as __member_new__ later?
-            save_new = __new__ is not None
-
-            if __new__ is None:
-                # check all possibles for __member_new__ before falling back to
-                # __new__
-                for method in ('__member_new__', '__new__'):
-                    for possible in (member_type, first_enum):
-                        target = getattr(possible, method, None)
-                        if target not in (
-                                None,
-                                None.__new__,
-                                object.__new__,
-                                Enum.__new__,
-                                ):
-                            __new__ = target
-                            break
-                    if __new__ is not None:
-                        break
-                else:
-                    __new__ = object.__new__
-
-            # if a non-object.__new__ is used then whatever value/tuple was
-            # assigned to the enum member name will be passed to __new__ and to the
-            # new enum member's __init__
-            if __new__ is object.__new__:
-                use_args = False
-            else:
-                use_args = True
-
-            return __new__, save_new, use_args
+            pass
 
 
 ########################################################
@@ -728,13 +556,13 @@ del __hash__
 
 @_RouteClassAttributeToGetattr
 def name(self):
-    return self._name_
+    pass
 temp_enum_dict['name'] = name
 del name
 
 @_RouteClassAttributeToGetattr
 def value(self):
-    return self._value_
+    pass
 temp_enum_dict['value'] = value
 del value
 
@@ -750,15 +578,4 @@ class IntEnum(int, Enum):
 
 def unique(enumeration):
     """Class decorator that ensures only unique members exist in an enumeration."""
-    duplicates = []
-    for name, member in enumeration.__members__.items():
-        if name != member.name:
-            duplicates.append((name, member.name))
-    if duplicates:
-        duplicate_names = ', '.join(
-                ["%s -> %s" % (alias, name) for (alias, name) in duplicates]
-                )
-        raise ValueError('duplicate names found in %r: %s' %
-                (enumeration, duplicate_names)
-                )
-    return enumeration
+    pass

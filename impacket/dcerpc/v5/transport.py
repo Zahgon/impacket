@@ -64,7 +64,7 @@ class DCERPCStringBinding:
             self.__options = {}
 
     def get_uuid(self):
-        return self.__uuid
+        pass
 
     def get_protocol_sequence(self):
         return self.__ps
@@ -79,7 +79,7 @@ class DCERPCStringBinding:
         return self.__endpoint
 
     def get_options(self):
-        return self.__options
+        pass
 
     def get_option(self, option_name):
         return self.__options[option_name]
@@ -88,7 +88,7 @@ class DCERPCStringBinding:
         return option_name in self.__options
 
     def unset_option(self, option_name):
-        del self.__options[option_name]
+        pass
 
     def __str__(self):
         return DCERPCStringBindingCompose(self.__uuid, self.__ps, self.__na, self.__endpoint, self.__options)
@@ -225,8 +225,7 @@ class DCERPCTransport:
         return self.getRemoteHost(), self.get_dport()
     def set_addr(self, addr):
         """This method only makes sense before connection for most protocols."""
-        self.setRemoteHost(addr[0])
-        self.set_dport(addr[1])
+        pass
 
     def set_kerberos(self, flag, kdcHost = None):
         self._doKerberos = flag
@@ -242,10 +241,7 @@ class DCERPCTransport:
         # -1 is default fragment size: 0 (don't fragment)
         #  0 is don't fragment
         #    other values are max fragment size
-        if send_fragment_size == -1:
-            self.set_default_max_fragment_size()
-        else:
-            self._max_send_frag = send_fragment_size
+        pass
 
     def set_hostname_validation(self, validate, accept_empty, hostname):
         self._strict_hostname_validation = validate
@@ -333,7 +329,7 @@ class UDPTransport(DCERPCTransport):
         return buffer
 
     def get_recv_addr(self):
-        return self.__recv_addr
+        pass
 
     def get_socket(self):
         return self.__socket
@@ -420,7 +416,7 @@ class HTTPTransport(TCPTransport, RPCProxyClient):
         self._rpcProxyUrl = urlparse(url)
 
     def get_rpc_proxy_url(self):
-        return urlunparse(self._rpcProxyUrl)
+        pass
 
     def set_stringbinding(self, set_stringbinding):
         DCERPCTransport.set_stringbinding(self, set_stringbinding)
@@ -502,7 +498,7 @@ class SMBTransport(DCERPCTransport):
         self.set_connect_timeout(30)
 
     def preferred_dialect(self, dialect):
-        self.__prefDialect = dialect
+        pass
 
     def setup_smb_connection(self):
         if not self.__smb_connection:
@@ -560,7 +556,7 @@ class SMBTransport(DCERPCTransport):
             return self.__smb_connection.readFile(self.__tid, self.__handle)
 
     def get_smb_connection(self):
-        return self.__smb_connection
+        pass
 
     def set_smb_connection(self, smb_connection):
         self.__smb_connection = smb_connection
@@ -569,7 +565,7 @@ class SMBTransport(DCERPCTransport):
 
     def get_smb_server(self):
         # Raw Access to the SMBServer (whatever type it is)
-        return self.__smb_connection.getSMBServer()
+        pass
 
     def get_socket(self):
         return self.__socket

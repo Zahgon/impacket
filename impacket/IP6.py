@@ -129,32 +129,22 @@ class IP6(Header):
 
 
     def set_traffic_class(self, traffic_class):
-        b0 = self.get_byte(0) & 0xF0
-        b1 = self.get_byte(1) & 0x0F
-        b0 |= (traffic_class & 0xF0) >> 4
-        b1 |= (traffic_class & 0x0F) << 4
-        self.set_byte(0, b0)
-        self.set_byte(1, b1)
+        pass
     
 
     def set_flow_label(self, flow_label):
-        b1 = self.get_byte(1) & 0xF0
-        b1 |= (flow_label & 0xF0000) >> 16
-        self.set_byte(1, b1)
-        self.set_byte(2, (flow_label & 0x0FF00) >> 8)
-        self.set_byte(3, (flow_label & 0x000FF))
+        pass
  
 
     def set_payload_length(self, payload_length):
-        self.set_byte(4, (payload_length & 0xFF00) >> 8)
-        self.set_byte(5, (payload_length & 0x00FF))
+        pass
     
 
     def set_next_header(self, next_header):
         self.set_byte(6, next_header)
     
     def set_hop_limit(self, hop_limit):
-        self.set_byte(7, hop_limit)
+        pass
     
     def set_ip_src(self, source_address):
         address = IP6_Address(source_address)
@@ -169,25 +159,19 @@ class IP6(Header):
         self.set_bytes(bytes)
         
     def get_protocol_version(self):
-        LOG.warning('deprecated soon')
-        return self.get_ip_v()    
+        pass
     
     def get_source_address(self):
-        LOG.warning('deprecated soon')
-        return self.get_ip_src()
+        pass
     
     def get_destination_address(self):
-        LOG.warning('deprecated soon')
-        return self.get_ip_dst()
+        pass
     
     def set_protocol_version(self, version):
-        LOG.warning('deprecated soon')
-        self.set_ip_v(version)
+        pass
     
     def set_source_address(self, source_address):
-        LOG.warning('deprecated soon')
-        self.set_ip_src(source_address)
+        pass
     
     def set_destination_address(self, destination_address):
-        LOG.warning('deprecated soon')
-        self.set_ip_dst(destination_address)
+        pass

@@ -508,16 +508,7 @@ def hRpcOpenPrinter(dce, printerName, pDatatype = NULL, pDevModeContainer = NULL
 
     :return: a RpcOpenPrinterResponse instance, raises DCERPCSessionError on error.
     """
-    request = RpcOpenPrinter()
-    request['pPrinterName'] = checkNullString(printerName)
-    request['pDatatype'] = pDatatype
-    if pDevModeContainer is NULL:
-        request['pDevModeContainer']['pDevMode'] = NULL
-    else:
-        request['pDevModeContainer'] = pDevModeContainer
-
-    request['AccessRequired'] = accessRequired
-    return dce.request(request)
+    pass
 
 def hRpcClosePrinter(dce, phPrinter):
     """
@@ -529,9 +520,7 @@ def hRpcClosePrinter(dce, phPrinter):
 
     :return: a RpcClosePrinterResponse instance, raises DCERPCSessionError on error.
     """
-    request = RpcClosePrinter()
-    request['phPrinter'] = phPrinter
-    return dce.request(request)
+    pass
 
 
 def hRpcOpenPrinterEx(dce, printerName, pDatatype=NULL, pDevModeContainer=NULL, accessRequired=SERVER_READ,
@@ -554,20 +543,7 @@ def hRpcOpenPrinterEx(dce, printerName, pDatatype=NULL, pDevModeContainer=NULL, 
 
     :return: a RpcOpenPrinterExResponse instance, raises DCERPCSessionError on error.
     """
-    request = RpcOpenPrinterEx()
-    request['pPrinterName'] = checkNullString(printerName)
-    request['pDatatype'] = pDatatype
-    if pDevModeContainer is NULL:
-        request['pDevModeContainer']['pDevMode'] = NULL
-    else:
-        request['pDevModeContainer'] = pDevModeContainer
-
-    request['AccessRequired'] = accessRequired
-    if pClientInfo is NULL:
-        raise Exception('pClientInfo cannot be NULL')
-
-    request['pClientInfo'] = pClientInfo
-    return dce.request(request)
+    pass
 
 
 def hRpcRemoteFindFirstPrinterChangeNotificationEx(dce, hPrinter, fdwFlags, fdwOptions=0, pszLocalMachine=NULL,
@@ -588,17 +564,7 @@ def hRpcRemoteFindFirstPrinterChangeNotificationEx(dce, hPrinter, fdwFlags, fdwO
 
     :return: a RpcRemoteFindFirstPrinterChangeNotificationExResponse instance, raises DCERPCSessionError on error.
     """
-    request = RpcRemoteFindFirstPrinterChangeNotificationEx()
-
-    request['hPrinter'] = hPrinter
-    request['fdwFlags'] = fdwFlags
-    request['fdwOptions'] = fdwOptions
-    request['dwPrinterLocal'] = dwPrinterLocal
-    if pszLocalMachine is NULL:
-        raise Exception('pszLocalMachine cannot be NULL')
-    request['pszLocalMachine'] = checkNullString(pszLocalMachine)
-    request['pOptions'] = pOptions
-    return dce.request(request)
+    pass
 
 def hRpcEnumPrinters(dce, flags, name = NULL, level = 1):
     """
@@ -613,27 +579,7 @@ def hRpcEnumPrinters(dce, flags, name = NULL, level = 1):
 
     :return: a RpcEnumPrintersResponse instance, raises DCERPCSessionError on error.
     """
-    request = RpcEnumPrinters()
-    request['Flags'] = flags
-    request['Name'] = name
-    request['pPrinterEnum'] = NULL
-    request['Level'] = level
-    bytesNeeded = 0
-    try:
-        dce.request(request)
-    except DCERPCSessionError as e:
-        if str(e).find('ERROR_INSUFFICIENT_BUFFER') < 0:
-            raise
-        bytesNeeded = e.get_packet()['pcbNeeded']
-
-    request = RpcEnumPrinters()
-    request['Flags'] = flags
-    request['Name'] = name
-    request['Level'] = level
-
-    request['cbBuf'] = bytesNeeded
-    request['pPrinterEnum'] = b'a' * bytesNeeded
-    return dce.request(request)
+    pass
 
 
 def hRpcAddPrinterDriverEx(dce, pName, pDriverContainer, dwFileCopyFlags):
@@ -648,13 +594,7 @@ def hRpcAddPrinterDriverEx(dce, pName, pDriverContainer, dwFileCopyFlags):
 
     :return: raises DCERPCSessionError on error.
     """
-    request = RpcAddPrinterDriverEx()
-    request['pName'] = checkNullString(pName)
-    request['pDriverContainer'] = pDriverContainer
-    request['dwFileCopyFlags'] = dwFileCopyFlags
-
-    #return request
-    return dce.request(request)
+    pass
 
 
 def hRpcEnumPrinterDrivers(dce, pName, pEnvironment, Level):
@@ -673,30 +613,7 @@ def hRpcEnumPrinterDrivers(dce, pName, pEnvironment, Level):
 
     :return: raises DCERPCSessionError on error.
     """
-    # get value for cbBuf
-    request = RpcEnumPrinterDrivers()
-    request['pName']        = checkNullString(pName)
-    request['pEnvironment'] = pEnvironment
-    request['Level']        = Level
-    request['pDrivers']     = NULL
-    request['cbBuf']        = 0
-    try:
-        dce.request(request)
-    except DCERPCSessionError as e:
-        if str(e).find('ERROR_INSUFFICIENT_BUFFER') < 0:
-            raise
-        bytesNeeded = e.get_packet()['pcbNeeded']
-
-    # now do RpcEnumPrinterDrivers again
-    request = RpcEnumPrinterDrivers()
-    request['pName']        = checkNullString(pName)
-    request['pEnvironment'] = pEnvironment
-    request['Level']        = Level
-    request['pDrivers']     = b'a' * bytesNeeded
-    request['cbBuf']        = bytesNeeded
-
-    #return request
-    return dce.request(request)
+    pass
 
 def hRpcGetPrinterDriverDirectory(dce, pName, pEnvironment, Level):
     """
@@ -713,26 +630,4 @@ def hRpcGetPrinterDriverDirectory(dce, pName, pEnvironment, Level):
 
     :return: raises DCERPCSessionError on error.
     """
-    # get value for cbBuf
-    request = RpcGetPrinterDriverDirectory()
-    request['pName']            = checkNullString(pName)
-    request['pEnvironment']     = pEnvironment
-    request['Level']            = Level
-    request['pDriverDirectory'] = NULL
-    request['cbBuf']            = 0
-    try:
-        dce.request(request)
-    except DCERPCSessionError as e:
-        if str(e).find('ERROR_INSUFFICIENT_BUFFER') < 0:
-            raise
-        bytesNeeded = e.get_packet()['pcbNeeded']
-    
-    # now do RpcGetPrinterDriverDirectory again
-    request = RpcGetPrinterDriverDirectory()
-    request['pName']            = checkNullString(pName)
-    request['pEnvironment']     = pEnvironment
-    request['Level']            = Level
-    request['pDriverDirectory'] = b'a' * bytesNeeded
-    request['cbBuf']            = bytesNeeded
-    
-    return dce.request(request)
+    pass

@@ -15,7 +15,7 @@ class LDAPSSocksRelay(SSLServerMixin, LDAPSocksRelay):
 
     @staticmethod
     def getProtocolPort():
-        return 636
+        pass
 
     def skipAuthentication(self):
         LOG.debug('Wrapping client connection in TLS/SSL')

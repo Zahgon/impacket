@@ -95,7 +95,7 @@ class handle_t(NDRSTRUCT):
         self['context_handle_uuid'] = b'\x00'*16
 
     def isNull(self):
-        return self['context_handle_uuid'] == b'\x00'*16
+        pass
 
 CONTEXT_HANDLE_REMOTE_SUBSCRIPTION = handle_t
 
@@ -430,90 +430,31 @@ OPNUMS = {
 ################################################################################
 
 def hEvtRpcRegisterRemoteSubscription(dce, channelPath, query, bookmarkXml, flags):
-    request = EvtRpcRegisterRemoteSubscription()
-    request['channelPath'] = checkNullString(channelPath)
-    request['query'] = checkNullString(query)
-    request['bookmarkXml'] = checkNullString(bookmarkXml)
-    request['Flags'] = flags
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hEvtRpcRemoteSubscriptionNext(dce, handle, numRequestedRecords, timeOut=1000, flags=0):
-    request = EvtRpcRemoteSubscriptionNext()
-    request['Handle'] = handle
-    request['NumRequestedRecords'] = numRequestedRecords
-    request['TimeOut'] = timeOut
-    request['Flags'] = flags
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hEvtRpcRegisterControllableOperation(dce):
-    request = EvtRpcRegisterControllableOperation()
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hEvtRpcRegisterLogQuery(dce, path, flags, query='*\x00'):
-    request = EvtRpcRegisterLogQuery()
-    request['Path'] = checkNullString(path)
-    request['Query'] = checkNullString(query)
-    request['Flags'] = flags
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hEvtRpcClearLog(dce, handle, path, backupPath=NULL):
-    request = EvtRpcClearLog()
-    request['Handle'] = handle
-    request['ChannelPath'] = checkNullString(path)
-    request['BackupPath'] = checkNullString(backupPath)
-    request['Flags'] = 0
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hEvtRpcExportLog(dce, handle, channelPath, query, backupPath):
-    request = EvtRpcExportLog()
-    request['Handle'] = handle
-    request['ChannelPath'] = checkNullString(channelPath)
-    request['Query'] = checkNullString(query)
-    request['BackupPath'] = checkNullString(backupPath)
-    request['Flags'] = 0
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hEvtRpcQueryNext(dce, handle, numRequestedRecords, timeOutEnd=1000):
-    request = EvtRpcQueryNext()
-
-    request['LogQuery'] = handle
-    request['NumRequestedRecords'] = numRequestedRecords
-    request['TimeOutEnd'] = timeOutEnd
-    request['Flags'] = 0
-    status = system_errors.ERROR_MORE_DATA
-    resp = dce.request(request)
-    while status == system_errors.ERROR_MORE_DATA:
-        try:
-            resp = dce.request(request)
-        except DCERPCException as e:
-            if str(e).find('ERROR_NO_MORE_ITEMS') < 0:
-                raise
-            elif str(e).find('ERROR_TIMEOUT') < 0:
-                raise
-            resp = e.get_packet()
-        return resp
+    pass
 
 def hEvtRpcClose(dce, handle):
-    request = EvtRpcClose()
-    request['Handle'] = handle
-    resp = dce.request(request)
-    return resp
+    pass
 
 def hEvtRpcOpenLogHandle(dce, channel, flags):
-    request = EvtRpcOpenLogHandle()
-    request['Channel'] = checkNullString(channel)
-    request['Flags'] = flags
-    return dce.request(request)
+    pass
 
 def hEvtRpcGetChannelList(dce):
-    request = EvtRpcGetChannelList()
-
-    request['Flags'] = 0
-    resp = dce.request(request)
-    return resp
+    pass

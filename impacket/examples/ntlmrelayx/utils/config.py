@@ -116,186 +116,131 @@ class NTLMRelayxConfig:
         self.SCCMDPFiles = None
 
     def setSMBChallenge(self, value):
-        self.SMBServerChallenge = value
+        pass
 
     def setSMBRPCAttack(self, value):
-        self.rpc_attack = value
+        pass
 
     def setSMB2Support(self, value):
-        self.smb2support = value
+        pass
 
     def setProtocolClients(self, clients):
-        self.protocolClients = clients
+        pass
 
     def setInterfaceIp(self, ip):
-        self.interfaceIp = ip
+        pass
 
     def setListeningPort(self, port):
-        self.listeningPort = port
+        pass
 
     def setRunSocks(self, socks, server):
-        self.runSocks = socks
-        self.socksServer = server
+        pass
 
     def setOutputFile(self, outputFile):
-        self.outputFile = outputFile
+        pass
 
     def setdumpHashes(self, dumpHashes):
-        self.dumpHashes = dumpHashes
+        pass
 
     def setTargets(self, target):
-        self.target = target
+        pass
 
     def setExeFile(self, filename):
-        self.exeFile = filename
+        pass
 
     def setCommand(self, command):
-        self.command = command
+        pass
 
     def setEnumLocalAdmins(self, enumLocalAdmins):
-        self.enumLocalAdmins = enumLocalAdmins
+        pass
 
     def setAddComputerSMB(self, addComputerSMB):
-        self.addComputerSMB = addComputerSMB
+        pass
 
     def setDisableMulti(self, disableMulti):
-        self.disableMulti = disableMulti
+        pass
 
     def setKeepRelaying(self, keepRelaying):
-        self.keepRelaying = keepRelaying
+        pass
 
     def setEncoding(self, encoding):
-        self.encoding = encoding
+        pass
 
     def setMode(self, mode):
-        self.mode = mode
+        pass
 
     def setAttacks(self, attacks):
-        self.attacks = attacks
+        pass
 
     def setLootdir(self, lootdir):
-        self.lootdir = lootdir
+        pass
 
     def setRedirectHost(self, redirecthost):
-        self.redirecthost = redirecthost
+        pass
 
     def setDomainAccount(self, machineAccount, machineHashes, domainIp):
         # Don't set this if we're not exploiting it
-        if not self.remove_target:
-            return
-        if machineAccount is None or machineHashes is None or domainIp is None:
-            raise Exception("You must specify machine-account/hashes/domain all together!")
-        self.machineAccount = machineAccount
-        self.machineHashes = machineHashes
-        self.domainIp = domainIp
+        pass
 
     def setRandomTargets(self, randomtargets):
-        self.randomtargets = randomtargets
+        pass
 
     def setLDAPOptions(self, dumpdomain, addda, aclattack, validateprivs, escalateuser, addcomputer, delegateaccess, dumplaps, dumpgmsa, dumpadcs, sid, adddnsrecord):
-        self.dumpdomain = dumpdomain
-        self.addda = addda
-        self.aclattack = aclattack
-        self.validateprivs = validateprivs
-        self.escalateuser = escalateuser
-        self.addcomputer = addcomputer
-        self.delegateaccess = delegateaccess
-        self.dumplaps = dumplaps
-        self.dumpgmsa = dumpgmsa
-        self.dumpadcs = dumpadcs
-        self.sid = sid
-        self.adddnsrecord = adddnsrecord
+        pass
 
     def setMSSQLOptions(self, queries):
-        self.queries = queries
+        pass
 
     def setRPCOptions(self, rpc_mode, rpc_use_smb, auth_smb, hashes_smb, rpc_smb_port, icpr_ca_name):
-        self.rpc_mode = rpc_mode
-        self.rpc_use_smb = rpc_use_smb
-        self.smbdomain, self.smbuser, self.smbpass = parse_credentials(auth_smb)
-
-        if hashes_smb is not None:
-            self.smblmhash, self.smbnthash = hashes_smb.split(':')
-        else:
-            self.smblmhash = ''
-            self.smbnthash = ''
-
-        self.rpc_smb_port = rpc_smb_port
-        self.icpr_ca_name = icpr_ca_name
+        pass
 
     def setInteractive(self, interactive):
-        self.interactive = interactive
+        pass
 
     def setIMAPOptions(self, keyword, mailbox, dump_all, dump_max):
-        self.keyword = keyword
-        self.mailbox = mailbox
-        self.dump_all = dump_all
-        self.dump_max = dump_max
+        pass
 
     def setIPv6(self, use_ipv6):
-        self.ipv6 = use_ipv6
+        pass
 
     def setWpadOptions(self, wpad_host, wpad_auth_num):
-        if wpad_host is not None:
-            self.serve_wpad = True
-        self.wpad_host = wpad_host
-        self.wpad_auth_num = wpad_auth_num
+        pass
 
     def setExploitOptions(self, remove_mic, remove_target, remove_sign_seal=False):
-        self.remove_mic = remove_mic
-        self.remove_target = remove_target
-        self.remove_sign_seal = remove_sign_seal
+        pass
 
     def setWebDAVOptions(self, serve_image):
-        self.serve_image = serve_image
+        pass
 
     def setADCSOptions(self, template):
-        self.template = template
+        pass
 
     def setIsADCSAttack(self, isADCSAttack):
-        self.isADCSAttack = isADCSAttack
+        pass
 
     def setIsShadowCredentialsAttack(self, IsShadowCredentialsAttack):
-        self.IsShadowCredentialsAttack = IsShadowCredentialsAttack
+        pass
 
     def setShadowCredentialsOptions(self, ShadowCredentialsTarget, ShadowCredentialsPFXPassword, ShadowCredentialsExportType, ShadowCredentialsOutfilePath):
-        self.ShadowCredentialsTarget = ShadowCredentialsTarget
-        self.ShadowCredentialsPFXPassword = ShadowCredentialsPFXPassword
-        self.ShadowCredentialsExportType = ShadowCredentialsExportType
-        self.ShadowCredentialsOutfilePath = ShadowCredentialsOutfilePath
+        pass
     
     def setIsSCCMPoliciesAttack(self, isSCCMPoliciesAttack):
-        self.isSCCMPoliciesAttack = isSCCMPoliciesAttack
+        pass
     
     def setSCCMPoliciesOptions(self, sccm_policies_clientname, sccm_policies_sleep):
-        self.SCCMPoliciesClientname = sccm_policies_clientname
-        self.SCCMPoliciesSleep = sccm_policies_sleep
+        pass
     
     def setIsSCCMDPAttack(self, isSCCMDPAttack):
-        self.isSCCMDPAttack = isSCCMDPAttack
+        pass
     
     def setSCCMDPOptions(self, sccm_dp_extensions, sccm_dp_files):
-        self.SCCMDPExtensions = sccm_dp_extensions
-        self.SCCMDPFiles = sccm_dp_files       
+        pass
             
     def setMSSQLDb(self, mssql_db):
-        self.database = mssql_db
+        pass
 
     def setAltName(self, altName):
-        self.altName = altName
+        pass
 
 def parse_listening_ports(value):
-    ports = set()
-    for entry in value.split(","):
-        items = entry.split("-")
-        if len(items) > 2:
-            raise ValueError
-        if len(items) == 1:
-            ports.add(int(items[0])) # Can raise ValueError if casted value not an Int, will be caught by calling method
-            continue
-        item1, item2 = map(int, items) # Can raise ValueError if casted values not an Int, will be caught by calling method
-        if item2 < item1:
-            raise ValueError("Upper bound in port range smaller than lower bound")
-        ports.update(range(item1, item2 + 1))
-
-    return ports
+    pass

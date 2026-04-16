@@ -112,10 +112,10 @@ class Structure:
         return answer
 
     def setAlignment(self, alignment):
-        self.alignment = alignment
+        pass
 
     def setData(self, data):
-        self.data = data
+        pass
 
     def packField(self, fieldName, format = None):
         if self.debug:
@@ -667,20 +667,4 @@ def hexdump(data, indent = ''):
         i += 16
 
 def parse_bitmask(dict, value):
-    ret = ''
-    
-    for i in range(0, 31):
-        flag = 1 << i
-
-        if value & flag == 0:
-            continue
-
-        if flag in dict:
-            ret += '%s | ' % dict[flag]
-        else:
-            ret += "0x%.8X | " % flag
-
-    if len(ret) == 0:
-        return '0'
-    else:
-        return ret[:-3]
+    pass

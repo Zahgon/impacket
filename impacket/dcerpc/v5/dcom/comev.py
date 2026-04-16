@@ -1244,82 +1244,40 @@ class IEventClass(IDispatch):
         self._iid = IID_IEventClass
 
     def get_EventClassID(self):
-        request = IEventClass_get_EventClassID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_EventClassID(self,bstrEventClassID):
-        request = IEventClass_put_EventClassID()
-        request['bstrEventClassID'] = bstrEventClassID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_EventClassName(self):
-        request = IEventClass_get_EventClassName()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_EventClassName(self, bstrEventClassName):
-        request = IEventClass_put_EventClassName()
-        request['bstrEventClassName'] = bstrEventClassName
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_OwnerSID(self):
-        request = IEventClass_get_OwnerSID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_OwnerSID(self, bstrOwnerSID):
-        request = IEventClass_put_OwnerSID()
-        request['bstrOwnerSID'] = bstrOwnerSID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_FiringInterfaceID(self):
-        request = IEventClass_get_FiringInterfaceID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_FiringInterfaceID(self, bstrFiringInterfaceID):
-        request = IEventClass_put_FiringInterfaceID()
-        request['bstrFiringInterfaceID'] = bstrFiringInterfaceID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_Description(self):
-        request = IEventClass_get_Description()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_Description(self, bstrDescription):
-        request = IEventClass_put_Description()
-        request['bstrDescription'] = bstrDescription
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_TypeLib(self):
-        request = IEventClass_get_TypeLib()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_TypeLib(self, bstrTypeLib):
-        request = IEventClass_put_TypeLib()
-        request['bstrTypeLib'] = bstrTypeLib
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
 class IEventClass2(IEventClass):
     def __init__(self, interface):
@@ -1327,56 +1285,28 @@ class IEventClass2(IEventClass):
         self._iid = IID_IEventClass2
 
     def get_PublisherID(self):
-        request = IEventClass2_get_PublisherID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_PublisherID(self, bstrPublisherID):
-        request = IEventClass2_put_PublisherID()
-        request['bstrPublisherID'] = bstrPublisherID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_MultiInterfacePublisherFilterCLSID(self):
-        request = IEventClass2_get_MultiInterfacePublisherFilterCLSID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_MultiInterfacePublisherFilterCLSID(self, bstrPubFilCLSID):
-        request = IEventClass2_put_MultiInterfacePublisherFilterCLSID()
-        request['bstrPubFilCLSID'] = bstrPubFilCLSID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_AllowInprocActivation(self):
-        request = IEventClass2_get_AllowInprocActivation()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_AllowInprocActivation(self, fAllowInprocActivation):
-        request = IEventClass2_put_AllowInprocActivation()
-        request['fAllowInprocActivation '] = fAllowInprocActivation
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_FireInParallel(self):
-        request = IEventClass2_get_FireInParallel()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_FireInParallel(self, fFireInParallel):
-        request = IEventClass2_put_FireInParallel()
-        request['fFireInParallel '] = fFireInParallel
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
 class IEventClass3(IEventClass2):
     def __init__(self, interface):
@@ -1384,30 +1314,16 @@ class IEventClass3(IEventClass2):
         self._iid = IID_IEventClass3
 
     def get_EventClassPartitionID(self):
-        request = IEventClass3_get_EventClassPartitionID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_EventClassPartitionID(self, bstrEventClassPartitionID):
-        request = IEventClass3_put_EventClassPartitionID()
-        request['bstrEventClassPartitionID '] = bstrEventClassPartitionID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_EventClassApplicationID(self):
-        request = IEventClass3_get_EventClassApplicationID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_EventClassApplicationID(self, bstrEventClassApplicationID):
-        request = IEventClass3_put_EventClassApplicationID()
-        request['bstrEventClassApplicationID '] = bstrEventClassApplicationID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
 class IEventSubscription(IDispatch):
     def __init__(self, interface):
@@ -1415,226 +1331,106 @@ class IEventSubscription(IDispatch):
         self._iid = IID_IEventSubscription
 
     def get_SubscriptionID(self):
-        request = IEventSubscription_get_SubscriptionID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_SubscriptionID(self, bstrSubscriptionID):
-        request = IEventSubscription_put_SubscriptionID()
-        request['bstrSubscriptionID'] = bstrSubscriptionID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_SubscriptionName(self):
-        request = IEventSubscription_get_SubscriptionName()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def put_SubscriptionName(self, bstrSubscriptionName):
-        request = IEventSubscription_put_SubscriptionName()
-        request['bstrSubscriptionName'] = bstrSubscriptionName
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_PublisherID(self):
-        request = IEventSubscription_get_PublisherID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_PublisherID(self, bstrPublisherID):
-        request = IEventSubscription_put_PublisherID()
-        request['bstrPublisherID'] = bstrPublisherID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_EventClassID(self):
-        request = IEventSubscription_get_EventClassID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_EventClassID(self, pbstrEventClassID):
-        request = IEventSubscription_put_EventClassID()
-        request['pbstrEventClassID'] = pbstrEventClassID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_MethodName(self):
-        request = IEventSubscription_get_MethodName()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_MethodName(self, bstrMethodName):
-        request = IEventSubscription_put_MethodName()
-        request['bstrMethodName'] = bstrMethodName
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_SubscriberCLSID(self):
-        request = IEventSubscription_get_SubscriberCLSID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_SubscriberCLSID(self, bstrSubscriberCLSID):
-        request = IEventSubscription_put_SubscriberCLSID()
-        request['bstrSubscriberCLSID'] = bstrSubscriberCLSID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_SubscriberInterface(self):
-        request = IEventSubscription_get_SubscriberInterface()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_SubscriberInterface(self, pSubscriberInterface):
-        request = IEventSubscription_put_SubscriberInterface()
-        request['pSubscriberInterface'] = pSubscriberInterface
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_PerUser(self):
-        request = IEventSubscription_get_PerUser()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_PerUser(self, fPerUser):
-        request = IEventSubscription_put_PerUser()
-        request['fPerUser'] = fPerUser
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_OwnerSID(self):
-        request = IEventSubscription_get_OwnerSID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_OwnerSID(self, bstrOwnerSID):
-        request = IEventSubscription_put_OwnerSID()
-        request['bstrOwnerSID'] = bstrOwnerSID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_Enabled(self):
-        request = IEventSubscription_get_Enabled()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_Enabled(self, fEnabled):
-        request = IEventSubscription_put_Enabled()
-        request['fEnabled'] = fEnabled
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_Description(self):
-        request = IEventSubscription_get_Description()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_Description(self, bstrDescription):
-        request = IEventSubscription_put_Description()
-        request['bstrDescription'] = bstrDescription
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_MachineName(self):
-        request = IEventSubscription_get_MachineName()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_MachineName(self, bstrMachineName):
-        request = IEventSubscription_put_MachineName()
-        request['bstrMachineName'] = bstrMachineName
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def GetPublisherProperty(self):
-        request = IEventSubscription_GetPublisherProperty()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def PutPublisherProperty(self, bstrPropertyName, propertyValue):
-        request = IEventSubscription_PutPublisherProperty()
-        request['bstrPropertyName'] = bstrPropertyName
-        request['propertyValue'] = propertyValue
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def RemovePublisherProperty(self, bstrPropertyName):
-        request = IEventSubscription_RemovePublisherProperty()
-        request['bstrPropertyName'] = bstrPropertyName
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def GetPublisherPropertyCollection(self):
-        request = IEventSubscription_GetPublisherPropertyCollection()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def GetSubscriberProperty(self):
-        request = IEventSubscription_GetSubscriberProperty()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def PutSubscriberProperty(self, bstrPropertyName, propertyValue):
-        request = IEventSubscription_PutSubscriberProperty()
-        request['bstrPropertyName'] = bstrPropertyName
-        request['propertyValue'] = propertyValue
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def RemoveSubscriberProperty(self, bstrPropertyName):
-        request = IEventSubscription_RemoveSubscriberProperty()
-        request['bstrPropertyName'] = bstrPropertyName
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def GetSubscriberPropertyCollection(self):
-        request = IEventSubscription_GetSubscriberPropertyCollection()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_InterfaceID(self):
-        request = IEventSubscription_get_InterfaceID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_InterfaceID(self, bstrInterfaceID):
-        request = IEventSubscription_put_InterfaceID()
-        request['bstrInterfaceID'] = bstrInterfaceID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
 class IEventSubscription2(IEventSubscription):
     def __init__(self, interface):
@@ -1642,30 +1438,16 @@ class IEventSubscription2(IEventSubscription):
         self._iid = IID_IEventSubscription2
 
     def get_FilterCriteria(self):
-        request = IEventSubscription2_get_FilterCriteria()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_FilterCriteria(self, bstrFilterCriteria):
-        request = IEventSubscription2_put_FilterCriteria()
-        request['bstrFilterCriteria'] = bstrFilterCriteria
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_SubscriberMoniker (self):
-        request = IEventSubscription2_get_SubscriberMoniker ()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_SubscriberMoniker(self, bstrMoniker):
-        request = IEventSubscription2_put_SubscriberMoniker()
-        request['bstrMoniker'] = bstrMoniker
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
 class IEventSubscription3(IEventSubscription2):
     def __init__(self, interface):
@@ -1673,56 +1455,28 @@ class IEventSubscription3(IEventSubscription2):
         self._iid = IID_IEventSubscription3
 
     def get_EventClassPartitionID(self):
-        request = IEventSubscription3_get_EventClassPartitionID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_EventClassPartitionID(self, bstrEventClassPartitionID):
-        request = IEventSubscription3_put_EventClassPartitionID()
-        request['bstrEventClassPartitionID'] = bstrEventClassPartitionID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_EventClassApplicationID(self):
-        request = IEventSubscription3_get_EventClassApplicationID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_EventClassApplicationID(self, bstrEventClassApplicationID):
-        request = IEventSubscription3_put_EventClassApplicationID()
-        request['bstrEventClassApplicationID'] = bstrEventClassApplicationID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_SubscriberPartitionID(self):
-        request = IEventSubscription3_get_SubscriberPartitionID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_SubscriberPartitionID(self, bstrSubscriberPartitionID):
-        request = IEventSubscription3_put_SubscriberPartitionID()
-        request['bstrSubscriberPartitionID'] = bstrSubscriberPartitionID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def get_SubscriberApplicationID(self):
-        request = IEventSubscription3_get_SubscriberApplicationID()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
     def put_SubscriberApplicationID(self, bstrSubscriberApplicationID):
-        request = IEventSubscription3_put_SubscriberApplicationID()
-        request['bstrSubscriberApplicationID'] = bstrSubscriberApplicationID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        resp.dump()
-        return resp
+        pass
 
 
 class IEnumEventObject(IDispatch):
@@ -1731,29 +1485,16 @@ class IEnumEventObject(IDispatch):
         self._iid = IID_IEnumEventObject
 
     def Clone(self):
-        request = IEnumEventObject_Clone()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return IEnumEventObject(INTERFACE(self.get_cinstance(), b''.join(resp['ppInterface']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
+        pass
 
     def Next(self, cReqElem):
-        request = IEnumEventObject_Next()
-        request['cReqElem'] = cReqElem
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        interfaces = list()
-        for interface in resp['ppInterface']:
-            interfaces.append(IEventClass2(INTERFACE(self.get_cinstance(), b''.join(interface['abData']), self.get_ipidRemUnknown(), target = self.get_target())))
-        return interfaces
+        pass
 
     def Reset(self):
-        request = IEnumEventObject_Reset()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def Skip(self, cSkipElem):
-        request = IEnumEventObject_Skip()
-        request['cSkipElem'] = cSkipElem
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
 class IEventObjectCollection(IDispatch):
     def __init__(self, interface):
@@ -1761,38 +1502,22 @@ class IEventObjectCollection(IDispatch):
         self._iid = IID_IEventObjectCollection
 
     def get__NewEnum(self):
-        request = IEventObjectCollection_get__NewEnum()
-        resp = self.request(request, iid = self._iid , uuid = self.get_iPid())
-        return IEnumEventObject(INTERFACE(self.get_cinstance(), b''.join(resp['ppEnum']['abData']), self.get_ipidRemUnknown(), target = self._get_target()))
+        pass
 
     def get_Item(self, objectID):
-        request = IEventObjectCollection_get_Item()
-        request['objectID']['asData'] = objectID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def get_NewEnum(self):
-        request = IEventObjectCollection_get_NewEnum()
-        resp = self.request(request, iid = self._iid , uuid = self.get_iPid())
-        return IEnumEventObject(INTERFACE(self.get_cinstance(), b''.join(resp['ppEnum']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
+        pass
 
     def get_Count(self):
-        request = IEventObjectCollection_get_Count()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def Add(self, item, objectID):
-        request = IEventObjectCollection_Add()
-        request['item'] = item
-        request['objectID']['asData'] = objectID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def Remove(self, objectID):
-        request = IEventObjectCollection_Remove()
-        request['objectID']['asData'] = objectID
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
 class IEventSystem(IDispatch):
     def __init__(self, interface):
@@ -1800,46 +1525,22 @@ class IEventSystem(IDispatch):
         self._iid = IID_IEventSystem
 
     def Query(self, progID, queryCriteria):
-        request = IEventSystem_Query()
-        request['progID']['asData']=progID
-        request['queryCriteria']['asData']=queryCriteria
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        iInterface = IDispatch(INTERFACE(self.get_cinstance(), b''.join(resp['ppInterface']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
-        return IEventObjectCollection(iInterface.RemQueryInterface(1, (IID_IEventObjectCollection,)))
+        pass
 
     def Store(self, progID, pInterface):
-        request = IEventSystem_Store()
-        request['progID']['asData']=progID
-        request['pInterface'] = pInterface
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def Remove(self, progID, queryCriteria):
-        request = IEventSystem_Remove()
-        request['progID']['asData']=progID
-        request['queryCriteria'] = queryCriteria
-        resp = self.request(request, uuid = self.get_iPid())
-        return resp
+        pass
 
     def get_EventObjectChangeEventClassID(self):
-        request = IEventSystem_get_EventObjectChangeEventClassID()
-        resp = self.request(request, uuid = self.get_iPid())
-        return resp
+        pass
 
     def QueryS(self,progID, queryCriteria):
-        request = IEventSystem_QueryS()
-        request['progID']['asData']=progID
-        request['queryCriteria']['asData']=queryCriteria
-        resp = self.request(request, uuid = self.get_iPid())
-        iInterface = IDispatch(INTERFACE(self.get_cinstance(), b''.join(resp['ppInterface']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
-        return IEventObjectCollection(iInterface.RemQueryInterface(1, (IID_IEventObjectCollection,)))
+        pass
 
     def RemoveS(self,progID, queryCriteria):
-        request = IEventSystem_RemoveS()
-        request['progID']['asData']=progID
-        request['queryCriteria']['asData']=queryCriteria
-        resp = self.request(request, uuid = self.get_iPid())
-        return resp
+        pass
 
 class IEventSystem2(IEventSystem):
     def __init__(self, interface):
@@ -1847,14 +1548,10 @@ class IEventSystem2(IEventSystem):
         self._iid = IID_IEventSystem2
 
     def GetVersion(self):
-        request = IEventSystem2_GetVersion()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
     def VerifyTransientSubscribers(self):
-        request = IEventSystem2_GetVersion()
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass
 
 class IEventSystemInitialize(IRemUnknown):
     def __init__(self, interface):
@@ -1862,7 +1559,4 @@ class IEventSystemInitialize(IRemUnknown):
         self._iid = IID_IEventSystemInitialize
 
     def SetCOMCatalogBehaviour(self, bRetainSubKeys):
-        request = IEventSystem2_GetVersion()
-        request['bRetainSubKeys'] = bRetainSubKeys
-        resp = self.request(request, iid = self._iid, uuid = self.get_iPid())
-        return resp
+        pass

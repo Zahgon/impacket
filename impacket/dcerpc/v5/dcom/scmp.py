@@ -253,12 +253,7 @@ class IVssEnumMgmtObject(IRemUnknown2):
         self._iid = IID_IVssEnumMgmtObject
 
     def Next(self, celt):
-        request = IVssEnumMgmtObject_Next()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        request['celt'] = celt
-        resp = self.request(request, self._iid, uuid = self.get_iPid())
-        return resp 
+        pass
 
 class IVssEnumObject(IRemUnknown2):
     def __init__(self, interface):
@@ -266,13 +261,7 @@ class IVssEnumObject(IRemUnknown2):
         self._iid = IID_IVssEnumObject
 
     def Next(self, celt):
-        request = IVssEnumObject_Next()
-        request['ORPCthis'] = self.get_cinstance().get_ORPCthis()
-        request['ORPCthis']['flags'] = 0
-        request['celt'] = celt
-        dce = self.connect()
-        resp = dce.request(request, self._iid, uuid = self.get_iPid())
-        return resp 
+        pass
 
 class IVssSnapshotMgmt(IRemUnknown2):
     def __init__(self, interface):
@@ -280,43 +269,13 @@ class IVssSnapshotMgmt(IRemUnknown2):
         self._iid = IID_IVssSnapshotMgmt
 
     def GetProviderMgmtInterface(self, providerId = IID_ShadowCopyProvider, interfaceId = IID_IVssDifferentialSoftwareSnapshotMgmt):
-        req = GetProviderMgmtInterface()
-        classInstance = self.get_cinstance()
-        req['ORPCthis'] = classInstance.get_ORPCthis()
-        req['ORPCthis']['flags'] = 0
-        req['ProviderId'] = providerId
-        req['InterfaceId'] = interfaceId
-        resp = self.request(req, self._iid, uuid = self.get_iPid())
-        return IVssDifferentialSoftwareSnapshotMgmt(INTERFACE(classInstance, ''.join(resp['ppItf']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
+        pass
 
     def QueryVolumesSupportedForSnapshots(self, providerId, iContext):
-        req = QueryVolumesSupportedForSnapshots()
-        classInstance = self.get_cinstance()
-        req['ORPCthis'] = classInstance.get_ORPCthis()
-        req['ORPCthis']['flags'] = 0
-        req['ProviderId'] = providerId
-        req['IContext'] = iContext
-        resp = self.request(req, self._iid, uuid = self.get_iPid())
-        return IVssEnumMgmtObject(INTERFACE(self.get_cinstance(), ''.join(resp['ppEnum']['abData']), self.get_ipidRemUnknown(),target = self.get_target()))
+        pass
 
     def QuerySnapshotsByVolume(self, volumeName, providerId = IID_ShadowCopyProvider):
-        req = QuerySnapshotsByVolume()
-        classInstance = self.get_cinstance()
-        req['ORPCthis'] = classInstance.get_ORPCthis()
-        req['ORPCthis']['flags'] = 0
-        req['pwszVolumeName'] = volumeName
-        req['ProviderId'] = providerId
-        try:
-            resp = self.request(req, self._iid, uuid = self.get_iPid())
-        except DCERPCException as e:
-            print(e)
-            from impacket.winregistry import hexdump
-            data = e.get_packet()
-            hexdump(data)
-            kk = QuerySnapshotsByVolumeResponse(data)
-            kk.dump()
-        #resp.dump()
-        return IVssEnumObject(INTERFACE(self.get_cinstance(), ''.join(resp['ppEnum']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
+        pass
 
 class IVssDifferentialSoftwareSnapshotMgmt(IRemUnknown2):
     def __init__(self, interface):
@@ -324,19 +283,7 @@ class IVssDifferentialSoftwareSnapshotMgmt(IRemUnknown2):
         self._iid = IID_IVssDifferentialSoftwareSnapshotMgmt
 
     def QueryDiffAreasOnVolume(self, pwszVolumeName):
-        req = QueryDiffAreasOnVolume()
-        classInstance = self.get_cinstance()
-        req['ORPCthis'] = classInstance.get_ORPCthis()
-        req['ORPCthis']['flags'] = 0
-        req['pwszVolumeName'] = pwszVolumeName
-        resp = self.request(req, self._iid, uuid = self.get_iPid())
-        return IVssEnumMgmtObject(INTERFACE(self.get_cinstance(), ''.join(resp['ppEnum']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
+        pass
 
     def QueryDiffAreasForVolume(self, pwszVolumeName):
-        req = QueryDiffAreasForVolume()
-        classInstance = self.get_cinstance()
-        req['ORPCthis'] = classInstance.get_ORPCthis()
-        req['ORPCthis']['flags'] = 0
-        req['pwszVolumeName'] = pwszVolumeName
-        resp = self.request(req, self._iid, uuid = self.get_iPid())
-        return IVssEnumMgmtObject(INTERFACE(self.get_cinstance(), ''.join(resp['ppEnum']['abData']), self.get_ipidRemUnknown(), target = self.get_target()))
+        pass
