@@ -81,12 +81,12 @@ class ProtocolClient:
     def getSessionData(self):
         # Should return any extra data that could be useful for the SOCKS proxy to work (e.g. some of the
         # answers from the original server)
-        pass
+        return self.sessionData
 
     def getStandardSecurityChallenge(self):
         # Should return the Challenge returned by the server when Extended Security is not set
         # This should only happen with against old Servers. By default we return None
-        pass
+        return None
 
     def keepAlive(self):
         # Charged of keeping connection alive

@@ -11,7 +11,12 @@
 
 import ssl
 def _insecure_create_default_context(purpose=ssl.Purpose.SERVER_AUTH, *, cafile=None, capath=None, cadata=None):
-    pass
+    context = ssl._create_default_context(purpose=purpose, cafile=cafile, capath=capath, cadata=cadata)
+    context.minimum_version = ssl.TLSVersion.MINIMUM_SUPPORTED
+    context.set_ciphers("ALL:@SECLEVEL=0")
+    context.check_hostname = False
+    context.verify_mode = ssl.CERT_NONE
+    return context
 
 def monkeypatch_ssl_create_default_context():
     if ssl.create_default_context != _insecure_create_default_context:
