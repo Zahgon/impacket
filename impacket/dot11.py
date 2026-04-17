@@ -1589,12 +1589,12 @@ class RadioTap(ProtocolPacket):
 
     def set_antenna( self, antenna_index ):
         "Set Rx/Tx antenna index for this packet. "\
-        "The first antenna is antenna 0. "\
+        "The first antenna is antenna 0. "
         pass
    
     def get_antenna( self ):
         "Set Rx/Tx antenna index for this packet. "\
-        "The first antenna is antenna 0. "\
+        "The first antenna is antenna 0. "
         pass
 
     def set_dB_ant_signal( self, signal ):
